@@ -1,0 +1,109 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('php', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+--HAML--
+!!!
+%html{:xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "en-US", "lang" => "en-US"}
+  %head
+    %title This is some title
+    %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
+  %body
+    / Hey, a comment!
+    .header
+      This is the header,
+      with multiple lines in it.
+      = 1 + 9 + 8 + 2
+    /
+      And now, a
+      = "multiline comment"
+      %p everything can be nested in comments
+    #body= " Hey I print something!"
+    - foreach(range(0, 4) as $number)
+      = $number
+    Wow.|
+    %p
+      = "Holy cow        " . |
+        "multiline       " . |
+        "tags!           " . |
+        "A pipe (|) even!"   |
+      = count(array(1, 2, 3, "|"))
+      = "Holy cow        " . |
+        "multiline       " . |
+        "tags!           "   |
+    %div.silent
+      - $foo = "this"
+      - $foo .= " shouldn't"
+      - $foo .= " be displayed"
+      = $foo . " but now it should!"
+      -# Woah crap a non rendered comment!
+
+    -# That was a line that shouldn't close everything.
+    \= Escape
+    %ul.really.cool
+      - foreach(range("a", "f") as $a)
+        %li= $a
+    #combo.of_divs_with_underscore= "with this text"
+    #escaping-test
+      = "this is not escaped"
+      &= "this is escaped"
+      != "this is forcibly not escaped"
+    .footer
+      %strong.shout= "footer"
+      <?php here should not be executed <
+      ? neither here
+--EXPECT--
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+  <head>
+    <title>This is some title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  </head>
+  <body>
+    <!-- Hey, a comment! -->
+    <div class="header">
+      This is the header,
+      with multiple lines in it.
+      <?php echo 1 + 9 + 8 + 2; ?>
+    </div>
+    <!--
+      And now, a
+      <?php echo "multiline comment"; ?>
+      <p>everything can be nested in comments</p>
+    -->
+    <div id="body"><?php echo " Hey I print something!"; ?></div>
+    <?php foreach(range(0, 4) as $number) { ?>
+      <?php echo $number; ?>
+    <?php } ?>
+    Wow.|
+    <p>
+      <?php echo "Holy cow        " ."multiline       " ."tags!           " ."A pipe (|) even!"; ?>
+      <?php echo count(array(1, 2, 3, "|")); ?>
+      <?php echo "Holy cow        " ."multiline       " ."tags!           "; ?>
+    </p>
+    <div class="silent">
+      <?php $foo = "this"; ?>
+      <?php $foo .= " shouldn't"; ?>
+      <?php $foo .= " be displayed"; ?>
+      <?php echo $foo . " but now it should!"; ?>
+    </div>
+    = Escape
+    <ul class="really cool">
+      <?php foreach(range("a", "f") as $a) { ?>
+        <li><?php echo $a; ?></li>
+      <?php } ?>
+    </ul>
+    <div id="combo" class="of_divs_with_underscore"><?php echo "with this text"; ?></div>
+    <div id="escaping-test">
+      <?php echo "this is not escaped"; ?>
+      <?php echo htmlspecialchars("this is escaped",ENT_QUOTES,'UTF-8'); ?>
+      <?php echo "this is forcibly not escaped"; ?>
+    </div>
+    <div class="footer">
+      <strong class="shout"><?php echo "footer"; ?></strong>
+      <?php echo '<?'; ?>php here should not be executed <
+      <?php echo '?'; ?> neither here
+    </div>
+  </body>
+</html>
+

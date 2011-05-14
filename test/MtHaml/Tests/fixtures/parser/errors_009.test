@@ -1,0 +1,5 @@
+--HAML--
+%html{:foo => bar
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Unexpected end of line, expected ',' or '}' in .* on line 2, column 18

@@ -1,0 +1,25 @@
+--HAML--
+
+.foo.bar.baz
+
+#id.foo.bar{"class" => "abc #{def}", "id" => "x"}
+
+%p{:a => "b", :a => "c"}
+
+--FILE--
+$visitor = new \MtHaml\NodeVisitor\MergeAttrs;
+$node->accept($visitor);
+--EXPECT--
+root(
+  tag(div
+    attr(text(class)interpolated(text(foo)text( )text(bar)text( )text(baz)))
+  )
+  tag(div
+    attr(text(class)interpolated(text(foo)text( )text(bar)text( )text(abc )insert(def)))
+    attr(interpolated(text(id))interpolated(text(x)))
+  )
+  tag(p
+    attr(text(a)interpolated(text(c)))
+  )
+)
+

@@ -1,0 +1,54 @@
+--HAML--
+%html
+  %body
+    - for x in foo
+      = foo
+    - for y in bar
+      = bar
+    - else
+      sorry, no bar
+    - if z > 1
+      %p something
+    - elseif z < 0
+      %p something
+    - else
+      %p something
+    #footer
+--FILE--
+$visitor = new \MtHaml\NodeVisitor\Midblock('/else\b|elseif\b/A');
+$node->accept($visitor);
+--EXPECT--
+root(
+  tag(html
+    tag(body
+      run(for x in foo
+        insert(foo)
+      )
+      run(for y in bar
+        insert(bar)
+        midblock(
+          run(else
+            interpolated(text(sorry, no bar))
+          )
+        )
+      )
+      run(if z > 1
+        tag(p interpolated(text(something)))
+        midblock(
+          run(elseif z < 0
+            tag(p interpolated(text(something)))
+            midblock(
+              run(else
+                tag(p interpolated(text(something)))
+              )
+            )
+          )
+        )
+      )
+      tag(div
+        attr(text(id)text(footer))
+      )
+    )
+  )
+)
+

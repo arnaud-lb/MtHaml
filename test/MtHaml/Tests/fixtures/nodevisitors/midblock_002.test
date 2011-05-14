@@ -1,0 +1,32 @@
+--HAML--
+- if a
+  %ul
+    - for item in items
+      %li
+        = item
+  = foo
+- else
+  no item
+  
+--FILE--
+$visitor = new \MtHaml\NodeVisitor\Midblock('/else\b|elseif\b/A');
+$node->accept($visitor);
+--EXPECT--
+root(
+  run(if a
+    tag(ul
+      run(for item in items
+        tag(li
+          insert(item)
+        )
+      )
+    )
+    insert(foo)
+    midblock(
+      run(else
+        interpolated(text(no item))
+      )
+    )
+  )
+)
+

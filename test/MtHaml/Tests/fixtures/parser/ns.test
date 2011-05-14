@@ -1,0 +1,11 @@
+--HAML--
+%html(xml:lang="en")
+    %svg:svg
+--EXPECT--
+root(
+  tag(html
+    attr(text(xml:lang)interpolated(text(en)))
+    tag(svg:svg)
+  )
+)
+

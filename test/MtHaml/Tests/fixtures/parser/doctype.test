@@ -1,0 +1,11 @@
+--HAML--
+!!!
+!!! abc
+!!! abc def
+--EXPECT--
+root(
+  doctype(default)
+  doctype(abc)
+  doctype(abc, def)
+)
+

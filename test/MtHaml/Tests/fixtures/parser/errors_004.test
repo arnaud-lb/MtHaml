@@ -1,0 +1,6 @@
+--HAML--
+%html
+	 %head
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Indentation can't use both tabs and spaces in .* on line 3, column \d+

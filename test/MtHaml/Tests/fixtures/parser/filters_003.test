@@ -1,0 +1,13 @@
+--HAML--
+%html
+:javascript
+foo
+
+--EXPECT--
+root(
+  tag(html)
+  filter(javascript
+  )
+  interpolated(text(foo))
+)
+

@@ -1,0 +1,5 @@
+--HAML--
+    %html
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Indenting at the beginning of the document is illegal in .* on line 2, column \d+

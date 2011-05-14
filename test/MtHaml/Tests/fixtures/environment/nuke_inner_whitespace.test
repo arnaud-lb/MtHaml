@@ -1,0 +1,77 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+%p
+  %q< Foo
+%p
+  %q{:a => 1 + 1}< Foo
+%p
+  %q< Foo Bar
+%p
+  %q{:a => 1 + 1}< Foo Bar
+%p
+  %q<
+    Foo
+    Bar
+%p
+  %q{:a => 1 + 1}<
+    Foo
+    Bar
+%p
+  %q<
+    %div
+      Foo
+      Bar
+%p
+  %q{:a => 1 + 1}<
+    %div
+      Foo
+      Bar
+
+%p
+  %q< foo
+  %q{:a => 1 + 1}
+    bar
+--EXPECT--
+<p>
+  <q>Foo</q>
+</p>
+<p>
+  <q a="{{ 1 + 1 }}">Foo</q>
+</p>
+<p>
+  <q>Foo Bar</q>
+</p>
+<p>
+  <q a="{{ 1 + 1 }}">Foo Bar</q>
+</p>
+<p>
+  <q>Foo
+  Bar</q>
+</p>
+<p>
+  <q a="{{ 1 + 1 }}">Foo
+  Bar</q>
+</p>
+<p>
+  <q><div>
+    Foo
+    Bar
+  </div></q>
+</p>
+<p>
+  <q a="{{ 1 + 1 }}"><div>
+    Foo
+    Bar
+  </div></q>
+</p>
+<p>
+  <q>foo</q>
+  <q a="{{ 1 + 1 }}">
+    bar
+  </q>
+</p>
+

@@ -1,0 +1,18 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+
+.foo.bar.baz
+
+#id.foo.bar{"class" => "abc #{def}", "id" => "x"}
+
+%p{:a => "b", :a => "c"}
+
+--EXPECT--
+<div class="foo bar baz"></div>
+<div class="foo bar abc {{ def }}" id="x"></div>
+<p a="c"></p>
+

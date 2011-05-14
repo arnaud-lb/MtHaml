@@ -1,0 +1,39 @@
+--HAML--
+%p<
+#id<
+.class<
+%p{:foo=>"bar"}<
+%p <
+#id <
+.class <
+%p{:foo=>"bar"} <
+%p>
+%p/
+%p<>/
+--EXPECT--
+root(
+  tag(p<)
+  tag(div<
+    attr(text(id)text(id))
+  )
+  tag(div<
+    attr(text(class)text(class))
+  )
+  tag(p<
+    attr(text(foo)interpolated(text(bar)))
+  )
+  tag(p interpolated(text(<)))
+  tag(div interpolated(text(<))
+    attr(text(id)text(id))
+  )
+  tag(div interpolated(text(<))
+    attr(text(class)text(class))
+  )
+  tag(p interpolated(text(<))
+    attr(text(foo)interpolated(text(bar)))
+  )
+  tag(p>)
+  tag(p/)
+  tag(p<>/)
+)
+

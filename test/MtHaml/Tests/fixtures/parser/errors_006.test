@@ -1,0 +1,7 @@
+--HAML--
+%html
+  abc
+    def
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Illegal nesting: nesting within interpolated string is illegal in .* on line 4, column \d+

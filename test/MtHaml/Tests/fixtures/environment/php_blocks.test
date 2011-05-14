@@ -1,0 +1,29 @@
+--HAML--
+- if ($a)
+  %ul
+    - foreach($items as $item)
+      %li
+        = $item
+  = $foo
+- else
+  no item
+  
+--FILE--
+<?php
+$env = new MtHaml\Environment('php', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--EXPECT--
+<?php if ($a) { ?>
+  <ul>
+    <?php foreach($items as $item) { ?>
+      <li>
+        <?php echo $item; ?>
+      </li>
+    <?php } ?>
+  </ul>
+  <?php echo $foo; ?>
+<?php } else { ?>
+  no item
+<?php } ?>
+

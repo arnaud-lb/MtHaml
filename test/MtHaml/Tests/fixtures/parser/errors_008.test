@@ -1,0 +1,7 @@
+--HAML--
+%html
+    / foo
+        bar
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Illegal nesting: nesting within a tag that already has content is illegal in .* on line 4, column \d+

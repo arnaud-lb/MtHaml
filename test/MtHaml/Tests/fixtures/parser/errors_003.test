@@ -1,0 +1,8 @@
+--HAML--
+%html
+  %head
+	%title foo
+  %body
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Inconsistent indentation: tabs were used for indentation, but the rest of the document was indented using spaces in .* on line 4, column \d+

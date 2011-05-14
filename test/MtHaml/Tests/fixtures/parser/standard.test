@@ -1,0 +1,114 @@
+--HAML--
+!!!
+%html{:xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "en-US", "lang" => "en-US"}
+  %head
+    %title This is some title
+    %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
+  %body
+    / Hey, a comment!
+    .header
+      This is the header,
+      with multiple lines in it.
+      = 1 + 9 + 8 + 2
+    /
+      And now, a
+      = "multiline comment"
+      %p everything can be nested in comments
+    #body= " Hey I print something!"
+    - for number in range(0, 120)
+      = number
+    Wow.|
+    %p
+      = "Holy cow        " ~ |
+        "multiline       " ~ |
+        "tags!           " ~ |
+        "A pipe (|) even!"   |
+      = [1, 2, 3]|length
+      = "Holy cow        " ~ |
+        "multiline       " ~ |
+        "tags!           "   |
+    %div.silent
+      - set foo = "this"
+      - set foo = foo ~ " shouldn't"
+      - set foo = foo ~ " be displayed"
+      = foo ~ " but now it should!"
+      -# Woah crap a non rendered comment!
+
+    -# That was a line that shouldn't close everything.
+    \= Escape
+    %ul.really.cool
+      - for a in ('a'..'f')
+        %li= a
+    #combo.of_divs_with_underscore= "with this text"
+    .footer
+      %strong.shout= "footer"
+--EXPECT--
+root(
+  doctype(default)
+  tag(html
+    attr(text(xmlns)interpolated(text(http://www.w3.org/1999/xhtml)))
+    attr(interpolated(text(xml:lang))interpolated(text(en-US)))
+    attr(interpolated(text(lang))interpolated(text(en-US)))
+    tag(head
+      tag(title interpolated(text(This is some title)))
+      tag(meta
+        attr(interpolated(text(http-equiv))interpolated(text(Content-Type)))
+        attr(text(content)interpolated(text(text/html; charset=utf-8)))
+      )
+    )
+    tag(body
+      comment(interpolated(text(Hey, a comment!)))
+      tag(div
+        attr(text(class)text(header))
+        interpolated(text(This is the header,))
+        interpolated(text(with multiple lines in it.))
+        insert(1 + 9 + 8 + 2)
+      )
+      comment(
+        interpolated(text(And now, a))
+        insert("multiline comment")
+        tag(p interpolated(text(everything can be nested in comments)))
+      )
+      tag(div insert(" Hey I print something!")
+        attr(text(id)text(body))
+      )
+      run(for number in range(0, 120)
+        insert(number)
+      )
+      interpolated(text(Wow.|))
+      tag(p
+        insert("Holy cow        " ~"multiline       " ~"tags!           " ~"A pipe (|) even!")
+        insert([1, 2, 3]|length)
+        insert("Holy cow        " ~"multiline       " ~"tags!           ")
+      )
+      tag(div
+        attr(text(class)text(silent))
+        run(set foo = "this")
+        run(set foo = foo ~ " shouldn't")
+        run(set foo = foo ~ " be displayed")
+        insert(foo ~ " but now it should!")
+        comment(interpolated(text(Woah crap a non rendered comment!)))
+      )
+      comment(interpolated(text(That was a line that shouldn't close everything.)))
+      interpolated(text(= Escape))
+      tag(ul
+        attr(text(class)text(really))
+        attr(text(class)text(cool))
+        run(for a in ('a'..'f')
+          tag(li insert(a))
+        )
+      )
+      tag(div insert("with this text")
+        attr(text(id)text(combo))
+        attr(text(class)text(of_divs_with_underscore))
+      )
+      tag(div
+        attr(text(class)text(footer))
+        tag(strong insert("footer")
+          attr(text(class)text(shout))
+        )
+      )
+    )
+  )
+)
+

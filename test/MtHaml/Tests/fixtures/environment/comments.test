@@ -1,0 +1,26 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+%html
+  / foo
+  %p / foo
+  /
+    foo
+    bar
+  -# foo
+  -#
+    foo
+    bar
+--EXPECT--
+<html>
+  <!-- foo -->
+  <p><!-- foo --></p>
+  <!--
+    foo
+    bar
+  -->
+</html>
+

@@ -1,0 +1,5 @@
+--HAML--
+%html(foo = "#{z"
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Unexpected '#', expected string or #{...} in .* on line 2, column 14

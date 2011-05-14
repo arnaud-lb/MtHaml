@@ -1,0 +1,7 @@
+--HAML--
+%html
+  %head
+    %title/ foo
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Illegal nesting: nesting within a self-closing tag is illegal in .* on line 4, column 16

@@ -1,0 +1,42 @@
+--HAML--
+%html#id.class1.class2{:foo => "bar"}(bar="baz")
+%html(xml:lang="en")
+%p{"foo" => "test #{a + b / c({# + 3 + "" + ''}) } bar #{"baz"} \" ", ("a" + "bc") => "d=>f", :z => {x} }
+%p(abc="def" ghi=jkl mn=o+p q=(r=s) tuv="wx(y+z)")
+%p(abc="" ghi=j+""+'')
+%p{"fooo" => "bar",
+            "bar" => "baz"} content
+--EXPECT--
+root(
+  tag(html
+    attr(text(id)text(id))
+    attr(text(class)text(class1))
+    attr(text(class)text(class2))
+    attr(text(foo)interpolated(text(bar)))
+    attr(text(bar)interpolated(text(baz)))
+  )
+  tag(html
+    attr(text(xml:lang)interpolated(text(en)))
+  )
+  tag(p
+    attr(interpolated(text(foo))interpolated(text(test )insert(a + b / c({# + 3 + "" + ''}) )text( bar )insert("baz")text( " )))
+    attr(insert(("a" + "bc") )interpolated(text(d=>f)))
+    attr(text(z)insert({x} ))
+  )
+  tag(p
+    attr(text(abc)interpolated(text(def)))
+    attr(text(ghi)insert(jkl))
+    attr(text(mn)insert(o+p))
+    attr(text(q)insert((r=s)))
+    attr(text(tuv)interpolated(text(wx(y+z))))
+  )
+  tag(p
+    attr(text(abc)interpolated())
+    attr(text(ghi)insert(j+""+''))
+  )
+  tag(p interpolated(text(content))
+    attr(interpolated(text(fooo))interpolated(text(bar)))
+    attr(interpolated(text(bar))interpolated(text(baz)))
+  )
+)
+

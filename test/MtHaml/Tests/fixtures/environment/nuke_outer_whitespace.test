@@ -1,0 +1,122 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+%p
+  %p
+    %q>
+      Foo
+%p
+  %p
+    %q(a="2")>
+      Foo
+%p
+  %p
+    %q> Foo
+%p
+  %p
+    %q(a="3")> Foo
+%p
+  %p
+    %q>
+      Foo
+%p
+  %p
+    %q(a="4")>
+      Foo
+%p
+  %p
+    %q>Foo
+%p
+  %p
+    %q(a="5")>Foo
+%p
+  %p
+    %q>
+      Foo Bar
+%p
+  %p
+    %q(a="6")>
+      Foo Bar
+%p
+  %p
+    %q>Foo Bar
+%p
+  %p
+    %q(a="7")>Foo Bar
+%p
+  %p
+    %q>
+%p
+  %p
+    %q>/
+%p
+  %p
+    %q(a="2")>
+%p
+  %p
+    %q(a="2")>/
+--EXPECT--
+<p>
+  <p><q>
+    Foo
+  </q></p>
+</p>
+<p>
+  <p><q a="2">
+    Foo
+  </q></p>
+</p>
+<p>
+  <p><q>Foo</q></p>
+</p>
+<p>
+  <p><q a="3">Foo</q></p>
+</p>
+<p>
+  <p><q>
+    Foo
+  </q></p>
+</p>
+<p>
+  <p><q a="4">
+    Foo
+  </q></p>
+</p>
+<p>
+  <p><q>Foo</q></p>
+</p>
+<p>
+  <p><q a="5">Foo</q></p>
+</p>
+<p>
+  <p><q>
+    Foo Bar
+  </q></p>
+</p>
+<p>
+  <p><q a="6">
+    Foo Bar
+  </q></p>
+</p>
+<p>
+  <p><q>Foo Bar</q></p>
+</p>
+<p>
+  <p><q a="7">Foo Bar</q></p>
+</p>
+<p>
+  <p><q></q></p>
+</p>
+<p>
+  <p><q /></p>
+</p>
+<p>
+  <p><q a="2"></q></p>
+</p>
+<p>
+  <p><q a="2" /></p>
+</p>
+

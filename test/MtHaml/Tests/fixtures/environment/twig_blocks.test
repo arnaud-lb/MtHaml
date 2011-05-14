@@ -1,0 +1,29 @@
+--HAML--
+- if a
+  %ul
+    - for item in items
+      %li
+        = item
+  = foo
+- else
+  no item
+  
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--EXPECT--
+{% if a %}
+  <ul>
+    {% for item in items %}
+      <li>
+        {{ item }}
+      </li>
+    {% endfor %}
+  </ul>
+  {{ foo }}
+{% else %}
+  no item
+{% endif %}
+

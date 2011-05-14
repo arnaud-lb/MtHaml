@@ -1,0 +1,23 @@
+--HAML--
+%html
+  :css
+  :javascript
+    if (foo) {
+            alert('hey!');
+    }
+  foo
+
+--EXPECT--
+root(
+  tag(html
+    filter(css
+    )
+    filter(javascript
+      interpolated(text(if (foo) {))
+      interpolated(text(        alert('hey!');))
+      interpolated(text(}))
+    )
+    interpolated(text(foo))
+  )
+)
+

@@ -1,0 +1,10 @@
+--HAML--
+%html
+    This is an "interpolated" #{string}
+--EXPECT--
+root(
+  tag(html
+    interpolated(text(This is an "interpolated" )insert(string))
+  )
+)
+

@@ -1,0 +1,5 @@
+--HAML--
+%html(/foo => bar
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Unexpected '/', expected html attribute name in .* on line 2, column 7

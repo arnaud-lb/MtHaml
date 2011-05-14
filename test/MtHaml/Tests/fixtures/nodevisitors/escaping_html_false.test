@@ -1,0 +1,52 @@
+--HAML--
+%html
+  %body
+    <p>
+    %p = "foo"
+    - if foo
+      #id{:foo => "bar #{baz}", "z #{z}" => x}
+        bar #{baz}
+        = baz
+    - else
+      .class(a="b #{f}" c=d)
+        bar
+        = baz
+    %p != "foo"
+    %p &= "bar"
+--FILE--
+$visitor = new \MtHaml\NodeVisitor\Midblock('/else/A');
+$node->accept($visitor);
+$visitor = new \MtHaml\NodeVisitor\Escaping(\MtHaml\NodeVisitor\Escaping::ESCAPE_FALSE, \MtHaml\NodeVisitor\Escaping::ESCAPE_TRUE);
+$node->accept($visitor);
+--EXPECT--
+root(
+  tag(html
+    tag(body
+      interpolated(text(!<p>))
+      tag(p insert(!"foo"))
+      run(if foo
+        tag(div
+          attr(text(&id)text(&id))
+          attr(text(&foo)interpolated(text(&bar )insert(&baz)))
+          attr(interpolated(text(&z )insert(&z))insert(&x))
+          interpolated(text(!bar )insert(!baz))
+          insert(!baz)
+        )
+        midblock(
+          run(else
+            tag(div
+              attr(text(&class)text(&class))
+              attr(text(&a)interpolated(text(&b )insert(&f)))
+              attr(text(&c)insert(&d))
+              interpolated(text(!bar))
+              insert(!baz)
+            )
+          )
+        )
+      )
+      tag(p insert(!"foo"))
+      tag(p insert(&"bar"))
+    )
+  )
+)
+

@@ -1,0 +1,38 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+%html
+  :javascript
+    if (foo) {
+        alert(bar);
+    }
+  :css
+    body {
+            border: 1px;
+                    }
+  :plain
+            text
+    text
+--EXPECT--
+<html>
+  <script type="text/javascript">
+  //<![CDATA[
+    if (foo) {
+        alert(bar);
+    }
+  //]]>
+  </script>
+  <style type="text/css">
+  /*<![CDATA[*/
+    body {
+            border: 1px;
+                    }
+  /*]]>*/
+  </style>
+          text
+  text
+</html>
+

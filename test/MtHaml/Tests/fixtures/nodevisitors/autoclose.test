@@ -1,0 +1,30 @@
+--HAML--
+%html
+  %head
+    %title
+    %link
+  %body
+    %link foo
+    %link
+      bar
+    %br
+--FILE--
+$visitor = new \MtHaml\NodeVisitor\Autoclose(array('br', 'link'));
+$node->accept($visitor);
+--EXPECT--
+root(
+  tag(html
+    tag(head
+      tag(title)
+      tag(link/)
+    )
+    tag(body
+      tag(link interpolated(text(foo)))
+      tag(link
+        interpolated(text(bar))
+      )
+      tag(br/)
+    )
+  )
+)
+

@@ -1,0 +1,27 @@
+--HAML--
+- if a
+  %ul
+    - for item in items
+      %li
+        = item
+  = foo
+- else
+  no item
+  
+--EXPECT--
+root(
+  run(if a
+    tag(ul
+      run(for item in items
+        tag(li
+          insert(item)
+        )
+      )
+    )
+    insert(foo)
+  )
+  run(else
+    interpolated(text(no item))
+  )
+)
+

@@ -1,0 +1,21 @@
+--HAML--
+%html
+:javascript
+
+  bar
+    baz
+    
+foo
+
+--EXPECT--
+root(
+  tag(html)
+  filter(javascript
+    interpolated()
+    interpolated(text( bar))
+    interpolated(text(   baz))
+    interpolated(text(    ))
+  )
+  interpolated(text(foo))
+)
+

@@ -1,0 +1,8 @@
+--HAML--
+%html
+  %head
+      %title foo
+  %body
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+The line was indented more than one level deeper than the previous line in .* on line 4, column \d+

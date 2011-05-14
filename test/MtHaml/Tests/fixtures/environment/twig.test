@@ -1,0 +1,112 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+!!!
+%html{:xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "en-US", "lang" => "en-US"}
+  %head
+    %title This is some title
+    %meta{"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
+  %body
+    / Hey, a comment!
+    .header
+      This is the header,
+      with multiple lines in it.
+      = 1 + 9 + 8 + 2
+    /
+      And now, a
+      = "multiline comment"
+      %p everything can be nested in comments
+    #body= " Hey I print something!"
+    - for number in range(0, 120)
+      = number
+    Wow.|
+    %p
+      = "Holy cow        " ~ |
+        "multiline       " ~ |
+        "tags!           " ~ |
+        "A pipe (|) even!"   |
+      = [1, 2, 3]|length
+      = "Holy cow        " ~ |
+        "multiline       " ~ |
+        "tags!           "   |
+    %div.silent
+      - set foo = "this"
+      - set foo = foo ~ " shouldn't"
+      - set foo = foo ~ " be displayed"
+      = foo ~ " but now it should!"
+      -# Woah crap a non rendered comment!
+
+    -# That was a line that shouldn't close everything.
+    \= Escape
+    %ul.really.cool
+      - for a in ('a'..'f')
+        %li= a
+    #combo.of_divs_with_underscore= "with this text"
+    #escaping-test
+      = "this is not escaped"
+      &= "this is escaped"
+      != "this is forcibly not escaped"
+    .footer
+      %strong.shout= "footer"
+      {% twig here should not be executed {
+      { neither here {{ or here {% or here {
+      %
+--EXPECT--
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+  <head>
+    <title>This is some title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  </head>
+  <body>
+    <!-- Hey, a comment! -->
+    <div class="header">
+      This is the header,
+      with multiple lines in it.
+      {{ 1 + 9 + 8 + 2 }}
+    </div>
+    <!--
+      And now, a
+      {{ "multiline comment" }}
+      <p>everything can be nested in comments</p>
+    -->
+    <div id="body">{{ " Hey I print something!" }}</div>
+    {% for number in range(0, 120) %}
+      {{ number }}
+    {% endfor %}
+    Wow.|
+    <p>
+      {{ "Holy cow        " ~"multiline       " ~"tags!           " ~"A pipe (|) even!" }}
+      {{ [1, 2, 3]|length }}
+      {{ "Holy cow        " ~"multiline       " ~"tags!           " }}
+    </p>
+    <div class="silent">
+      {% set foo = "this" %}
+      {% set foo = foo ~ " shouldn't" %}
+      {% set foo = foo ~ " be displayed" %}
+      {{ foo ~ " but now it should!" }}
+    </div>
+    = Escape
+    <ul class="really cool">
+      {% for a in ('a'..'f') %}
+        <li>{{ a }}</li>
+      {% endfor %}
+    </ul>
+    <div id="combo" class="of_divs_with_underscore">{{ "with this text" }}</div>
+    <div id="escaping-test">
+      {{ "this is not escaped" }}
+      {{ ("this is escaped")|escape }}
+      {{ ("this is forcibly not escaped")|raw }}
+    </div>
+    <div class="footer">
+      <strong class="shout">{{ "footer" }}</strong>
+      {{ '{%' }} twig here should not be executed {
+      {{ '{' }} neither here {{ '{{' }} or here {{ '{%' }} or here {
+      {{ '%' }}
+    </div>
+  </body>
+</html>
+

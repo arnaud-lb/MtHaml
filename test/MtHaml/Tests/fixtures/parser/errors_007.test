@@ -1,0 +1,7 @@
+--HAML--
+%html
+    %body foo
+        bar
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Illegal nesting: content can't be both given on the same line as %body and nested within it in .* on line 4, column \d+

@@ -1,0 +1,17 @@
+--HAML--
+= foo
+!= foo
+&= foo
+~ foo
+!~ foo
+&~ foo
+--EXPECT--
+root(
+  insert(foo)
+  insert(!foo)
+  insert(&foo)
+  insert(foo)
+  insert(!foo)
+  insert(&foo)
+)
+
