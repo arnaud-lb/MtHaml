@@ -74,6 +74,8 @@ $haml = new MtHaml\Environment('twig', array('enable_escaper' => false));
 $compiled = $haml->compileString($haml_template, "filename");
 ```
 
+See [examples][7]
+
 ## Escaping
 
 MtHaml will escape everything by default. As twig already supports auto escaping it is recommended to enable it in Twig and disable it in MtHaml:
@@ -94,17 +96,17 @@ Email <?php echo htmlspecialchars($user->getEmail(), ENT_QUOTES, 'UTF-8'); ?>
 
 ## Twig
 
-Using [Twig][4] in HAML give more control over what can be executed, what variables and functions are exposed to the templates, etc. This also allows to use all of Twig's awesome features like template inheritance, macros, blocks, filter, functions, tests, ...
+Using [Twig][4] in HAML give more control over what can be executed, what variables and functions are exposed to the templates, etc. This also allows to use all of Twig's awesome features like template inheritance, macros, blocks, filters, functions, tests, ...
 
 ``` haml
 - extends "some-template.haml"
 
-- macro printSomehting()
+- macro printSomething()
   %p something
 
 - block body
   %h1 Title
-  = printSomething()
+  = _self.printSomething()
 ```
 
 ### Integration in Twig
@@ -182,3 +184,4 @@ MtHaml is released under the MIT license (same as HAML/Ruby).
 [4]: http://www.twig-project.org/
 [5]: http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#attribute_methods
 [6]: http://sass-lang.com/
+[7]: https://github.com/arnaud-lb/MtHaml/blob/master/examples/example.php

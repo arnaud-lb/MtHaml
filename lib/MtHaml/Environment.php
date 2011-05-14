@@ -60,7 +60,7 @@ class Environment
                 $target = new Twig;
                 break;
             default:
-                throw new Exception('Unknown target language: %s', $target);
+                throw new Exception(sprintf('Unknown target language: %s', $target));
             }
             $this->target = $target;
         }
