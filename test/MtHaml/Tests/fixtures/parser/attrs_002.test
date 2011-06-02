@@ -1,0 +1,15 @@
+--HAML--
+%input(type="submit" value=foo().bar)
+%input(type="submit" value=foo{}.bar)
+--EXPECT--
+root(
+  tag(input
+    attr(text(type)interpolated(text(submit)))
+    attr(text(value)insert(foo().bar))
+  )
+  tag(input
+    attr(text(type)interpolated(text(submit)))
+    attr(text(value)insert(foo{}.bar))
+  )
+)
+
