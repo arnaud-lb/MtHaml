@@ -22,7 +22,7 @@ echo $env->compileString($parts['HAML'], "$file.haml");
       </li>
     {% endfor %}
   </ul>
-  {{ foo }}
+  {% line 6 %}{{ foo }}
 {% else %}
   no item
 {% endif %}

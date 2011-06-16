@@ -23,11 +23,13 @@ class PhpRenderer extends RendererAbstract
                 $fmt = "<?php echo htmlspecialchars(%s,ENT_QUOTES,'%s'); ?>";
             }
         }
+        $this->addDebugInfos($node);
         $this->raw(sprintf($fmt, $node->getContent(), $this->charset));
     }
 
     public function enterTopBlock(Run $node)
     {
+        $this->addDebugInfos($node);
         if (!$node->hasChilds()) {
             $this->write(sprintf('<?php %s; ?>' , $node->getContent()));
         } else {
@@ -37,6 +39,7 @@ class PhpRenderer extends RendererAbstract
 
     public function enterMidBlock(Run $node)
     {
+        $this->addDebugInfos($node);
         $this->write(sprintf('<?php } %s { ?>' , $node->getContent()));
     }
 
@@ -45,6 +48,10 @@ class PhpRenderer extends RendererAbstract
         if ($node->hasChilds()) {
             $this->write('<?php } ?>');
         }
+    }
+
+    protected function writeDebugInfos($lineno)
+    {
     }
 }
 

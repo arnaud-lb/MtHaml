@@ -18,8 +18,9 @@ class Loader implements \Twig_LoaderInterface
     public function getSource($name)
     {
         $source = $this->loader->getSource($name);
-        if (preg_match('#\s*{%\s*haml\s*%}#', $source, $match)) {
-            $source = substr($source, strlen($match[0]));
+        if (preg_match('#^\s*{%\s*haml\s*%}#', $source, $match)) {
+            $padding = str_repeat(' ', strlen($match[0]));
+            $source = $padding . substr($source, strlen($match[0]));
             $source = $this->env->compileString($source, $name);
         }
         return $source;

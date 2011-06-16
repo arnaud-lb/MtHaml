@@ -20,6 +20,8 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 {
     protected $indent;
     protected $output = '';
+    protected $lineno = 1;
+    protected $lineOffset = 0;
 
     protected $prevFlags = 0;
 
@@ -57,8 +59,10 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             $this->writeIndentation();
         }
         $this->raw($string);
+        $this->lineno += substr_count($string, "\n");
         if ($break) {
             $this->output .= "\n";
+            $this->lineno++;
         }
         return $this;
     }
@@ -66,6 +70,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
     protected function raw($string)
     {
         $this->output .= $string;
+        $this->lineno += substr_count($string, "\n");
         return $this;
     }
 
@@ -74,6 +79,16 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         $this->output .= str_repeat(' ', $this->indent * 2);
         return $this;
     }
+
+    protected function addDebugInfos(NodeAbstract $node)
+    {
+        if ($this->lineno != $node->getLineno() + $this->lineOffset) {
+            $this->writeDebugInfos($node->getLineno());
+            $this->lineOffset = $this->lineno - $node->getLineno();
+        }
+    }
+
+    abstract protected function writeDebugInfos($lineno);
 
     abstract protected function escapeLanguage($string);
 

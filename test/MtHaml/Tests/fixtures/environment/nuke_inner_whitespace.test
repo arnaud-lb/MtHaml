@@ -40,20 +40,20 @@ echo $env->compileString($parts['HAML'], "$file.haml");
   <q>Foo</q>
 </p>
 <p>
-  <q a="{{ 1 + 1 }}">Foo</q>
+  <q a="{% line 4 %}{{ 1 + 1 }}">Foo</q>
 </p>
 <p>
   <q>Foo Bar</q>
 </p>
 <p>
-  <q a="{{ 1 + 1 }}">Foo Bar</q>
+  <q a="{% line 8 %}{{ 1 + 1 }}">Foo Bar</q>
 </p>
 <p>
   <q>Foo
   Bar</q>
 </p>
 <p>
-  <q a="{{ 1 + 1 }}">Foo
+  <q a="{% line 14 %}{{ 1 + 1 }}">Foo
   Bar</q>
 </p>
 <p>
@@ -63,7 +63,7 @@ echo $env->compileString($parts['HAML'], "$file.haml");
   </div></q>
 </p>
 <p>
-  <q a="{{ 1 + 1 }}"><div>
+  <q a="{% line 23 %}{{ 1 + 1 }}"><div>
     Foo
     Bar
   </div></q>

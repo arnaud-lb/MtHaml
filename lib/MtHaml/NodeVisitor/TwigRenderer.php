@@ -22,6 +22,7 @@ class TwigRenderer extends RendererAbstract
         } else {
             $fmt = '{{ %s }}';
         }
+        $this->addDebugInfos($node);
         $this->raw(sprintf($fmt, $node->getContent()));
     }
 
@@ -46,7 +47,14 @@ class TwigRenderer extends RendererAbstract
 
     protected function renderBlockTop(Run $node)
     {
+        $this->addDebugInfos($node);
         $this->write(sprintf('{%% %s %%}', $node->getContent()));
+    }
+
+    protected function writeDebugInfos($lineno)
+    {
+        $infos = sprintf('{%% line %d %%}', $lineno);
+        $this->raw($infos);
     }
 }
 

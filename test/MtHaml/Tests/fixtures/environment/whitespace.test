@@ -55,7 +55,7 @@ echo $env->compileString($parts['HAML'], "$file.haml");
   <b>
     test
   </b></div>
-  <p>{{ "Foo\nBar" }}</p>
+  <p>{% line 21 %}{{ "Foo\nBar" }}</p>
   <img /><img /><img />
   <img /><pre>foo
   bar</pre><img />

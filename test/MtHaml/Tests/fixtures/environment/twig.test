@@ -66,43 +66,43 @@ echo $env->compileString($parts['HAML'], "$file.haml");
     <div class="header">
       This is the header,
       with multiple lines in it.
-      {{ 1 + 9 + 8 + 2 }}
+      {% line 11 %}{{ 1 + 9 + 8 + 2 }}
     </div>
     <!--
       And now, a
-      {{ "multiline comment" }}
+      {% line 14 %}{{ "multiline comment" }}
       <p>everything can be nested in comments</p>
     -->
-    <div id="body">{{ " Hey I print something!" }}</div>
+    <div id="body">{% line 16 %}{{ " Hey I print something!" }}</div>
     {% for number in range(0, 120) %}
       {{ number }}
     {% endfor %}
     Wow.|
     <p>
-      {{ "Holy cow        " ~"multiline       " ~"tags!           " ~"A pipe (|) even!" }}
+      {% line 24 %}{{ "Holy cow        " ~"multiline       " ~"tags!           " ~"A pipe (|) even!" }}
       {{ [1, 2, 3]|length }}
-      {{ "Holy cow        " ~"multiline       " ~"tags!           " }}
+      {% line 28 %}{{ "Holy cow        " ~"multiline       " ~"tags!           " }}
     </p>
     <div class="silent">
-      {% set foo = "this" %}
+{% line 30 %}      {% set foo = "this" %}
       {% set foo = foo ~ " shouldn't" %}
       {% set foo = foo ~ " be displayed" %}
       {{ foo ~ " but now it should!" }}
     </div>
     = Escape
     <ul class="really cool">
-      {% for a in ('a'..'f') %}
+{% line 39 %}      {% for a in ('a'..'f') %}
         <li>{{ a }}</li>
       {% endfor %}
     </ul>
-    <div id="combo" class="of_divs_with_underscore">{{ "with this text" }}</div>
+    <div id="combo" class="of_divs_with_underscore">{% line 41 %}{{ "with this text" }}</div>
     <div id="escaping-test">
       {{ "this is not escaped" }}
       {{ ("this is escaped")|escape }}
       {{ ("this is forcibly not escaped")|raw }}
     </div>
     <div class="footer">
-      <strong class="shout">{{ "footer" }}</strong>
+      <strong class="shout">{% line 47 %}{{ "footer" }}</strong>
       {{ '{%' }} twig here should not be executed {
       {{ '{' }} neither here {{ '{{' }} or here {{ '{%' }} or here {
       {{ '%' }}
