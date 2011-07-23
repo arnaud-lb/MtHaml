@@ -1,0 +1,23 @@
+--HAML--
+/[if IE]
+  foo
+bar
+#id
+  /[if [f[o]o]]
+    baz
+/[if z]a []
+--EXPECT--
+root(
+  comment([if IE]
+    interpolated(text(foo))
+  )
+  interpolated(text(bar))
+  tag(div
+    attr(text(id)text(id))
+    comment([if [f[o]o]]
+      interpolated(text(baz))
+    )
+  )
+  comment(interpolated(text([if z]a [])))
+)
+

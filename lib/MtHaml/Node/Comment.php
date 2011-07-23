@@ -7,16 +7,28 @@ use MtHaml\NodeVisitor\NodeVisitorInterface;
 class Comment extends NestAbstract
 {
     protected $rendered;
+    protected $condition;
 
-    public function __construct(array $position, $rendered)
+    public function __construct(array $position, $rendered, $condition = null)
     {
         parent::__construct($position);
         $this->rendered = $rendered;
+        $this->condition = $condition;
     }
 
     public function isRendered()
     {
         return $this->rendered;
+    }
+
+    public function hasCondition()
+    {
+        return null !== $this->condition;
+    }
+
+    public function getCondition()
+    {
+        return $this->condition;
     }
 
     public function getNodeName()

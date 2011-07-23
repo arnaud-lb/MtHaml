@@ -191,10 +191,16 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             return false;
         }
 
+        if ($comment->hasCondition()) {
+            $open = '<!--' . $comment->getCondition() . '>';
+        } else {
+            $open = '<!--';
+        }
+
         if ($comment->hasContent()) {
-            $this->write('<!-- ', $comment->hasParent(), false);
+            $this->write($open . ' ', $comment->hasParent(), false);
         } else if ($comment->hasChilds()) {
-            $this->write('<!--', true, true)->indent();
+            $this->write($open, true, true)->indent();
         }
     }
 
@@ -204,10 +210,16 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             return false;
         }
 
+        if ($comment->hasCondition()) {
+            $close = '<![endif]-->';
+        } else {
+            $close = '-->';
+        }
+
         if ($comment->hasContent()) {
-            $this->write(' -->', false, $comment->hasParent());
+            $this->write(' ' . $close, false, $comment->hasParent());
         } else if ($comment->hasChilds()) {
-            $this->undent()->write('-->', true, true);
+            $this->undent()->write($close, true, true);
         }
     }
 

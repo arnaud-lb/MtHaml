@@ -282,7 +282,21 @@ class Parser
     protected function parseComment($buf)
     {
         if ($buf->match('!(-#|/)\s*!A', $match)) {
-            $node = new Comment($match['pos'][0], $match[1] == '/');
+            $pos = $match['pos'][0];
+            $rendered = '/' === $match[1];
+            $condition = null;
+
+            if ($rendered) {
+                // IE conditional comments
+                // example: [if IE lte 8]
+                //
+                // matches nested [...]
+                if ($buf->match('!(\[ ( [^\[\]]+ | (?1) )+  \])$!Ax', $match)) {
+                    $condition = $match[0];
+                }
+            }
+
+            $node = new Comment($pos, $rendered, $condition);
 
             if (null !== $nested = $this->parseNestableStatement($buf)) {
                 $node->setContent($nested);

@@ -200,7 +200,7 @@ class Printer extends NodeVisitorAbstract
 
     public function enterComment(Comment $node)
     {
-        $this->write('comment(', true, false)->indent();
+        $this->write('comment(' . $node->getCondition(), true, false)->indent();
     }
 
     public function enterCommentChilds(Comment $node)
