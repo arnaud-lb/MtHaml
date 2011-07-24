@@ -403,7 +403,15 @@ class Parser
                     break;
                 }
                 if (!$buf->match('/\s+/A')) {
-                    $this->syntaxErrorExpected($buf, "' ' or ')'");
+                    if (!$buf->isEol()) {
+                        $this->syntaxErrorExpected($buf, "' ', ')' or end of line");
+                    }
+                }
+
+                // allow line break
+                if ($buf->isEol()) {
+                    $buf->nextLine();
+                    $buf->skipWs();
                 }
 
             } while (true);

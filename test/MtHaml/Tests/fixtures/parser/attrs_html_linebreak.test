@@ -1,0 +1,17 @@
+--HAML--
+%html(foo="bar"
+    bar="baz")
+%html(foo="trailing space =>" 
+    bar="baz")
+--EXPECT--
+root(
+  tag(html
+    attr(text(foo)interpolated(text(bar)))
+    attr(text(bar)interpolated(text(baz)))
+  )
+  tag(html
+    attr(text(foo)interpolated(text(trailing space =>)))
+    attr(text(bar)interpolated(text(baz)))
+  )
+)
+

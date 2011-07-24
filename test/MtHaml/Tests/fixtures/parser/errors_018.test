@@ -1,0 +1,6 @@
+--HAML--
+%html(foo="bar"
+%p
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Unexpected '%', expected html attribute name in .* on line 3, column 1
