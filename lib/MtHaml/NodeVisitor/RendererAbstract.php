@@ -28,7 +28,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
     protected $env;
     protected $charset = 'UTF-8';
 
-    protected $midblock = 0;
+    protected $midblock = array(false);
 
     public function __construct(Environment $env)
     {
@@ -265,7 +265,10 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     public function enterRun(Run $node)
     {
-        if (!$this->midblock) {
+        $isMidBlock = $this->midblock[0];
+        array_unshift($this->midblock, false);
+
+        if (!$isMidBlock) {
             $this->enterTopblock($node);
         } else {
             $this->enterMidblock($node);
@@ -284,17 +287,19 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     public function enterRunMidblock(Run $node)
     {
-        ++$this->midblock;
+        array_unshift($this->midblock, true);
     }
 
     public function leaveRunMidblock(Run $node)
     {
-        --$this->midblock;
+        array_shift($this->midblock);
     }
 
     public function leaveRun(Run $node)
     {
-        if (!$this->midblock) {
+        array_shift($this->midblock);
+
+        if (!$this->midblock[0]) {
             $this->leaveTopblock($node);
         } else {
             $this->leaveMidblock($node);

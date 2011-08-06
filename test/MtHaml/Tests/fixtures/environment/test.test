@@ -1,0 +1,24 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+--HAML--
+- if a
+  = b
+- elseif c
+  - for d in e
+    - if f
+      = d
+= g
+--EXPECT--
+{% if a %}
+  {{ b }}
+{% elseif c %}
+  {% for d in e %}
+    {% if f %}
+      {{ d }}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% line 7 %}{{ g }}
+
