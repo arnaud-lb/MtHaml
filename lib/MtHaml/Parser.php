@@ -268,7 +268,6 @@ class Parser
 
         } else if ($buf->match('/-(?!#)/A', $match)) {
 
-            $buf->eatChar();
             $buf->skipWs();
             return new Run($match['pos'][0], $buf->getLine());
 

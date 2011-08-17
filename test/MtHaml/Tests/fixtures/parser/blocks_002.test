@@ -1,0 +1,15 @@
+--HAML--
+-block foo
+  %bar
+- block foo
+  %bar
+--EXPECT--
+root(
+  run(block foo
+    tag(bar)
+  )
+  run(block foo
+    tag(bar)
+  )
+)
+
