@@ -78,7 +78,7 @@ See [examples][7]
 
 ## Escaping
 
-MtHaml will escape everything by default. As twig already supports auto escaping it is recommended to enable it in Twig and disable it in MtHaml:
+MtHaml will escape everything by default. Since Twig already supports auto escaping it is recommended to enable it in Twig and disable it in MtHaml:
 
 `new MtHaml\Environment('twig', array('enable_escaper' => false));`
 
@@ -96,7 +96,7 @@ Email <?php echo htmlspecialchars($user->getEmail(), ENT_QUOTES, 'UTF-8'); ?>
 
 ## Twig
 
-Using [Twig][4] in HAML give more control over what can be executed, what variables and functions are exposed to the templates, etc. This also allows to use all of Twig's awesome features like template inheritance, macros, blocks, filters, functions, tests, ...
+Using [Twig][4] in HAML gives more control over what can be executed, what variables and functions are exposed to the templates, etc. This also allows to use all of Twig's awesome features like template inheritance, macros, blocks, filters, functions, tests, ...
 
 ``` haml
 - extends "some-template.haml"
@@ -111,7 +111,7 @@ Using [Twig][4] in HAML give more control over what can be executed, what variab
 
 ### Integration in Twig
 
-MtHaml comes with a Twig_Loader that will automatically convert HAML into Twig at loading time (Twig will then compile the resulting Twig script and cache it). Scripts starting with `{% haml %}` will be parsed as HAML, and the others will be left untouched.
+MtHaml comes with an example Twig_Loader that will automatically convert HAML into Twig at loading time (Twig will then compile the resulting Twig script and cache it). Scripts starting with `{% haml %}` will be parsed as HAML, and the others will be left untouched.
 
 The loader acts as a proxy and takes an other loader as parameter:
 
@@ -126,13 +126,13 @@ $twig_loader = new MtHaml\Support\Twig\Loader($twig_loader);
 
 ## Syntax
 
-The syntax is the same as [HAML/Ruby][1]'s syntax; except that PHP or Twig have to be used where Ruby is expected.
+The syntax is the same as [HAML/Ruby][1]'s syntax, except that PHP or Twig have to be used where Ruby is expected.
 
 See the [tutorial][2] and the [reference][3]
 
 ## Performance
 
-MtHaml has no overhead as everything is done at compile time. Compiled templates are cacheable and don't even need MtHaml to execute.
+MtHaml has no overhead since everything is done at compile time. Compiled templates are cacheable and don't even need MtHaml to execute.
 
 ## Unsupported features
 
@@ -147,7 +147,11 @@ Some features are still to be implemented:
 
 ## Helpers
 
-Helpers un HAML/Ruby are just ruby functions exposed to templates. Any function can be made available to HAML templates by the target language (the function only have to be available at runtime).
+Helpers in HAML/Ruby are just ruby functions exposed to templates.
+Any function can be made available to HAML templates by the target language
+(the function only have to be available at runtime).
+
+In HAML/Twig you can use all of Twig's functions, filters and tags. In PHP, you can use all PHP functions.
 
 ## Filters
 
@@ -172,7 +176,7 @@ Example:
 
 ## Sass
 
-[Sass][6] can be used in PHP projects without problem. It only depends on Ruby and does not need to be installed on production servers. So MtHaml will not re-implement Sass.
+[Sass][6] can be used in PHP projects without problem.It only depends on Ruby and does not need to be installed on production servers. So MtHaml will not re-implement Sass.
 
 ## License
 
