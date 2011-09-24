@@ -133,7 +133,10 @@ See the [tutorial][2] and the [reference][3]
 
 ## Performance
 
-MtHaml has no overhead since everything is done at compile time. Compiled templates are cacheable and don't even need MtHaml to execute.
+MtHaml converts HAML to PHP or Twig code. The resulting code can be cached and executed any number of times, and
+doesn't depend on HAML at runtime.
+
+MtHaml has no runtime overhead.
 
 ## Unsupported features
 
