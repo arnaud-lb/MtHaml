@@ -9,9 +9,9 @@ Mt-Haml implements the exact same syntax as ruby-haml; the only difference is th
 ## HAML/Twig:
 
 ``` haml
-ul#users
+%ul#users
   - for user in users
-    %li
+    %li.user
       = user.name
       Email: #{user.email}
       %a(href=user.url) Home page
@@ -22,7 +22,7 @@ Rendered:
 ``` jinja
 <ul id="users">
   {% for user in users %}
-    <li>
+    <li class="user">
       {{ user.name }}
       Email: {{ user.email }}
       <a href="{{ user.url }}">Home page</a>
@@ -34,9 +34,9 @@ Rendered:
 ## HAML/PHP:
 
 ``` haml
-ul#users
+%ul#users
   - foreach($users as $user)
-    %li
+    %li.user
       = $user->getName()
       Email: #{$user->getEmail()}
       %a(href=$user->getUrl()) Home page
@@ -47,7 +47,7 @@ Rendered:
 ``` php
 <ul id="users">
   <?php foreach($users as $user) { ?>
-    <li>
+    <li class="user">
       <?php echo $user->getName(); ?>
       Email: <?php echo $user->getEmail(); ?>
       <a href="<?php echo $user->getUrl(); ?>">Home page</a>
@@ -78,7 +78,8 @@ See [examples][7]
 
 ## Escaping
 
-MtHaml will escape everything by default. Since Twig already supports auto escaping it is recommended to enable it in Twig and disable it in MtHaml:
+MtHaml escapes everything by default. Since Twig already supports
+auto escaping it is recommended to enable it in Twig and disable it in MtHaml:
 
 `new MtHaml\Environment('twig', array('enable_escaper' => false));`
 
