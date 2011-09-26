@@ -247,36 +247,18 @@ class Parser
      */
     protected function parseLine($buf)
     {
-        $doctypeRegex = '/
-            !!!                         # start of doctype decl
-            (?:
-                \s(?P<type>[^\s]+)      # optional doctype id
-                (?:\s(?P<options>.*))?  # doctype options (e.g. charset, for
-                                        # xml decls)
-            )?$/Ax';
-
-        if ($buf->match($doctypeRegex, $match)) {
-
-            $type = empty($match['type']) ? null : $match['type'];
-            $options = empty($match['options']) ? null : $match['options'];
-            $node = new Doctype($match['pos'][0], $type, $options);
-            $this->processStatement($buf, $node, '');
-
-        } else {
-
-            if ('' === trim($buf->getLine())) {
-                return;
-            }
-
-            $buf->match('/[ \t]*/A', $match);
-            $indent = $match[0];
-            $this->checkIndent($buf, $indent);
-
-            if (null === $node = $this->parseStatement($buf)) {
-                $this->syntaxErrorExect($buf, 'statement');
-            }
-            $this->processStatement($buf, $node);
+        if ('' === trim($buf->getLine())) {
+            return;
         }
+
+        $buf->match('/[ \t]*/A', $match);
+        $indent = $match[0];
+        $this->checkIndent($buf, $indent);
+
+        if (null === $node = $this->parseStatement($buf)) {
+            $this->syntaxErrorExect($buf, 'statement');
+        }
+        $this->processStatement($buf, $node);
     }
 
     protected function parseStatement($buf)
@@ -322,10 +304,33 @@ class Parser
             $buf->skipWs();
             return new Run($match['pos'][0], $buf->getLine());
 
+        } else if (null !== $doctype = $this->parseDoctype($buf)) {
+
+            return $doctype;
+
         } else {
             if (null !== $node = $this->parseNestableStatement($buf)) {
                 return new Statement($node->getPosition(), $node);
             }
+        }
+    }
+
+    protected function parseDoctype($buf)
+    {
+        $doctypeRegex = '/
+            !!!                         # start of doctype decl
+            (?:
+                \s(?P<type>[^\s]+)      # optional doctype id
+                (?:\s(?P<options>.*))?  # doctype options (e.g. charset, for
+                                        # xml decls)
+            )?$/Ax';
+
+        if ($buf->match($doctypeRegex, $match)) {
+
+            $type = empty($match['type']) ? null : $match['type'];
+            $options = empty($match['options']) ? null : $match['options'];
+            $node = new Doctype($match['pos'][0], $type, $options);
+            return $node;
         }
     }
 
