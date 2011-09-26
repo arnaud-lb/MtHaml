@@ -1,0 +1,16 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+!!!
+!!! XML
+!!! XML utf-8
+!!! XML iso-8859-15
+--EXPECT--
+<!DOCTYPE html>
+<?xml version='1.0' encoding='utf-8' ?>
+<?xml version='1.0' encoding='utf-8' ?>
+<?xml version='1.0' encoding='iso-8859-15' ?>
+
