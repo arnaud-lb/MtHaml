@@ -4,6 +4,12 @@ namespace MtHaml\Node;
 
 use MtHaml\NodeVisitor\NodeVisitorInterface;
 
+/**
+ * Run Node
+ *
+ * Represents code to execute. If there is children, the node should be
+ * rendered as a block (the renderer should emit a properly closed block).
+ */
 class Run extends NestAbstract
 {
     private $midblock;

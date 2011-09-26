@@ -4,6 +4,11 @@ namespace MtHaml\Node;
 
 use MtHaml\NodeVisitor\NodeVisitorInterface;
 
+/**
+ * Insert Node
+ *
+ * Represents code to execute and whose result is inserted in the document.
+ */
 class Insert extends EscapableAbstract
 {
     protected $content;

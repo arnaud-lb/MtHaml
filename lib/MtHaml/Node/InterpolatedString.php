@@ -4,6 +4,12 @@ namespace MtHaml\Node;
 
 use MtHaml\NodeVisitor\NodeVisitorInterface;
 
+/**
+ * InterpolatedString Node
+ *
+ * Represents a ruby-like interpolated string. Children are Text and Insert
+ * nodes.
+ */
 class InterpolatedString extends NodeAbstract
 {
     protected $childs;
