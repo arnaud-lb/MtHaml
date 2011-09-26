@@ -18,6 +18,9 @@ use MtHaml\Node\Statement;
 use MtHaml\Node\NestInterface;
 use MtHaml\Node\Filter;
 
+/**
+ * MtHaml Parser
+ */
 class Parser
 {
     protected $parentStack = array();
@@ -39,6 +42,12 @@ class Parser
         $this->parent = new Root;
     }
 
+    /**
+     * Verifies and maintains indentation state
+     *
+     * @param Buffer $buf
+     * @param string $indent The indentation characters of the current line
+     */
     public function checkIndent($buf, $indent)
     {
         $this->prevIndentLevel = $this->indentLevel;
@@ -88,6 +97,19 @@ class Parser
         }
     }
 
+    /**
+     * Returns the indentation string for the current line
+     *
+     * Returns the string that should be used for indentation in regard to the
+     * current indentation state.
+     *
+     * @param int       $levelOffset    Identation level offset
+     * @param string    $fallback       Fallback indent string. If there is
+     *                                  currently no indentation level and
+     *                                  fallback is not null, the first char of
+     *                                  $fallback is returned instead
+     * @return string   A string of zero or more spaces or tabs
+     */
     public function getIndentString($levelOffset = 0, $fallback = null)
     {
         if (null !== $this->indentChar) {
@@ -103,6 +125,15 @@ class Parser
         return '';
     }
 
+    /**
+     * Processes a statement
+     *
+     * Inserts a new $node in the tree, given the current and previous
+     * indentation level.
+     *
+     * @param Buffer        $buf
+     * @param NodeAbstract  $node   Node to insert in the tree
+     */
     public function processStatement($buf, NodeAbstract $node)
     {
         // open tag or block
@@ -152,6 +183,14 @@ class Parser
         $this->prev = $node;
     }
 
+    /**
+     * Parses a HAML document
+     *
+     * @param string    $string     A HAML document
+     * @param string    $fileaname  Filename to report in error messages
+     * @param string    $lineno     Line number of the first line of $string in
+     *                              $filename (for error messages)
+     */
     public function parse($string, $filename, $lineno = 1)
     {
         $this->filename = $filename;
@@ -169,6 +208,15 @@ class Parser
         }
     }
 
+    /**
+     * Handles HAML multiline syntax
+     *
+     * Any line terminated by ` |` is concatenated with the following lines
+     * also terminated by ` |`. Empty or whitespace-only lines are ignored. The
+     * current line is replaced by the resulting line in $buf.
+     *
+     * @param Buffer $buf
+     */
     public function handleMultiline($buf)
     {
         $line = $buf->getLine();
@@ -194,6 +242,9 @@ class Parser
         return ' |' === substr($string, -2);
     }
 
+    /**
+     * Parses a HAML line
+     */
     protected function parseLine($buf)
     {
         $doctypeRegex = '/

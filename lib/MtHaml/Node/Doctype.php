@@ -4,6 +4,9 @@ namespace MtHaml\Node;
 
 use MtHaml\NodeVisitor\NodeVisitorInterface;
 
+/**
+ * Doctype Node
+ */
 class Doctype extends NodeAbstract
 {
     protected $doctypeId;
