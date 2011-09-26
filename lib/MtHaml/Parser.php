@@ -263,31 +263,7 @@ class Parser
 
     protected function parseStatement($buf)
     {
-        if ($buf->match('/
-                    %(?P<tag_name>[\w:-]+)  # explicit tag name ( %tagname )
-                    | (?=[.#][\w-])         # implicit div with class or id
-                                            # ( .class or #id )
-                /xA', $match))
-        {
-            $tag_name = empty($match['tag_name']) ? 'div' : $match['tag_name'];
-
-            $attributes = $this->parseTagAttributes($buf);
-
-            $flags = $this->parseTagFlags($buf);
-
-            $node = new Tag($match['pos'][0], $tag_name, $attributes, $flags);
-
-            $buf->skipWs();
-
-            if (null !== $nested = $this->parseNestableStatement($buf)) {
-
-                if ($flags & Tag::FLAG_SELF_CLOSE) {
-                    $msg = 'Illegal nesting: nesting within a self-closing tag is illegal';
-                    $this->syntaxError($buf, $msg);
-                }
-
-                $node->setContent($nested);
-            }
+        if (null !== $node = $this->parseTag($buf)) {
 
             return $node;
 
@@ -354,6 +330,40 @@ class Parser
             $node = new Comment($pos, $rendered, $condition);
 
             if (null !== $nested = $this->parseNestableStatement($buf)) {
+                $node->setContent($nested);
+            }
+
+            return $node;
+        }
+    }
+
+    protected function parseTag($buf)
+    {
+        $tagRegex = '/
+            %(?P<tag_name>[\w:-]+)  # explicit tag name ( %tagname )
+            | (?=[.#][\w-])         # implicit div followed by class or id
+                                    # ( .class or #id )
+            /xA';
+
+        if ($buf->match($tagRegex, $match))
+        {
+            $tag_name = empty($match['tag_name']) ? 'div' : $match['tag_name'];
+
+            $attributes = $this->parseTagAttributes($buf);
+
+            $flags = $this->parseTagFlags($buf);
+
+            $node = new Tag($match['pos'][0], $tag_name, $attributes, $flags);
+
+            $buf->skipWs();
+
+            if (null !== $nested = $this->parseNestableStatement($buf)) {
+
+                if ($flags & Tag::FLAG_SELF_CLOSE) {
+                    $msg = 'Illegal nesting: nesting within a self-closing tag is illegal';
+                    $this->syntaxError($buf, $msg);
+                }
+
                 $node->setContent($nested);
             }
 
