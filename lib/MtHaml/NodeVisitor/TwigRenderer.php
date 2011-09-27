@@ -39,8 +39,8 @@ class TwigRenderer extends RendererAbstract
     public function leaveTopBlock(Run $node)
     {
         if ($node->hasChilds()) {
-            if (preg_match('~^(\w+)~', $node->getContent(), $match)) {
-                $this->write(sprintf('{%% end%s %%}', $match[1]));
+            if (preg_match('~^(?:-\s*)?(\w+)~', $node->getContent(), $match)) {
+                $this->write($this->renderTag('end'.$match[1]));
             }
         }
     }
@@ -48,7 +48,22 @@ class TwigRenderer extends RendererAbstract
     protected function renderBlockTop(Run $node)
     {
         $this->addDebugInfos($node);
-        $this->write(sprintf('{%% %s %%}', $node->getContent()));
+        $this->write($this->renderTag($node->getContent()));
+    }
+
+    protected function renderTag($content)
+    {
+        $prefix = ' ';
+        $suffix = ' ';
+
+        if (preg_match('/^-/', $content)) {
+            $prefix = '';
+        }
+        if (preg_match('/-$/', $content)) {
+            $suffix = '';
+        }
+
+        return sprintf('{%%%s%s%s%%}', $prefix, $content, $suffix);
     }
 
     protected function writeDebugInfos($lineno)

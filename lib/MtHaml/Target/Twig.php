@@ -10,7 +10,7 @@ class Twig extends TargetAbstract
     public function __construct(array $options = array())
     {
         parent::__construct($options + array(
-            'midblock_regex' => '/else\b|elseif\b/A',
+            'midblock_regex' => '/(?:-\s*)?(?:else\b|elseif\b)/A',
         ));
     }
 
