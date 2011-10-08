@@ -20,8 +20,8 @@ root(
   )
   tag(p
     attr(interpolated(text(foo))interpolated(text(test )insert(a + b / c({# + 3 + "" + ''}) )text( bar )insert("baz")text( " )))
-    attr(insert(("a" + "bc") )interpolated(text(d=>f)))
-    attr(text(z)insert({x} ))
+    attr(insert(("a" + "bc"))interpolated(text(d=>f)))
+    attr(text(z)insert({x}))
   )
   tag(p
     attr(text(abc)interpolated(text(def)))

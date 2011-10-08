@@ -1,5 +1,0 @@
---HAML--
-%html(foo = :/
---EXCEPTION--
-MtHaml\Exception\SyntaxErrorException
-Unexpected ':', expected symbol in .* on line 2, column 13

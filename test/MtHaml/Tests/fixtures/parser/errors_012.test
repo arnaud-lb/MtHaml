@@ -1,5 +1,0 @@
---HAML--
-%html(foo = "bar"=
---EXCEPTION--
-MtHaml\Exception\SyntaxErrorException
-Unexpected '=', expected ' ', '\)' or end of line in .* on line 2, column 18

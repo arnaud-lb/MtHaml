@@ -421,7 +421,8 @@ class Parser
             do {
                 $name = $this->parseAttrExpression($buf, '=,');
 
-                if (!$buf->match('/\s*=>\s*/A')) {
+                $buf->skipWs();
+                if (!$buf->match('/=>\s*/A')) {
                     $this->syntaxErrorExpected($buf, "'=>'");
                 }
 
@@ -430,10 +431,13 @@ class Parser
                 $attr = new TagAttribute($name->getPosition(), $name, $value);
                 $attrs[] = $attr;
 
-                if ($buf->match('/\s*}/A')) {
+                $buf->skipWs();
+                if ($buf->match('/}/A')) {
                     break;
                 }
-                if (!$buf->match('/\s*,\s*/A')) {
+
+                $buf->skipWs();
+                if (!$buf->match('/,\s*/A')) {
                     $this->syntaxErrorExpected($buf, "',' or '}'");
                 }
                 // allow line break after comma
@@ -455,7 +459,8 @@ class Parser
                 }
                 $name = new Text($match['pos'][0], $match[0]);
 
-                if (!$buf->match('/\s*=\s*/A')) {
+                $buf->skipWs();
+                if (!$buf->match('/=\s*/A')) {
                     $this->syntaxErrorExpected($buf, "'='");
                 }
 
@@ -487,14 +492,32 @@ class Parser
 
     protected function parseAttrExpression($buf, $delims)
     {
-        if ($buf->match('/"/A', $match, false)) {
-            return $this->parseInterpolatedString($buf);
-        } else if ($buf->match('/:/A', $match, false)) {
-            return $this->parseSymbol($buf);
-        } else {
-            list($expr, $pos) = $this->parseExpression($buf, $delims);
-            return new Insert($pos, $expr);
+        $sub = clone $buf;
+
+        list($expr, $pos) = $this->parseExpression($buf, $delims);
+
+        // hack to return a parsed string or symbol instead of an expression
+        // if the whole expression can be parsed as string or symbol.
+
+        if (preg_match('/"/A', $expr)) {
+            try {
+                $string = $this->parseInterpolatedString($sub);
+                if ($sub->getColumn() == $buf->getColumn()) {
+                    return $string;
+                }
+            } catch(SyntaxErrorException $e) {
+            }
+        } else if (preg_match('/:/A', $expr)) {
+            try {
+                $sym = $this->parseSymbol($sub);
+                if ($sub->getColumn() == $buf->getColumn()) {
+                    return $sym;
+                }
+            } catch(SyntaxErrorException $e) {
+            }
         }
+
+        return new Insert($pos, $expr);
     }
 
     protected function parseExpression($buf, $delims)
@@ -504,10 +527,21 @@ class Parser
         // {}, and () (recursive)
 
         $re = "/(?P<expr>(?:
-                [^(){}\"\'\\\\$delims]+
+                
+                # anything except \", ', (), {}
+                (?:[^(){}\"\'\\\\$delims]+(?=(?P>expr)))
+                |(?:[^(){}\"\'\\\\ $delims]+)
+
+                # double quoted string
                 | \"(?: [^\"\\\\]+ | \\\\[\"\\\\] )*\"
+
+                # single quoted string
                 | '(?: [^'\\\\]+ | \\\\['\\\\] )*'
+
+                # { ... } pair
                 | \{ (?: (?P>expr) | [$delims] )* \}
+
+                # ( ... ) pair
                 | \( (?: (?P>expr) | [$delims] )* \)
             )+)/xA";
 
@@ -530,7 +564,7 @@ class Parser
     protected function parseInterpolatedString($buf, $quoted = true)
     {
         if ($quoted && !$buf->match('/"/A', $match)) {
-            $this->syntaxErrorExpected('double quoted string');
+            $this->syntaxErrorExpected($buf, 'double quoted string');
         }
 
         $node = new InterpolatedString($buf->getPosition());
