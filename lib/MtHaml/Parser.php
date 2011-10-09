@@ -502,7 +502,8 @@ class Parser
         if (preg_match('/"/A', $expr)) {
             try {
                 $string = $this->parseInterpolatedString($sub);
-                if ($sub->getColumn() == $buf->getColumn()) {
+                if ($sub->getColumn() >= $buf->getColumn()) {
+                    $buf->eatChars($sub->getColumn() - $buf->getColumn());
                     return $string;
                 }
             } catch(SyntaxErrorException $e) {
@@ -510,7 +511,8 @@ class Parser
         } else if (preg_match('/:/A', $expr)) {
             try {
                 $sym = $this->parseSymbol($sub);
-                if ($sub->getColumn() == $buf->getColumn()) {
+                if ($sub->getColumn() >= $buf->getColumn()) {
+                    $buf->eatChars($sub->getColumn() - $buf->getColumn());
                     return $sym;
                 }
             } catch(SyntaxErrorException $e) {
