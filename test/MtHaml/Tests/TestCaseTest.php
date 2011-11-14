@@ -40,7 +40,7 @@ class TestCaseTest extends TestCase
 
     /**
      * @expectedException PHPUnit_Framework_ExpectationFailedException
-     * @expectedExceptionMessage Failed asserting that <string:foo> matches PCRE pattern "~^(bar)$~".
+     * @expectedExceptionMessage Failed asserting that 'foo' matches PCRE pattern "~^(bar)$~".
      */
     public function testAssertExceptionFailsIfMessageDoesNotMatch()
     {
