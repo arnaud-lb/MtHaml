@@ -1,0 +1,22 @@
+{
+    "name": "mthaml/mthaml",
+    "type": "library",
+    "description": "HAML for PHP",
+    "keywords": ["HAML"],
+    "homepage": "https://github.com/arnaud-lb/MtHaml",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arnaud Le Blanc",
+            "email": "arnaud.lb@gmail.com"
+        }
+    ],
+    "required": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "prs-0": {
+            "MtHaml\\": "lib/"
+        }
+    }
+}
