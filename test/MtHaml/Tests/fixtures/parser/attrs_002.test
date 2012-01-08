@@ -1,6 +1,8 @@
 --HAML--
 %input(type="submit" value=foo().bar)
 %input(type="submit" value=foo{}.bar)
+%input(type="submit" value=(foo ? bar : baz))
+%input(type="submit" value=(foo or bar ? bar('foo\\bar\'bar') : baz('')))
 --EXPECT--
 root(
   tag(input
@@ -10,6 +12,14 @@ root(
   tag(input
     attr(text(type)interpolated(text(submit)))
     attr(text(value)insert(foo{}.bar))
+  )
+  tag(input
+    attr(text(type)interpolated(text(submit)))
+    attr(text(value)insert((foo ? bar : baz)))
+  )
+  tag(input
+    attr(text(type)interpolated(text(submit)))
+    attr(text(value)insert((foo or bar ? bar('foo\\bar\'bar') : baz(''))))
   )
 )
 
