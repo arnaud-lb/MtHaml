@@ -17,7 +17,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
         if (!empty($class)) {
             if (null === $e) {
-                $this->syntheticFail('Expected exception ' . $class);
+                $this->assertThat(
+                    NULL,
+                    new \PHPUnit_Framework_Constraint_Exception($class)
+                );
             }
             if (get_class($e) !== $class) {
                 throw $e;

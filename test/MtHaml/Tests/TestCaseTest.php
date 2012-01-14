@@ -21,8 +21,8 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_SyntheticError
-     * @expectedExceptionMessage Expected exception Foo
+     * @expectedException PHPUnit_Framework_ExpectationFailedException
+     * @expectedExceptionMessage Failed asserting that exception of type "Foo"
      */
     public function testAssertExceptionFailsIfExpectedButNothingThrown()
     {
