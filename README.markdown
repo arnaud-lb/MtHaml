@@ -1,5 +1,7 @@
 # Multi target HAML
 
+[![Build Status](https://secure.travis-ci.org/arnaud-lb/MtHaml.png)](http://travis-ci.org/arnaud-lb/MtHaml)
+
 MtHaml is a PHP implementation of the [HAML language][1] which can target multiple languages.
 
 Currently supported targets are PHP and [Twig][4], and new ones can be added easily.
