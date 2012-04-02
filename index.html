@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Mthaml : Multi target HAML (HAML for PHP, Twig, &lt;your language here&gt;)" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Mthaml</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/arnaud-lb/MtHaml">Fork Me on GitHub</a>
+
+          <h1 id="project_title">Mthaml</h1>
+          <h2 id="project_tagline">Multi target HAML (HAML for PHP, Twig, &lt;your language here&gt;)</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/arnaud-lb/MtHaml/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/arnaud-lb/MtHaml/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Multi target HAML</h1>
+
+<p>MtHaml is a PHP implementation of the <a href="http://haml-lang.com/">HAML language</a> which can target multiple languages.</p>
+
+<p>Currently supported targets are PHP and <a href="http://www.twig-project.org/">Twig</a>, and new ones can be added easily.</p>
+
+<p>Mt-Haml implements the exact same syntax as ruby-haml; the only difference is that any supported language can be used everywhere HAML expects Ruby code:</p>
+
+<h2>HAML/Twig:</h2>
+
+<div class="highlight">
+<pre><span class="nt">%ul</span><span class="nf">#users</span>
+  <span class="p">-</span> <span class="k">for</span> <span class="n">user</span> <span class="k">in</span> <span class="n">users</span>
+    <span class="nt">%li</span><span class="nc">.user</span>
+      <span class="p">=</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span>
+      Email: <span class="si">#{</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="si">}</span>
+      <span class="nt">%a</span>(<span class="na">href=</span><span class="nv">user</span><span class="err">.</span><span class="na">url</span>) Home page
+</pre>
+</div>
+
+
+<p>Rendered:</p>
+
+<div class="highlight">
+<pre><span class="x">&lt;ul id="users"&gt;</span>
+<span class="x">  </span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">user</span> <span class="k">in</span> <span class="nv">users</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">    &lt;li class="user"&gt;</span>
+<span class="x">      </span><span class="cp">{{</span> <span class="nv">user.name</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">      Email: </span><span class="cp">{{</span> <span class="nv">user.email</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x">      &lt;a href="</span><span class="cp">{{</span> <span class="nv">user.url</span> <span class="cp">}}</span><span class="x">"&gt;Home page&lt;/a&gt;</span>
+<span class="x">    &lt;/li&gt;</span>
+<span class="x">  </span><span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">&lt;/ul&gt;</span>
+</pre>
+</div>
+
+
+<h2>HAML/PHP:</h2>
+
+<div class="highlight">
+<pre><span class="nt">%ul</span><span class="nf">#users</span>
+  <span class="p">-</span> <span class="n">foreach</span><span class="p">(</span><span class="vg">$users</span> <span class="n">as</span> <span class="vg">$user</span><span class="p">)</span>
+    <span class="nt">%li</span><span class="nc">.user</span>
+      <span class="p">=</span> <span class="vg">$user</span><span class="o">-&gt;</span><span class="n">getName</span><span class="p">()</span>
+      Email: <span class="si">#{</span><span class="vg">$user</span><span class="o">-&gt;</span><span class="n">getEmail</span><span class="p">()</span><span class="si">}</span>
+      <span class="nt">%a</span>(<span class="na">href=</span><span class="vg">$user</span><span class="na">-</span><span class="err">&gt;</span><span class="na">getUrl</span><span class="err">(</span>)) Home page
+</pre>
+</div>
+
+
+<p>Rendered:</p>
+
+<div class="highlight">
+<pre><span class="x">&lt;ul id="users"&gt;</span>
+<span class="x">  </span><span class="cp">&lt;?php</span> <span class="k">foreach</span><span class="p">(</span><span class="nv">$users</span> <span class="k">as</span> <span class="nv">$user</span><span class="p">)</span> <span class="p">{</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">    &lt;li class="user"&gt;</span>
+<span class="x">      </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getName</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      Email: </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">      &lt;a href="</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getUrl</span><span class="p">();</span> <span class="cp">?&gt;</span><span class="x">"&gt;Home page&lt;/a&gt;</span>
+<span class="x">    &lt;/li&gt;</span>
+<span class="x">  </span><span class="cp">&lt;?php</span> <span class="p">}</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">&lt;/ul&gt;</span>
+</pre>
+</div>
+
+
+<h2>Usage</h2>
+
+<p>PHP:</p>
+
+<div class="highlight">
+<pre><span class="cp">&lt;?php</span>
+<span class="nv">$haml</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MtHaml\Environment</span><span class="p">(</span><span class="s1">'php'</span><span class="p">);</span>
+<span class="nv">$compiled</span> <span class="o">=</span> <span class="nv">$haml</span><span class="o">-&gt;</span><span class="na">compileString</span><span class="p">(</span><span class="nv">$haml_template</span><span class="p">,</span> <span class="s2">"filename"</span><span class="p">);</span>
+</pre>
+</div>
+
+
+<p><a href="http://www.twig-project.org/">Twig</a>:</p>
+
+<div class="highlight">
+<pre><span class="cp">&lt;?php</span>
+<span class="nv">$haml</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MtHaml\Environment</span><span class="p">(</span><span class="s1">'twig'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'enable_escaper'</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">));</span>
+<span class="nv">$compiled</span> <span class="o">=</span> <span class="nv">$haml</span><span class="o">-&gt;</span><span class="na">compileString</span><span class="p">(</span><span class="nv">$haml_template</span><span class="p">,</span> <span class="s2">"filename"</span><span class="p">);</span>
+</pre>
+</div>
+
+
+<p>See <a href="https://github.com/arnaud-lb/MtHaml/blob/master/examples/example.php">examples</a></p>
+
+<h2>Escaping</h2>
+
+<p>MtHaml escapes everything by default. Since Twig already supports
+auto escaping it is recommended to enable it in Twig and disable it in MtHaml:</p>
+
+<p><code>new MtHaml\Environment('twig', array('enable_escaper' =&gt; false));</code></p>
+
+<p>HAML/PHP is rendered like this when auto escaping is enabled:</p>
+
+<div class="highlight">
+<pre>Email <span class="si">#{</span><span class="vg">$user</span><span class="o">-&gt;</span><span class="n">getEmail</span><span class="p">()</span><span class="si">}</span>
+<span class="nt">%a</span>(<span class="na">href=</span><span class="vg">$user</span><span class="na">-</span><span class="err">&gt;</span><span class="na">getUrl</span><span class="err">(</span>)) Home page
+</pre>
+</div>
+
+
+<div class="highlight">
+<pre><span class="x">Email </span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getEmail</span><span class="p">(),</span> <span class="nx">ENT_QUOTES</span><span class="p">,</span> <span class="s1">'UTF-8'</span><span class="p">);</span> <span class="cp">?&gt;</span><span class="x"></span>
+<span class="x">&lt;a href="</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getUrl</span><span class="p">(),</span> <span class="nx">ENT_QUOTES</span><span class="p">,</span> <span class="s1">'UTF-8'</span><span class="p">);</span> <span class="cp">?&gt;</span><span class="x">"&gt;Home page&lt;/a&gt;</span>
+</pre>
+</div>
+
+
+<h2>Twig</h2>
+
+<p>Using <a href="http://www.twig-project.org/">Twig</a> in HAML gives more control over what can be executed, what variables and functions are exposed to the templates, etc. This also allows to use all of Twig's awesome features like template inheritance, macros, blocks, filters, functions, tests, ...</p>
+
+<div class="highlight">
+<pre><span class="p">-</span> <span class="n">extends</span> <span class="s2">"some-template.haml"</span>
+
+<span class="p">-</span> <span class="n">macro</span> <span class="n">printSomething</span><span class="p">()</span>
+  <span class="nt">%p</span> something
+
+<span class="p">-</span> <span class="n">block</span> <span class="n">body</span>
+  <span class="nt">%h1</span> Title
+  <span class="p">=</span> <span class="n">_self</span><span class="o">.</span><span class="n">printSomething</span><span class="p">()</span>
+</pre>
+</div>
+
+
+<h3>Integration in Twig</h3>
+
+<p>MtHaml comes with an example Twig_Loader that will automatically convert HAML into Twig at loading time (Twig will then compile the resulting Twig script and cache it). Scripts starting with <code>{% haml %}</code> will be parsed as HAML, and the others will be left untouched.</p>
+
+<p>The loader acts as a proxy and takes an other loader as parameter:</p>
+
+<div class="highlight">
+<pre><span class="cp">&lt;?php</span>
+
+<span class="nv">$haml</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MtHaml\Environment</span><span class="p">(</span><span class="o">...</span><span class="p">);</span>
+
+<span class="nv">$twig_loader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Twig_Loader_Filesystem</span><span class="p">(</span><span class="o">...</span><span class="p">);</span>
+<span class="nv">$twig_loader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MtHaml\Support\Twig\Loader</span><span class="p">(</span><span class="nv">$twig_loader</span><span class="p">);</span>
+</pre>
+</div>
+
+
+<h2>Syntax</h2>
+
+<p>The syntax is the same as <a href="http://haml-lang.com/">HAML/Ruby</a>'s syntax, except that PHP or Twig have to be used where Ruby is expected.</p>
+
+<p>See the <a href="http://haml-lang.com/tutorial.html">tutorial</a> and the <a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html">reference</a></p>
+
+<h2>Performance</h2>
+
+<p>MtHaml converts HAML to PHP or Twig code. The resulting code can be cached and executed any number of times, and
+doesn't depend on HAML at runtime.</p>
+
+<p>MtHaml has no runtime overhead.</p>
+
+<h2>Unsupported features</h2>
+
+<p>Some features are still to be implemented:</p>
+
+<ul>
+<li>merging of dynamically-named attributes: <code>%p{"#{foo}" =&gt; "bar", "#{foo}" =&gt; "baz"}</code> will render twice the same attribute</li>
+<li>special merging of the id attribute: <code>%p(id="a" id="b")</code> will render as <code>&lt;p id="b"&gt;</code>
+</li>
+<li>special handling of the data attribute</li>
+<li>handling of attribute methods and boolean attributes</li>
+<li>special handling of arrays, hashes and objects as attribute value</li>
+<li>indenting of dynamic content (while the HTML will be correctly indented, the generated content will be left untouched)</li>
+</ul><h2>Helpers</h2>
+
+<p>Helpers in HAML/Ruby are just ruby functions exposed to templates.
+Any function can be made available to HAML templates by the target language
+(the function only have to be available at runtime).</p>
+
+<p>In HAML/Twig you can use all of Twig's functions, filters and tags. In PHP, you can use all PHP functions.</p>
+
+<h2>Filters</h2>
+
+<p>Supported filters are <code>plain</code>, <code>javascript</code> and <code>css</code>. Others may be added in the future.</p>
+
+<p>Example:</p>
+
+<div class="highlight">
+<pre><span class="nt">%p</span> something
+<span class="nd">:javascript</span>
+  <span class="nd">some.javascript.code("</span><span class="si">#{</span><span class="n">var</span><span class="o">|</span><span class="n">escape</span><span class="p">(</span><span class="s1">'js'</span><span class="p">)</span><span class="si">}</span><span class="nd">");</span>
+</pre>
+</div>
+
+
+<div class="highlight">
+<pre><span class="x">&lt;p&gt;something&lt;/p&gt;</span>
+<span class="x">&lt;script type="text/javascript"&gt;</span>
+<span class="x">//&lt;![CDATA[</span>
+<span class="x">  some.javascript.code("</span><span class="cp">{{</span> <span class="nv">var</span><span class="o">|</span><span class="nf">escape</span><span class="o">(</span><span class="s1">'js'</span><span class="o">)</span> <span class="cp">}}</span><span class="x">");</span>
+<span class="x">//]]&gt;</span>
+<span class="x">&lt;/script&gt;</span>
+</pre>
+</div>
+
+
+<h2>Sass</h2>
+
+<p><a href="http://sass-lang.com/">Sass</a> can be used in PHP projects without problem.It only depends on Ruby and does not need to be installed on production servers. So MtHaml will not re-implement Sass.</p>
+
+<h2>License</h2>
+
+<p>MtHaml is released under the MIT license (same as HAML/Ruby).</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Mthaml maintained by <a href="https://github.com/arnaud-lb">arnaud-lb</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
