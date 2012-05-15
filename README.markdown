@@ -140,17 +140,6 @@ doesn't depend on HAML at runtime.
 
 MtHaml has no runtime overhead.
 
-## Unsupported features
-
-Some features are still to be implemented:
-
- * merging of dynamically-named attributes: `%p{"#{foo}" => "bar", "#{foo}" => "baz"}` will render twice the same attribute
- * special merging of the id attribute: `%p(id="a" id="b")` will render as `<p id="b">`
- * special handling of the data attribute
- * handling of attribute methods and boolean attributes
- * special handling of arrays, hashes and objects as attribute value
- * indenting of dynamic content (while the HTML will be correctly indented, the generated content will be left untouched)
-
 ## Helpers
 
 Helpers in HAML/Ruby are just ruby functions exposed to templates.
@@ -161,7 +150,7 @@ In HAML/Twig you can use all of Twig's functions, filters and tags. In PHP, you 
 
 ## Filters
 
-Supported filters are `plain`, `javascript` and `css`. Others may be added in the future.
+Supported filters are `plain`, `preserve`, `javascript` and `css`. Others may be added in the future.
 
 Example:
 

@@ -16,6 +16,9 @@ echo $env->compileString($parts['HAML'], "$file.haml");
   :plain
             text
     text
+  :preserve
+    foo
+    bar
 --EXPECT--
 <html>
   <script type="text/javascript">
@@ -34,5 +37,7 @@ echo $env->compileString($parts['HAML'], "$file.haml");
   </style>
           text
   text
+foo
+bar
 </html>
 

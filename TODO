@@ -1,0 +1,5 @@
+ * merging of dynamically-named attributes: `%p{"#{foo}" => "bar", "#{foo}" => "baz"}` should render only one attribute
+ * special merging of the id attribute: `%p(id="a" id="b")` should render id="a_b"
+ * special handling of the data attribute
+ * handling of attribute methods and boolean attributes
+ * special handling of arrays, hashes and objects as attribute value

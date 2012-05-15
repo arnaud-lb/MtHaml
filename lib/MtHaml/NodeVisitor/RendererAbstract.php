@@ -19,6 +19,7 @@ use MtHaml\Node\Run;
 abstract class RendererAbstract extends NodeVisitorAbstract
 {
     protected $indent;
+    protected $savedIndent = array();
     protected $output = '';
     protected $lineno = 1;
     protected $lineOffset = 0;
@@ -240,6 +241,10 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             break;
         case 'plain':
             break;
+        case 'preserve':
+            $this->savedIndent[] = $this->indent;
+            $this->indent = 0;
+            break;
         default:
             throw new Exception("unknown filter " . $node->getFilter());
         }
@@ -259,6 +264,9 @@ abstract class RendererAbstract extends NodeVisitorAbstract
                 ->write('</style>');
             break;
         case 'plain':
+            break;
+        case 'preserve':
+            $this->indent = array_pop($this->savedIndent);
             break;
         }
     }
