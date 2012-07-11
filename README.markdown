@@ -173,6 +173,13 @@ Example:
 
 [Sass][6] can be used in PHP projects without problem.It only depends on Ruby and does not need to be installed on production servers. So MtHaml will not re-implement Sass.
 
+## Frameworks and CMS support
+
+ - Symfony2: https://github.com/arnaud-lb/MtHamlBundle
+ - Zend Framework 1: https://github.com/bonndan/mthaml-zf1
+
+Add yours: https://github.com/arnaud-lb/MtHaml/edit/master/README.markdown
+
 ## License
 
 MtHaml is released under the MIT license (same as HAML/Ruby).
