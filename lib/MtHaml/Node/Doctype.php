@@ -55,7 +55,15 @@ class Doctype extends NodeAbstract
         } else if (isset($this->doctypes[$format][$this->doctypeId])) {
             return $this->doctypes[$format][$this->doctypeId];
         } else {
-            return null;
+
+            $doctypes = array();
+            foreach ($this->doctypes[$format] as $key => $doctype) {
+                $doctypes[] = "'".trim('!!! ' . $key)."'";
+            }
+
+            trigger_error(sprintf("No such doctype '!!! %s' for the format '%s'. Available doctypes for the current format are: %s", $this->doctypeId, $format, implode(', ', $doctypes)), E_USER_WARNING);
+
+            return $this->doctypes[$format][''];
         }
     }
 
