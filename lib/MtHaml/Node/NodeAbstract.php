@@ -69,5 +69,10 @@ abstract class NodeAbstract
     {
         return $this->previousSibling;
     }
+
+    public function isConst()
+    {
+        return false;
+    }
 }
 

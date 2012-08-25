@@ -530,9 +530,9 @@ class Parser
 
         $re = "/(?P<expr>(?:
                 
-                # anything except \", ', (), {}
-                (?:[^(){}\"\'\\\\$delims]+(?=(?P>expr)))
-                |(?:[^(){}\"\'\\\\ $delims]+)
+                # anything except \", ', (), {}, []
+                (?:[^(){}\[\]\"\'\\\\$delims]+(?=(?P>expr)))
+                |(?:[^(){}\[\]\"\'\\\\ $delims]+)
 
                 # double quoted string
                 | \"(?: [^\"\\\\]+ | \\\\[\"\\\\] )*\"
@@ -545,6 +545,9 @@ class Parser
 
                 # ( ... ) pair
                 | \( (?: (?P>expr) | [$delims] )* \)
+
+                # [ ... ] pair
+                | \[ (?: (?P>expr) | [$delims] )* \]
             )+)/xA";
 
         if ($buf->match($re, $match)) {

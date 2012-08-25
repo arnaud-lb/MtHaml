@@ -16,6 +16,18 @@ class MergeAttrs extends NodeVisitorAbstract
     {
         $this->attrs = array();
         $this->tag = $node;
+
+        // Do not attempt to merge attributes if any attribute
+        // name cannot be guessed at compile time.
+        //
+        // Else it may change the output (e.g. the unknown attribute
+        // name could be 'class')
+
+        foreach ($node->getAttributes() as $attr) {
+            if (null === $this->getString($attr->getName())) {
+                return false;
+            }
+        }
     }
 
     public function enterTagAttribute(TagAttribute $node)
@@ -25,6 +37,18 @@ class MergeAttrs extends NodeVisitorAbstract
                 if ('class' === $name) {
                     $orig = $this->attrs[$name]->getValue();
                     $new = $this->mergeClasses($orig, $node->getValue());
+
+                    // Don't merge it if the value isn't const since it could
+                    // be an array; which needs special handling at runtime.
+
+                    // Also unset $this->attrs[$name] so that following
+                    // class arguments do not get merged into this one.
+
+                    if (!$new->isConst()) {
+                        unset($this->attrs[$name]);
+                        return;
+                    }
+
                     $this->attrs[$name]->setValue($new);
                     $this->tag->removeAttribute($node);
                 } else {

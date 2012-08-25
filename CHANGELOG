@@ -1,0 +1,5 @@
+* 1.1.0 (2012-XX-XX)
+
+ * Added handling of special attributes (e.g. id, class, data, and boolean attributes)
+ * Compiled MtHaml templates now need MtHaml at runtime in some cases (and a Twig extension, for Twig templates).
+

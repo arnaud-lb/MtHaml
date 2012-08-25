@@ -15,7 +15,8 @@ root(
     attr(text(class)interpolated(text(foo)text( )text(bar)text( )text(baz)))
   )
   tag(div
-    attr(text(class)interpolated(text(foo)text( )text(bar)text( )text(abc )insert(def)))
+    attr(text(class)interpolated(text(foo)text( )text(bar)))
+    attr(interpolated(text(class))interpolated(text(abc )insert(def)))
     attr(interpolated(text(id))interpolated(text(x)))
   )
   tag(p
