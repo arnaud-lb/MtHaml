@@ -74,6 +74,10 @@ $compiled = $haml->compileString($haml_template, "filename");
 <?php
 $haml = new MtHaml\Environment('twig', array('enable_escaper' => false));
 $compiled = $haml->compileString($haml_template, "filename");
+
+// Register the MtHaml extension before executing the template:
+$twig->addExtension(new MtHaml\Support\Twig\Extension());
+$twig->render(...);
 ```
 
 See [examples][7]
@@ -117,6 +121,11 @@ Using [Twig][4] in HAML gives more control over what can be executed, what varia
 MtHaml comes with an example Twig_Loader that will automatically convert HAML into Twig at loading time (Twig will then compile the resulting Twig script and cache it). Scripts starting with `{% haml %}` will be parsed as HAML, and the others will be left untouched.
 
 The loader acts as a proxy and takes an other loader as parameter:
+
+### Runtime support
+
+Compiled MtHaml/Twig templates need support from MtHaml at runtime in some cases. Because of this, a Twig extension must be loaded before executing the templates.
+
 
 ``` php
 <?php

@@ -4,6 +4,8 @@ namespace MtHaml\NodeVisitor;
 
 use MtHaml\Node\Insert;
 use MtHaml\Node\Run;
+use MtHaml\Node\InterpolatedString;
+use MtHaml\Node\Tag;
 
 class TwigRenderer extends RendererAbstract
 {
@@ -12,18 +14,48 @@ class TwigRenderer extends RendererAbstract
         return preg_replace('~(^[\{%][\{%]?|\{[\{%])~', "{{ '\\1' }}", $string);
     }
 
+    protected function stringLiteral($string)
+    {
+        return var_export((string)$string, true);
+    }
+
+    public function enterInterpolatedString(InterpolatedString $node)
+    {
+        if (!$this->isEchoMode() && 1 < count($node->getChilds())) {
+            $this->raw('(');
+        }
+    }
+
+    public function betweenInterpolatedStringChilds(InterpolatedString $node)
+    {
+        if (!$this->isEchoMode()) {
+            $this->raw(' ~ ');
+        }
+    }
+
+    public function leaveInterpolatedString(InterpolatedString $node)
+    {
+        if (!$this->isEchoMode() && 1 < count($node->getChilds())) {
+            $this->raw(')');
+        }
+    }
+
     public function enterInsert(Insert $node)
     {
-        $escaping = $node->getEscaping()->isEnabled();
-        if (true === $escaping) {
-            $fmt = '{{ (%s)|escape }}';
-        } else if (false === $escaping) {
-            $fmt = '{{ (%s)|raw }}';
+        if ($this->isEchoMode()) {
+            $escaping = $node->getEscaping()->isEnabled();
+            if (true === $escaping) {
+                $fmt = '{{ (%s)|escape }}';
+            } else if (false === $escaping) {
+                $fmt = '{{ (%s)|raw }}';
+            } else {
+                $fmt = '{{ %s }}';
+            }
+            $this->addDebugInfos($node);
+            $this->raw(sprintf($fmt, $node->getContent()));
         } else {
-            $fmt = '{{ %s }}';
+            $this->raw($node->getContent());
         }
-        $this->addDebugInfos($node);
-        $this->raw(sprintf($fmt, $node->getContent()));
     }
 
     public function enterTopblock(Run $node)
@@ -70,6 +102,46 @@ class TwigRenderer extends RendererAbstract
     {
         $infos = sprintf('{%% line %d %%}', $lineno);
         $this->raw($infos);
+    }
+
+    protected function renderDynamicAttributes(Tag $tag)
+    {
+        $list = array();
+
+        $this->raw(' ');
+
+        foreach ($tag->getAttributes() as $attr) {
+            $this->addDebugInfos($attr);
+            break;
+        }
+
+        $this->raw('{{ mthaml_attributes([');
+
+        $this->setEchoMode(false);
+
+        foreach (array_values($tag->getAttributes()) as $i => $attr) {
+
+            if (0 !== $i) {
+                $this->raw(', ');
+            }
+
+            $this->raw('[');
+            $attr->getName()->accept($this);
+            $this->raw(', ');
+            $attr->getValue()->accept($this);
+            $this->raw(']');
+        }
+
+        $this->raw(']');
+
+        $this->setEchoMode(true);
+
+        $this->raw(', ');
+        $this->raw($this->stringLiteral($this->env->getOption('format')));
+        $this->raw(', ');
+        $this->raw($this->stringLiteral($this->charset));
+
+        $this->raw(')|raw }}');
     }
 }
 

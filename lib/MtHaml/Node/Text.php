@@ -29,5 +29,10 @@ class Text extends EscapableAbstract
         $visitor->enterText($this);
         $visitor->leaveText($this);
     }
+
+    public function isConst()
+    {
+        return true;
+    }
 }
 

@@ -31,6 +31,17 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     protected $midblock = array(false);
 
+    /**
+     * Whether echo mode is enabled
+     *
+     * In echo mode, nodes such as Text or Insert are directly printed with
+     * e.g. <?php echo $var; ?> in the PHP renderer.
+     *
+     * In non echo mode, nodes are rendered as rvalue (e.g. for assignment or
+     * argument passing).
+     */
+    protected $echoMode = true;
+
     public function __construct(Environment $env)
     {
         $this->env = $env;
@@ -93,6 +104,10 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     abstract protected function escapeLanguage($string);
 
+    abstract protected function stringLiteral($string);
+
+    abstract protected function betweenInterpolatedStringChilds(InterpolatedString $node);
+
     protected function escapeHtml($string, $double = true)
     {
         return htmlspecialchars($string, ENT_QUOTES, $this->charset, $double);
@@ -103,6 +118,29 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         $indent = $this->shouldIndentBeforeOpen($node);
 
         $this->write(sprintf('<%s', $node->getTagName()), $indent, false);
+    }
+
+    public function enterTagAttributes(Tag $node)
+    {
+        $hasDynAttr = false;
+
+        foreach ($node->getAttributes() as $attr) {
+            $nameNode = $attr->getName();
+            $valueNode = $attr->getValue();
+
+            if (!$nameNode->isConst() || !$valueNode->isConst()) {
+                $hasDynAttr = true;
+                break;
+            }
+        }
+
+        if (!$hasDynAttr) {
+            return;
+        }
+
+        $this->renderDynamicAttributes($node);
+
+        return false;
     }
 
     public function leaveTagAttributes(Tag $node)
@@ -171,14 +209,33 @@ abstract class RendererAbstract extends NodeVisitorAbstract
     {
         $string = $node->getContent();
 
-        if ($node->getEscaping()->isEnabled()) {
-            $once = $node->getEscaping()->isOnce();
-            $string = $this->escapeHtml($string, !$once);
+        if ($this->isEchoMode()) {
+            if ($node->getEscaping()->isEnabled()) {
+                $once = $node->getEscaping()->isOnce();
+                $string = $this->escapeHtml($string, !$once);
+            }
+
+            $string = $this->escapeLanguage($string);
+            $this->raw($string);
+        } else {
+            $string = $this->stringLiteral($string);
+            $this->raw($string);
+        }
+    }
+
+    public function enterInterpolatedStringChilds(InterpolatedString $node)
+    {
+        $n = 0;
+
+        foreach ($node->getChilds() as $child) {
+            if (0 !== $n) {
+                $this->betweenInterpolatedStringChilds($node);
+            }
+            $child->accept($this);
+            ++$n;
         }
 
-        $string = $this->escapeLanguage($string);
-
-        $this->raw($string);
+        return false;
     }
 
     public function enterDoctype(Doctype $node)
@@ -477,6 +534,16 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             }
         }
         return true;
+    }
+
+    public function setEchoMode($enabled)
+    {
+        $this->echoMode = $enabled;
+    }
+
+    public function isEchoMode()
+    {
+        return $this->echoMode;
     }
 }
 

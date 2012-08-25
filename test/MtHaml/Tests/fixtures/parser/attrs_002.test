@@ -3,6 +3,8 @@
 %input(type="submit" value=foo{}.bar)
 %input(type="submit" value=(foo ? bar : baz))
 %input(type="submit" value=(foo or bar ? bar('foo\\bar\'bar') : baz('')))
+%a(href="#" class=["foo", "bar", true ? "baz" : null])
+%a{:href => "#", :class => ["foo", "bar", true ? "baz" : null]}
 --EXPECT--
 root(
   tag(input
@@ -20,6 +22,14 @@ root(
   tag(input
     attr(text(type)interpolated(text(submit)))
     attr(text(value)insert((foo or bar ? bar('foo\\bar\'bar') : baz(''))))
+  )
+  tag(a
+    attr(text(href)interpolated(text(#)))
+    attr(text(class)insert(["foo", "bar", true ? "baz" : null]))
+  )
+  tag(a
+    attr(text(href)interpolated(text(#)))
+    attr(text(class)insert(["foo", "bar", true ? "baz" : null]))
   )
 )
 

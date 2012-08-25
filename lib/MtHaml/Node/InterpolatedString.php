@@ -20,11 +20,22 @@ class InterpolatedString extends NodeAbstract
         $this->childs = $childs;
     }
 
+    /**
+     * @param Text|Insert $child Child
+     */
     public function addChild(NodeAbstract $child)
     {
+
+        if (!$child instanceof Text && !$child instanceof Insert) {
+            throw new \InvalidArgumentException(sprintf('Argument 1 passed to %s() must be an instance of MtHaml\Node\Text or MtHaml\Node\Insert, instance of %s given', __METHOD__, get_class($child)));
+        }
+
         $this->childs[] = $child;
     }
 
+    /**
+     * @return Text|Insert
+     */
     public function getChilds()
     {
         return $this->childs;
@@ -47,6 +58,17 @@ class InterpolatedString extends NodeAbstract
             }
             $visitor->leaveInterpolatedString($this);
         }
+    }
+
+    public function isConst()
+    {
+        foreach ($this->childs as $child) {
+            if (!$child->isConst()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
