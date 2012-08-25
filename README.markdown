@@ -122,11 +122,6 @@ MtHaml comes with an example Twig_Loader that will automatically convert HAML in
 
 The loader acts as a proxy and takes an other loader as parameter:
 
-### Runtime support
-
-Compiled MtHaml/Twig templates need support from MtHaml at runtime in some cases. Because of this, a Twig extension must be loaded before executing the templates.
-
-
 ``` php
 <?php
 
@@ -134,6 +129,18 @@ $haml = new MtHaml\Environment(...);
 
 $twig_loader = new Twig_Loader_Filesystem(...);
 $twig_loader = new MtHaml\Support\Twig\Loader($twig_loader);
+```
+
+### Runtime support
+
+Compiled MtHaml/Twig templates need support from MtHaml at runtime in some cases. Because of this, a Twig extension must be loaded before executing the templates.
+
+
+``` php
+<?php
+// Register the MtHaml extension before executing the template:
+$twig->addExtension(new MtHaml\Support\Twig\Extension());
+$twig->render("rendered_twig_template.twig");
 ```
 
 ## Syntax
