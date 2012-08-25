@@ -1,0 +1,12 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+!!! invalid
+--EXPECT--
+
+--EXCEPTION--
+PHPUnit_Framework_Error_Warning
+No such doctype '!!! invalid' for the format 'html5'. Available doctypes for the current format are: '!!!'
