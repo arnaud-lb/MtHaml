@@ -1,0 +1,11 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+%x{foo => "a #{b} #{c + d}", bar => 1}
+
+--EXPECT--
+<x {{ mthaml_attributes([[foo, ('a ' ~ b ~ ' ' ~ (c + d))], [bar, 1]], 'html5', 'UTF-8')|raw }}></x>
+

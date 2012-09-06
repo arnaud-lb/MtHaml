@@ -54,7 +54,12 @@ class TwigRenderer extends RendererAbstract
             $this->addDebugInfos($node);
             $this->raw(sprintf($fmt, $node->getContent()));
         } else {
-            $this->raw($node->getContent());
+            $content = $node->getContent();
+            if (!preg_match('/^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/A', $content)) {
+                $this->raw('(' . $node->getContent() . ')');
+            } else {
+                $this->raw($node->getContent());
+            }
         }
     }
 

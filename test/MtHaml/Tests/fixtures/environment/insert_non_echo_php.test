@@ -1,0 +1,11 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('php');
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+%x{$foo => "a #{$b} #{$c + $d}", $bar => 1}
+
+--EXPECT--
+<x <?php echo MtHaml\Runtime::renderAttributes(array(array($foo, ('a ' . $b . ' ' . ($c + $d))), array($bar, 1)), 'html5', 'UTF-8'); ?>></x>
+
