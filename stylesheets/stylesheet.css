@@ -115,6 +115,8 @@ a {
 
   transition: color 0.5s ease;
   transition: text-shadow 0.5s ease;
+  -webkit-transition: color 0.5s ease;
+  -webkit-transition: text-shadow 0.5s ease;
   -moz-transition: color 0.5s ease;
   -moz-transition: text-shadow 0.5s ease;
   -o-transition: color 0.5s ease;
