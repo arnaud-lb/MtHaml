@@ -1,0 +1,11 @@
+--TEST--
+Every interpolated() node should have at least one child node
+--HAML--
+%foo(bar="")
+--EXPECT--
+root(
+  tag(foo
+    attr(text(bar)interpolated(text()))
+  )
+)
+

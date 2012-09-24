@@ -11,7 +11,7 @@ foo
 root(
   tag(html)
   filter(javascript
-    interpolated()
+    interpolated(text())
     interpolated(text( bar))
     interpolated(text(   baz))
     interpolated(text(    ))

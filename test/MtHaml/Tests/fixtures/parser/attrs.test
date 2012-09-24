@@ -31,7 +31,7 @@ root(
     attr(text(tuv)interpolated(text(wx(y+z))))
   )
   tag(p
-    attr(text(abc)interpolated())
+    attr(text(abc)interpolated(text()))
     attr(text(ghi)insert(j+""+''))
   )
   tag(p interpolated(text(content))

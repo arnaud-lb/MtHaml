@@ -617,6 +617,12 @@ class Parser
             }
         } while (true);
 
+        // ensure that the InterpolatedString has at least one child
+        if (0 === count($node->getChilds())) {
+            $text = new Text($buf->getPosition(), '');
+            $node->addChild($text);
+        }
+
         return $node;
     }
 
