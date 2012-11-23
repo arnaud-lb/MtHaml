@@ -196,6 +196,10 @@ Example:
 
 Add yours: https://github.com/arnaud-lb/MtHaml/edit/master/README.markdown
 
+## Guides
+
+[Using MtHaml with Twig][8]
+
 ## License
 
 MtHaml is released under the MIT license (same as HAML/Ruby).
@@ -207,3 +211,4 @@ MtHaml is released under the MIT license (same as HAML/Ruby).
 [5]: http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#attribute_methods
 [6]: http://sass-lang.com/
 [7]: https://github.com/arnaud-lb/MtHaml/blob/master/examples/example.php
+[8]: https://github.com/arnaud-lb/MtHaml/wiki/Use-MtHaml-with-Twig
