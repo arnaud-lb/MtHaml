@@ -80,7 +80,7 @@ $twig->addExtension(new MtHaml\Support\Twig\Extension());
 $twig->render(...);
 ```
 
-See [examples][7] and [https://github.com/arnaud-lb/MtHaml/wiki/Use-MtHaml-with-Twig][MtHaml with Twig]
+See [examples][7] and [MtHaml with Twig](https://github.com/arnaud-lb/MtHaml/wiki/Use-MtHaml-with-Twig)
 
 ## Escaping
 
