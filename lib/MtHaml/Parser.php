@@ -587,15 +587,6 @@ class Parser
                 )+/Ax';
         }
 
-        $exprRegex = '/
-            \#\{(?P<insert>(?P<expr>
-                [^\{\}"\']+
-                | \{ (?P>expr)* \}
-                | \'([^\'\\\\]+|\\\\[\'\\\\])*\'
-                | "([^"\\\\]+|\\\\["\\\\])*"
-            )+)\}
-            /AxU';
-
         do {
             if ($buf->match($stringRegex, $match)) {
                 $text = $match[0];
@@ -605,8 +596,7 @@ class Parser
                 }
                 $text = new Text($match['pos'][0], $text);
                 $node->addChild($text);
-            } else if ($buf->match($exprRegex, $match)) {
-                $expr = new Insert($match['pos']['insert'], $match['insert']);
+            } else if ($expr = $this->parseInterpolation($buf)) {
                 $node->addChild($expr);
             } else if ($quoted && $buf->match('/"/A')) {
                 break;
@@ -624,6 +614,28 @@ class Parser
         }
 
         return $node;
+    }
+
+    protected function parseInterpolation($buf)
+    {
+        // This matches an interpolation:
+        // #{ expr... }
+        $exprRegex = '/
+            \#\{(?P<insert>(?P<expr>
+                # do not allow {}"\' in expr
+                [^\{\}"\']+
+                # allow balanced {}
+                | \{ (?P>expr)* \}
+                # allow balanced \'
+                | \'([^\'\\\\]+|\\\\[\'\\\\])*\'
+                # allow balanced "
+                | "([^"\\\\]+|\\\\["\\\\])*"
+            )+)\}
+            /AxU';
+
+        if ($buf->match($exprRegex, $match)) {
+            return new Insert($match['pos']['insert'], $match['insert']);
+        }
     }
 
     protected function parseNestableStatement($buf)
