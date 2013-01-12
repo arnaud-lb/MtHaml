@@ -67,6 +67,8 @@ interface NodeVisitorInterface
     public function leaveTagAttributeName(TagAttribute $node);
     public function enterTagAttributeValue(TagAttribute $node);
     public function leaveTagAttributeValue(TagAttribute $node);
+    public function enterTagAttributeInterpolation(TagAttribute $node);
+    public function leaveTagAttributeInterpolation(TagAttribute $node);
     public function leaveTagAttribute(TagAttribute $node);
 
     public function enterText(Text $node);

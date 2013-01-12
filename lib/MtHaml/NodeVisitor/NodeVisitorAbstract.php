@@ -158,6 +158,12 @@ abstract class NodeVisitorAbstract implements NodeVisitorInterface
     public function leaveTagAttributeValue(TagAttribute $node)
     {
     }
+    public function enterTagAttributeInterpolation(TagAttribute $node)
+    {
+    }
+    public function leaveTagAttributeInterpolation(TagAttribute $node)
+    {
+    }
     public function leaveTagAttribute(TagAttribute $node)
     {
     }

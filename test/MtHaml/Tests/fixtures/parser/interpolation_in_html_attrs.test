@@ -1,0 +1,17 @@
+--HAML--
+%html(foo="bar" #{test} bar="baz")
+%html{:foo=>"bar", #{test}, :bar=>"baz"}
+--EXPECT--
+root(
+  tag(html
+    attr(text(foo)interpolated(text(bar)))
+    attr(insert(test))
+    attr(text(bar)interpolated(text(baz)))
+  )
+  tag(html
+    attr(text(foo)interpolated(text(bar)))
+    attr(insert(test))
+    attr(text(bar)interpolated(text(baz)))
+  )
+)
+
