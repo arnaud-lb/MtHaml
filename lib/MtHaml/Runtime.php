@@ -2,6 +2,8 @@
 
 namespace MtHaml;
 
+use MtHaml\Runtime\AttributeInterpolation;
+
 class Runtime
 {
     /**
@@ -29,6 +31,11 @@ class Runtime
         $attributes = array();
 
         foreach ($list as $item) {
+
+            if ($item instanceof AttributeInterpolation) {
+                $attributes[] = $item;
+                continue;
+            }
 
             list ($name, $value) = $item;
 
@@ -85,7 +92,9 @@ class Runtime
             if (null !== $result) {
                 $result .= ' ';
             }
-            if (true === $value) {
+            if ($value instanceof AttributeInterpolation) {
+                $result .= $value->value;
+            } else if (true === $value) {
                 $result .= 
                     htmlspecialchars($name, ENT_QUOTES, $charset);
             } else {
