@@ -1,0 +1,31 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+
+%p(foo="bar" #{test})
+%p(#{test} foo="bar")
+%p(#{test})
+%p(bar="baz" #{test} foo="bar")
+%p(bar="baz" #{test} class="abc #{def}")
+
+%p{:foo=>"bar", #{test}}
+%p{#{test}, :foo=>"bar"}
+%p{#{test}}
+%p{:bar=>"baz", #{test}, :foo=>"bar"}
+%p{:bar=>"baz", #{test}, :class=>"abc #{def}"}
+
+--EXPECT--
+<p foo="bar" {% line 2 %}{{ test }}></p>
+<p {{ test }} foo="bar"></p>
+<p {{ test }}></p>
+<p bar="baz" {{ test }} foo="bar"></p>
+<p {{ mthaml_attributes([['bar', 'baz'], mthaml_attribute_interpolation(test), ['class', ('abc ' ~ def)]], 'html5', 'UTF-8')|raw }}></p>
+<p foo="bar" {% line 8 %}{{ test }}></p>
+<p {{ test }} foo="bar"></p>
+<p {{ test }}></p>
+<p bar="baz" {{ test }} foo="bar"></p>
+<p {{ mthaml_attributes([['bar', 'baz'], mthaml_attribute_interpolation(test), ['class', ('abc ' ~ def)]], 'html5', 'UTF-8')|raw }}></p>
+
