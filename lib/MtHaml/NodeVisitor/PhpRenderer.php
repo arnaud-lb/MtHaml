@@ -106,11 +106,17 @@ class PhpRenderer extends RendererAbstract
                 $this->raw(', ');
             }
 
-            $this->raw('array(');
-            $attr->getName()->accept($this);
-            $this->raw(', ');
-            $attr->getValue()->accept($this);
-            $this->raw(')');
+            if (!$attr->getName()) {
+                $this->raw('MtHaml\Runtime\AttributeInterpolation::create(');
+                $attr->getValue()->accept($this);
+                $this->raw(')');
+            } else {
+                $this->raw('array(');
+                $attr->getName()->accept($this);
+                $this->raw(', ');
+                $attr->getValue()->accept($this);
+                $this->raw(')');
+            }
 
             ++$n;
         }

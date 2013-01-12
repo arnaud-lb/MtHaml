@@ -419,17 +419,21 @@ class Parser
         if ($buf->match('/{\s*/A')) {
 
             do {
-                $name = $this->parseAttrExpression($buf, '=,');
+                if ($expr = $this->parseInterpolation($buf)) {
+                    $attrs[] = new TagAttribute($expr->getPosition(), null, $expr);
+                } else {
+                    $name = $this->parseAttrExpression($buf, '=,');
 
-                $buf->skipWs();
-                if (!$buf->match('/=>\s*/A')) {
-                    $this->syntaxErrorExpected($buf, "'=>'");
+                    $buf->skipWs();
+                    if (!$buf->match('/=>\s*/A')) {
+                        $this->syntaxErrorExpected($buf, "'=>'");
+                    }
+
+                    $value = $this->parseAttrExpression($buf, ',');
+
+                    $attr = new TagAttribute($name->getPosition(), $name, $value);
+                    $attrs[] = $attr;
                 }
-
-                $value = $this->parseAttrExpression($buf, ',');
-
-                $attr = new TagAttribute($name->getPosition(), $name, $value);
-                $attrs[] = $attr;
 
                 $buf->skipWs();
                 if ($buf->match('/}/A')) {
@@ -454,20 +458,24 @@ class Parser
         if ($buf->match('/\(\s*/A')) {
 
             do {
-                if (!$buf->match('/[\w+:-]+/A', $match)) {
-                    $this->syntaxErrorExpected($buf, 'html attribute name');
+                if ($expr = $this->parseInterpolation($buf)) {
+                    $attrs[] = new TagAttribute($expr->getPosition(), null, $expr);
+                } else if ($buf->match('/[\w+:-]+/A', $match)) {
+                    $name = new Text($match['pos'][0], $match[0]);
+
+                    $buf->skipWs();
+                    if (!$buf->match('/=\s*/A')) {
+                        $this->syntaxErrorExpected($buf, "'='");
+                    }
+
+                    $value = $this->parseAttrExpression($buf, ' ');
+
+                    $attr = new TagAttribute($name->getPosition(), $name, $value);
+                    $attrs[] = $attr;
+
+                } else {
+                    $this->syntaxErrorExpected($buf, 'html attribute name or #{interpolation}');
                 }
-                $name = new Text($match['pos'][0], $match[0]);
-
-                $buf->skipWs();
-                if (!$buf->match('/=\s*/A')) {
-                    $this->syntaxErrorExpected($buf, "'='");
-                }
-
-                $value = $this->parseAttrExpression($buf, ' ');
-
-                $attr = new TagAttribute($name->getPosition(), $name, $value);
-                $attrs[] = $attr;
 
                 if ($buf->match('/\s*\)/A')) {
                     break;
@@ -587,15 +595,6 @@ class Parser
                 )+/Ax';
         }
 
-        $exprRegex = '/
-            \#\{(?P<insert>(?P<expr>
-                [^\{\}"\']+
-                | \{ (?P>expr)* \}
-                | \'([^\'\\\\]+|\\\\[\'\\\\])*\'
-                | "([^"\\\\]+|\\\\["\\\\])*"
-            )+)\}
-            /AxU';
-
         do {
             if ($buf->match($stringRegex, $match)) {
                 $text = $match[0];
@@ -605,8 +604,7 @@ class Parser
                 }
                 $text = new Text($match['pos'][0], $text);
                 $node->addChild($text);
-            } else if ($buf->match($exprRegex, $match)) {
-                $expr = new Insert($match['pos']['insert'], $match['insert']);
+            } else if ($expr = $this->parseInterpolation($buf)) {
                 $node->addChild($expr);
             } else if ($quoted && $buf->match('/"/A')) {
                 break;
@@ -624,6 +622,28 @@ class Parser
         }
 
         return $node;
+    }
+
+    protected function parseInterpolation($buf)
+    {
+        // This matches an interpolation:
+        // #{ expr... }
+        $exprRegex = '/
+            \#\{(?P<insert>(?P<expr>
+                # do not allow {}"\' in expr
+                [^\{\}"\']+
+                # allow balanced {}
+                | \{ (?P>expr)* \}
+                # allow balanced \'
+                | \'([^\'\\\\]+|\\\\[\'\\\\])*\'
+                # allow balanced "
+                | "([^"\\\\]+|\\\\["\\\\])*"
+            )+)\}
+            /AxU';
+
+        if ($buf->match($exprRegex, $match)) {
+            return new Insert($match['pos']['insert'], $match['insert']);
+        }
     }
 
     protected function parseNestableStatement($buf)

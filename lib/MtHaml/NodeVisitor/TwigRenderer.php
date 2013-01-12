@@ -130,11 +130,17 @@ class TwigRenderer extends RendererAbstract
                 $this->raw(', ');
             }
 
-            $this->raw('[');
-            $attr->getName()->accept($this);
-            $this->raw(', ');
-            $attr->getValue()->accept($this);
-            $this->raw(']');
+            if (!$attr->getName()) {
+                $this->raw('mthaml_attribute_interpolation(');
+                $attr->getValue()->accept($this);
+                $this->raw(')');
+            } else {
+                $this->raw('[');
+                $attr->getName()->accept($this);
+                $this->raw(', ');
+                $attr->getValue()->accept($this);
+                $this->raw(']');
+            }
         }
 
         $this->raw(']');

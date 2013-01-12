@@ -128,7 +128,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             $nameNode = $attr->getName();
             $valueNode = $attr->getValue();
 
-            if (!$nameNode->isConst() || !$valueNode->isConst()) {
+            if ($nameNode && (!$nameNode->isConst() || !$valueNode->isConst())) {
                 $hasDynAttr = true;
                 break;
             }
@@ -173,6 +173,11 @@ abstract class RendererAbstract extends NodeVisitorAbstract
     public function leaveTagAttributeValue(TagAttribute $node)
     {
         $this->raw('"');
+    }
+
+    public function enterTagAttributeInterpolation(TagAttribute $node)
+    {
+        $this->raw(' ');
     }
 
     public function leaveTag(Tag $node)
