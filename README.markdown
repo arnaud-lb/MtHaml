@@ -193,6 +193,7 @@ Example:
 
  - Symfony2: https://github.com/arnaud-lb/MtHamlBundle
  - Zend Framework 1: https://github.com/bonndan/mthaml-zf1
+ - Drupal: https://github.com/antoinelafontaine/oxide  
 
 Add yours: https://github.com/arnaud-lb/MtHaml/edit/master/README.markdown
 
