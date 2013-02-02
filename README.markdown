@@ -190,11 +190,13 @@ Example:
 [Sass][6] can be used in PHP projects without problem.It only depends on Ruby and does not need to be installed on production servers. So MtHaml will not re-implement Sass.
 
 ## Frameworks and CMS support
-
+ 
+ - Drupal: https://github.com/antoinelafontaine/oxide
+ - FuelPHP: https://github.com/fuel/parser
+ - PHPixie: https://github.com/dracony/PHPixie-HAML
  - Symfony2: https://github.com/arnaud-lb/MtHamlBundle
  - Zend Framework 1: https://github.com/bonndan/mthaml-zf1
- - Drupal: https://github.com/antoinelafontaine/oxide  
- - PHPixie: https://github.com/dracony/PHPixie-HAML
+
 
 Add yours: https://github.com/arnaud-lb/MtHaml/edit/master/README.markdown
 
