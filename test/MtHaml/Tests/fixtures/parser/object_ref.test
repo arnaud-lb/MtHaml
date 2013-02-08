@@ -1,0 +1,22 @@
+--HAML--
+%p[foo]
+%p[foo, "bar"]
+%p[foo,"bar","baz"]
+%p[]
+--EXPECT--
+root(
+  tag(p
+    attr(text(class)object_ref_class(insert(foo)))
+    attr(text(id)object_ref_id(insert(foo)))
+  )
+  tag(p
+    attr(text(class)object_ref_class(insert(foo)insert("bar")))
+    attr(text(id)object_ref_id(insert(foo)insert("bar")))
+  )
+  tag(p
+    attr(text(class)object_ref_class(insert(foo)insert("bar")))
+    attr(text(id)object_ref_id(insert(foo)insert("bar")))
+  )
+  tag(p)
+)
+

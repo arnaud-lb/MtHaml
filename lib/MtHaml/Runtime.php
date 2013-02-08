@@ -133,4 +133,52 @@ class Runtime
 
         return $result;
     }
+
+    static public function renderObjectRefClass($object, $prefix = null)
+    {
+        if (!$object) {
+            return;
+        }
+
+        $class = self::getObjectRefClassString(get_class($object));
+
+        if (false !== $prefix && null !== $prefix) {
+            $class = $prefix . '_' . $class;
+        }
+
+        return $class;
+    }
+
+    static public function renderObjectRefId($object, $prefix = null)
+    {
+        if (!$object) {
+            return;
+        }
+
+        if (method_exists($object, 'getId')) {
+            $id = $object->getId();
+        } else if (method_exists($object, 'id')) {
+            $id = $object->id();
+        }
+
+        if (false === $id || null === $id) {
+            $id = 'new';
+        }
+
+        $id = self::getObjectRefClassString(get_class($object)) . '_' . $id;
+
+        if (false !== $prefix && null !== $prefix) {
+            $id = $prefix . '_' . $id;
+        }
+
+        return $id;
+    }
+
+    static public function getObjectRefClassString($class)
+    {
+        if (false !== $pos = \strrpos($class, '\\')) {
+            $class = \substr($class, $pos+1);
+        }
+        return \strtolower(\preg_replace('#(?<=[a-z])[A-Z]+#', '_$0', $class));
+    }
 }

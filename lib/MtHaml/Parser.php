@@ -17,6 +17,8 @@ use MtHaml\Node\Run;
 use MtHaml\Node\Statement;
 use MtHaml\Node\NestInterface;
 use MtHaml\Node\Filter;
+use MtHaml\Node\ObjectRefClass;
+use MtHaml\Node\ObjectRefId;
 
 /**
  * MtHaml Parser
@@ -417,10 +419,52 @@ class Parser
             $attrs[] = $attr;
         }
 
-        // curly, ruby-like syntax
+        $hasRubyAttrs = false;
+        $hasHtmlAttrs = false;
+        $hasObjectRef = false;
 
-        if ($buf->match('/{\s*/A')) {
+        // accept ruby-attrs, html-attrs, and object-ref in any order,
+        // but only one of each
 
+        while (true) {
+            switch ($buf->peekChar()) {
+            case '{':
+                if ($hasRubyAttrs) {
+                    break 2;
+                }
+                $hasRubyAttrs = true;
+                $newAttrs = $this->parseTagAttributesRuby($buf);
+                $attrs = array_merge($attrs, $newAttrs);
+                break;
+            case '(':
+                if ($hasHtmlAttrs) {
+                    break 2;
+                }
+                $hasHtmlAttrs = true;
+                $newAttrs = $this->parseTagAttributesHtml($buf);
+                $attrs = array_merge($attrs, $newAttrs);
+                break;
+            case '[':
+                if ($hasObjectRef) {
+                    break 2;
+                }
+                $hasObjectRef = true;
+                $newAttrs = $this->parseTagAttributesObject($buf);
+                $attrs = array_merge($attrs, $newAttrs);
+                break;
+            default:
+                break 2;
+            }
+        }
+
+        return $attrs;
+    }
+
+    protected function parseTagAttributesRuby($buf)
+    {
+        $attrs = [];
+
+        if ($buf->match('/\{\s*/')) {
             do {
                 if ($expr = $this->parseInterpolation($buf)) {
                     $attrs[] = new TagAttribute($expr->getPosition(), null, $expr);
@@ -452,14 +496,17 @@ class Parser
                     $buf->nextLine();
                     $buf->skipWs();
                 }
-
             } while (true);
         }
 
-        // html-like syntax
+        return $attrs;
+    }
+
+    protected function parseTagAttributesHtml($buf)
+    {
+        $attrs = [];
 
         if ($buf->match('/\(\s*/A')) {
-
             do {
                 if ($expr = $this->parseInterpolation($buf)) {
                     $attrs[] = new TagAttribute($expr->getPosition(), null, $expr);
@@ -497,6 +544,51 @@ class Parser
 
             } while (true);
         }
+
+        return $attrs;
+    }
+
+    protected function parseTagAttributesObject($buf)
+    {
+        $nodes = [];
+        $attrs = [];
+
+        if (!$buf->match('/\[\s*/A', $match)) {
+            return $attrs;
+        }
+
+        $pos = $match['pos'][0];
+
+        do {
+            if ($buf->match('/\s*\]\s*/A')) {
+                break;
+            }
+
+            list($expr, $pos) = $this->parseExpression($buf, ',\\]');
+            $nodes[] = new Insert($pos, $expr);
+
+            if ($buf->match('/\s*\]\s*/A')) {
+                break;
+            } else if (!$buf->match('/\s*,\s*/A')) {
+                $this->syntaxErrorExpected($buf, "',' or ']'");
+            }
+
+        } while (true);
+
+        list ($object, $prefix) = array_pad($nodes, 2, null);
+
+        if (!$object) {
+            return $attrs;
+        }
+
+        $class = new ObjectRefClass($pos, $object, $prefix);
+        $id = new ObjectRefId($pos, $object, $prefix);
+
+        $name = new Text($pos, 'class');
+        $attrs[] = new TagAttribute($pos, $name, $class);
+
+        $name = new Text($pos, 'id');
+        $attrs[] = new TagAttribute($pos, $name, $id);
 
         return $attrs;
     }

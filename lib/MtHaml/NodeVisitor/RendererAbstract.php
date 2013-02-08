@@ -41,6 +41,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
      * argument passing).
      */
     protected $echoMode = true;
+    protected $echoModeStack = array();
 
     public function __construct(Environment $env)
     {
@@ -549,6 +550,17 @@ abstract class RendererAbstract extends NodeVisitorAbstract
     public function isEchoMode()
     {
         return $this->echoMode;
+    }
+
+    public function pushEchoMode($enabled)
+    {
+        $this->echoModeStack[] = $this->echoMode;
+        $this->setEchoMode($enabled);
+    }
+
+    public function popEchoMode()
+    {
+        $this->echoMode = array_pop($this->echoModeStack);
     }
 }
 

@@ -13,6 +13,8 @@ use MtHaml\Node\InterpolatedString;
 use MtHaml\Node\Comment;
 use MtHaml\Node\Doctype;
 use MtHaml\Node\Filter;
+use MtHaml\Node\ObjectRefClass;
+use MtHaml\Node\ObjectRefId;
 
 class Printer extends NodeVisitorAbstract
 {
@@ -235,5 +237,26 @@ class Printer extends NodeVisitorAbstract
     {
         $this->undent()->write(')');
     }
+
+    public function enterObjectRefClass(ObjectRefClass $node)
+    {
+        $this->raw('object_ref_class(');
+    }
+
+    public function leaveObjectRefClass(ObjectRefClass $node)
+    {
+        $this->raw(')');
+    }
+
+    public function enterObjectRefId(ObjectRefId $node)
+    {
+        $this->raw('object_ref_id(');
+    }
+
+    public function leaveObjectRefId(ObjectRefId $node)
+    {
+        $this->raw(')');
+    }
+
 }
 

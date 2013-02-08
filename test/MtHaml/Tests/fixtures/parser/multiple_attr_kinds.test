@@ -1,0 +1,47 @@
+--HAML--
+%p(foo="bar"){"bar"=>"baz"}[a]
+%p{"bar"=>"baz"}(foo="bar")[a]
+%p[a](foo="bar"){"bar"=>"baz"}
+%p[a](foo="bar"){"bar"=>"baz"}[a]
+%p[a](foo="bar"){"bar"=>"baz"}(foo="bar")
+%p[a](foo="bar"){"bar"=>"baz"}{"bar"=>"baz"}
+--EXPECT--
+root(
+  tag(p
+    attr(text(foo)interpolated(text(bar)))
+    attr(interpolated(text(bar))interpolated(text(baz)))
+    attr(text(class)object_ref_class(insert(a)))
+    attr(text(id)object_ref_id(insert(a)))
+  )
+  tag(p
+    attr(interpolated(text(bar))interpolated(text(baz)))
+    attr(text(foo)interpolated(text(bar)))
+    attr(text(class)object_ref_class(insert(a)))
+    attr(text(id)object_ref_id(insert(a)))
+  )
+  tag(p
+    attr(text(class)object_ref_class(insert(a)))
+    attr(text(id)object_ref_id(insert(a)))
+    attr(text(foo)interpolated(text(bar)))
+    attr(interpolated(text(bar))interpolated(text(baz)))
+  )
+  tag(p interpolated(text([a]))
+    attr(text(class)object_ref_class(insert(a)))
+    attr(text(id)object_ref_id(insert(a)))
+    attr(text(foo)interpolated(text(bar)))
+    attr(interpolated(text(bar))interpolated(text(baz)))
+  )
+  tag(p interpolated(text((foo="bar")))
+    attr(text(class)object_ref_class(insert(a)))
+    attr(text(id)object_ref_id(insert(a)))
+    attr(text(foo)interpolated(text(bar)))
+    attr(interpolated(text(bar))interpolated(text(baz)))
+  )
+  tag(p interpolated(text({"bar"=>"baz"}))
+    attr(text(class)object_ref_class(insert(a)))
+    attr(text(id)object_ref_id(insert(a)))
+    attr(text(foo)interpolated(text(bar)))
+    attr(interpolated(text(bar))interpolated(text(baz)))
+  )
+)
+

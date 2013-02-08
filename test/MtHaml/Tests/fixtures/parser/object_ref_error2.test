@@ -1,0 +1,5 @@
+--HAML--
+%p[foo
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Unexpected end of line, expected ',' or ']'.*

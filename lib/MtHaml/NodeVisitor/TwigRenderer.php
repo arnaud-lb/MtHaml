@@ -6,6 +6,9 @@ use MtHaml\Node\Insert;
 use MtHaml\Node\Run;
 use MtHaml\Node\InterpolatedString;
 use MtHaml\Node\Tag;
+use MtHaml\Node\ObjectRefClass;
+use MtHaml\Node\ObjectRefId;
+use MtHaml\Node\NodeAbstract;
 
 class TwigRenderer extends RendererAbstract
 {
@@ -87,6 +90,53 @@ class TwigRenderer extends RendererAbstract
         $this->addDebugInfos($node);
         $this->write($this->renderTag($node->getContent()));
     }
+
+    public function enterObjectRefClass(ObjectRefClass $node)
+    {
+        if ($this->isEchoMode()) {
+            $this->raw('{{ ');
+        }
+        $this->raw('mthaml_object_ref_class(');
+
+        $this->pushEchoMode(false);
+    }
+
+    public function leaveObjectRefClass(ObjectRefClass $node)
+    {
+        $this->raw(')');
+
+        $this->popEchoMode(true);
+        if ($this->isEchoMode()) {
+            $this->raw(' }}');
+        }
+    }
+
+    public function enterObjectRefId(ObjectRefId $node)
+    {
+        if ($this->isEchoMode()) {
+            $this->raw('{{ ');
+        }
+        $this->raw('mthaml_object_ref_id(');
+
+        $this->pushEchoMode(false);
+    }
+
+    public function leaveObjectRefId(ObjectRefId $node)
+    {
+        $this->raw(')');
+
+        $this->popEchoMode(true);
+        if ($this->isEchoMode()) {
+            $this->raw(' }}');
+        }
+    }
+
+    public function enterObjectRefPrefix(NodeAbstract $node)
+    {
+        $this->raw(', ');
+    }
+
+
 
     protected function renderTag($content)
     {

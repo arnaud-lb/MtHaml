@@ -1,0 +1,5 @@
+--HAML--
+%p[
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Unexpected end of line, expected target language expression.*

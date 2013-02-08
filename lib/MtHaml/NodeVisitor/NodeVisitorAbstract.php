@@ -13,6 +13,9 @@ use MtHaml\Node\InterpolatedString;
 use MtHaml\Node\Comment;
 use MtHaml\Node\Doctype;
 use MtHaml\Node\Filter;
+use MtHaml\Node\ObjectRefClass;
+use MtHaml\Node\NodeAbstract;
+use MtHaml\Node\ObjectRefId;
 
 /**
  * Abstract node visitor
@@ -165,6 +168,31 @@ abstract class NodeVisitorAbstract implements NodeVisitorInterface
     {
     }
     public function leaveTagAttribute(TagAttribute $node)
+    {
+    }
+
+    public function enterObjectRefClass(ObjectRefClass $node)
+    {
+    }
+    public function leaveObjectRefClass(ObjectRefClass $node)
+    {
+    }
+    public function enterObjectRefId(ObjectRefId $node)
+    {
+    }
+    public function leaveObjectRefId(ObjectRefId $node)
+    {
+    }
+    public function enterObjectRefObject(NodeAbstract $node)
+    {
+    }
+    public function leaveObjectRefObject(NodeAbstract $node)
+    {
+    }
+    public function enterObjectRefPrefix(NodeAbstract $node)
+    {
+    }
+    public function leaveObjectRefPrefix(NodeAbstract $node)
     {
     }
 
