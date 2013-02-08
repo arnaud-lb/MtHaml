@@ -493,7 +493,7 @@ class Parser
 
     protected function parseTagAttributesRuby($buf)
     {
-        $attrs = [];
+        $attrs = array();
 
         if ($buf->match('/\{\s*/')) {
             do {
@@ -535,7 +535,7 @@ class Parser
 
     protected function parseTagAttributesHtml($buf)
     {
-        $attrs = [];
+        $attrs = array();
 
         if ($buf->match('/\(\s*/A')) {
             do {
@@ -581,8 +581,8 @@ class Parser
 
     protected function parseTagAttributesObject($buf)
     {
-        $nodes = [];
-        $attrs = [];
+        $nodes = array();
+        $attrs = array();
 
         if (!$buf->match('/\[\s*/A', $match)) {
             return $attrs;
