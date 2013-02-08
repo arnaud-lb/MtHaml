@@ -334,8 +334,39 @@ class Parser
 
             $node = new Comment($pos, $rendered, $condition);
 
-            if (null !== $nested = $this->parseNestableStatement($buf)) {
-                $node->setContent($nested);
+            if ($rendered) {
+                if (null !== $nested = $this->parseNestableStatement($buf)) {
+                    $node->setContent($nested);
+                }
+            } else {
+
+                if ('' !== $line = trim($buf->getLine())) {
+                    $content = new Text($buf->getPosition(), $line);
+                    $node->setContent($content);
+                }
+
+                while (null !== $next = $buf->peekLine()) {
+
+                    $indent = '';
+
+                    if ('' !== trim($next)) {
+                        $indent = $this->getIndentString(1, $next);
+                        if ('' === $indent) {
+                            break;
+                        }
+                        if (strpos($next, $indent) !== 0) {
+                            break;
+                        }
+                    }
+
+                    $buf->nextLine();
+
+                    if ('' !== trim($next)) {
+                        $buf->eatChars(strlen($indent));
+                        $str = new Text($buf->getPosition(), $buf->getLine());
+                        $node->addChild(new Statement($str->getPosition(), $str));
+                    }
+                }
             }
 
             return $node;

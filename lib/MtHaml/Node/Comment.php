@@ -63,5 +63,10 @@ class Comment extends NestAbstract
         }
         $visitor->leaveComment($this);
     }
+
+    public function allowsNestingAndContent()
+    {
+        return ! $this->rendered;
+    }
 }
 

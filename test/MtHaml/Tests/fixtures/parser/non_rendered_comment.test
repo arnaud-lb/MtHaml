@@ -1,0 +1,31 @@
+--HAML--
+%div
+    -# foo
+        bar
+            baz
+        %syntax(error
+        a
+         b
+          c
+        a |
+        b |
+        c |
+    %p
+--EXPECT--
+root(
+  tag(div
+    comment(text(foo)
+      text(bar)
+      text(    baz)
+      text(%syntax(error)
+      text(a)
+      text( b)
+      text(  c)
+      text(a |)
+      text(b |)
+      text(c |)
+    )
+    tag(p)
+  )
+)
+
