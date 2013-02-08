@@ -10,7 +10,7 @@ class Php extends TargetAbstract
     public function __construct(array $options = array())
     {
         parent::__construct($options + array(
-            'midblock_regex' => '~else\b|else\s*if\b~A',
+            'midblock_regex' => '~else\b|else\s*if\b|catch\b~A',
         ));
     }
 

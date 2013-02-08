@@ -1,0 +1,17 @@
+--HAML--
+- try
+  = foo()
+- catch(\Exception $e)
+  bar
+--FILE--
+<?php
+$env = new MtHaml\Environment('php', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--EXPECT--
+<?php try { ?>
+  <?php echo foo(); ?>
+<?php } catch(\Exception $e) { ?>
+  bar
+<?php } ?>
+
