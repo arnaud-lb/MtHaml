@@ -1,0 +1,10 @@
+--HAML--
+foo |
+ 
+^ previous line is just one space
+--EXPECT--
+root(
+  interpolated(text(foo))
+  interpolated(text(^ previous line is just one space))
+)
+

@@ -228,7 +228,10 @@ class Parser
         $line = substr($line, 0, -2);
 
         while ($next = $buf->peekLine()) {
-            if (trim($next) == '') continue;
+            if (trim($next) == '') {
+                $buf->nextLine();
+                continue;
+            }
             if (!$this->isMultiline($next)) break;
             $line .= trim(substr($next, 0, -2));
             $buf->nextLine();
