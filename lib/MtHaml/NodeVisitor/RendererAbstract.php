@@ -135,7 +135,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
                 $hasDynAttr = true;
                 break;
             }
-            if ($nameNode && (!$nameNode->isConst() || !$valueNode->isConst())) {
+            if ($nameNode && (!$nameNode->isConst() || !$valueNode || !$valueNode->isConst())) {
                 $hasDynAttr = true;
                 break;
             }

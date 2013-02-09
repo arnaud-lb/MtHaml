@@ -51,10 +51,12 @@ class TagAttribute extends NodeAbstract
             }
             $visitor->leaveTagAttributeName($this);
 
-            if (false !== $visitor->enterTagAttributeValue($this)) {
-                $this->getValue()->accept($visitor);
+            if ($this->getValue()) {
+                if (false !== $visitor->enterTagAttributeValue($this)) {
+                    $this->getValue()->accept($visitor);
+                }
+                $visitor->leaveTagAttributeValue($this);
             }
-            $visitor->leaveTagAttributeValue($this);
         }
         $visitor->leaveTagAttribute($this);
     }

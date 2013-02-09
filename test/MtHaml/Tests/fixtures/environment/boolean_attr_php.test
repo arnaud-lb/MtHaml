@@ -1,0 +1,16 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('php', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+%p(foo bar="baz")
+%p(foo)
+%p(bar="baz" foo)
+%p(foo class=baz)
+--EXPECT--
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('foo', TRUE), array('bar', 'baz')), 'html5', 'UTF-8'); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('foo', TRUE)), 'html5', 'UTF-8'); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('bar', 'baz'), array('foo', TRUE)), 'html5', 'UTF-8'); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('foo', TRUE), array('class', baz)), 'html5', 'UTF-8'); ?>></p>
+

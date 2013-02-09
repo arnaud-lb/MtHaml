@@ -1,0 +1,19 @@
+--HAML--
+%p(foo bar="baz")
+%p(foo)
+%p(bar="baz" foo)
+--EXPECT--
+root(
+  tag(p
+    attr(text(foo))
+    attr(text(bar)interpolated(text(baz)))
+  )
+  tag(p
+    attr(text(foo))
+  )
+  tag(p
+    attr(text(bar)interpolated(text(baz)))
+    attr(text(foo))
+  )
+)
+

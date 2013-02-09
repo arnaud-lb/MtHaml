@@ -194,7 +194,11 @@ class TwigRenderer extends RendererAbstract
                 $this->raw('[');
                 $attr->getName()->accept($this);
                 $this->raw(', ');
-                $attr->getValue()->accept($this);
+                if ($value = $attr->getValue()) {
+                    $attr->getValue()->accept($this);
+                } else {
+                    $this->raw('true');
+                }
                 $this->raw(']');
             }
         }

@@ -181,7 +181,11 @@ class PhpRenderer extends RendererAbstract
                 $this->raw('array(');
                 $attr->getName()->accept($this);
                 $this->raw(', ');
-                $attr->getValue()->accept($this);
+                if ($value = $attr->getValue()) {
+                    $attr->getValue()->accept($this);
+                } else {
+                    $this->raw('TRUE');
+                }
                 $this->raw(')');
             }
 

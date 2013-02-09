@@ -545,12 +545,11 @@ class Parser
                 } else if ($buf->match('/[\w+:-]+/A', $match)) {
                     $name = new Text($match['pos'][0], $match[0]);
 
-                    $buf->skipWs();
-                    if (!$buf->match('/=\s*/A')) {
-                        $this->syntaxErrorExpected($buf, "'='");
+                    if (!$buf->match('/\s*=\s*/A')) {
+                        $value = null;
+                    } else {
+                        $value = $this->parseAttrExpression($buf, ' ');
                     }
-
-                    $value = $this->parseAttrExpression($buf, ' ');
 
                     $attr = new TagAttribute($name->getPosition(), $name, $value);
                     $attrs[] = $attr;
