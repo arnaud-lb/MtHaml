@@ -227,7 +227,7 @@ class Parser
             return;
         }
 
-        $line = substr($line, 0, -2);
+        $line = substr(rtrim($line), 0, -1);
 
         while ($next = $buf->peekLine()) {
             if (trim($next) == '') {
@@ -235,7 +235,7 @@ class Parser
                 continue;
             }
             if (!$this->isMultiline($next)) break;
-            $line .= trim(substr($next, 0, -2));
+            $line .= substr(trim($next), 0, -1);
             $buf->nextLine();
         }
 
@@ -244,7 +244,7 @@ class Parser
 
     public function isMultiline($string)
     {
-        return ' |' === substr($string, -2);
+        return ' |' === substr(rtrim($string), -2);
     }
 
     /**

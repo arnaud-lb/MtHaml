@@ -1,0 +1,18 @@
+--HAML--
+testing multiline |
+indicators.   |               
+notice trailing spaces after | ^ |
+test
+%p
+  second   |
+    multiline |
+  line |
+--EXPECT--
+root(
+  interpolated(text(testing multiline indicators.   notice trailing spaces after | ^ ))
+  interpolated(text(test))
+  tag(p
+    interpolated(text(second   multiline line ))
+  )
+)
+

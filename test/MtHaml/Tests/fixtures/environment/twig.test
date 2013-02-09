@@ -79,9 +79,9 @@ echo $env->compileString($parts['HAML'], "$file.haml");
     {% endfor %}
     Wow.|
     <p>
-      {% line 24 %}{{ "Holy cow        " ~"multiline       " ~"tags!           " ~"A pipe (|) even!" }}
+      {% line 24 %}{{ "Holy cow        " ~ "multiline       " ~ "tags!           " ~ "A pipe (|) even!"    }}
       {{ [1, 2, 3]|length }}
-      {% line 28 %}{{ "Holy cow        " ~"multiline       " ~"tags!           " }}
+      {% line 28 %}{{ "Holy cow        " ~ "multiline       " ~ "tags!           "    }}
     </p>
     <div class="silent">
 {% line 30 %}      {% set foo = "this" %}

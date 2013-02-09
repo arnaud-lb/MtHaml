@@ -77,9 +77,9 @@ echo $env->compileString($parts['HAML'], "$file.haml");
     <?php } ?>
     Wow.|
     <p>
-      <?php echo "Holy cow        " ."multiline       " ."tags!           " ."A pipe (|) even!"; ?>
+      <?php echo "Holy cow        " . "multiline       " . "tags!           " . "A pipe (|) even!"   ; ?>
       <?php echo count(array(1, 2, 3, "|")); ?>
-      <?php echo "Holy cow        " ."multiline       " ."tags!           "; ?>
+      <?php echo "Holy cow        " . "multiline       " . "tags!           "   ; ?>
     </p>
     <div class="silent">
       <?php $foo = "this"; ?>

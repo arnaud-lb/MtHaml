@@ -77,9 +77,9 @@ root(
       )
       interpolated(text(Wow.|))
       tag(p
-        insert("Holy cow        " ~"multiline       " ~"tags!           " ~"A pipe (|) even!")
+        insert("Holy cow        " ~ "multiline       " ~ "tags!           " ~ "A pipe (|) even!"   )
         insert([1, 2, 3]|length)
-        insert("Holy cow        " ~"multiline       " ~"tags!           ")
+        insert("Holy cow        " ~ "multiline       " ~ "tags!           "   )
       )
       tag(div
         attr(text(class)text(silent))
