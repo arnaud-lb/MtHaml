@@ -1,0 +1,22 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('php', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+= 1 + 2 # comment
+= 1 + 2 // comment
+- if ($foo) # comment
+  .
+- else // comment
+  .
+
+--EXPECT--
+<?php echo 1 + 2; ?>
+<?php echo 1 + 2; ?>
+<?php if ($foo) { ?>
+  .
+<?php } else { ?>
+  .
+<?php } ?>
+

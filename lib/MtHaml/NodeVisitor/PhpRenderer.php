@@ -45,6 +45,9 @@ class PhpRenderer extends RendererAbstract
 
     public function enterInsert(Insert $node)
     {
+        $content = $node->getContent();
+        $content = $this->trimInlineComments($content);
+
         if ($this->isEchoMode()) {
             $fmt = '<?php echo %s; ?>';
 
@@ -56,13 +59,13 @@ class PhpRenderer extends RendererAbstract
                 }
             }
             $this->addDebugInfos($node);
-            $this->raw(sprintf($fmt, $node->getContent(), $this->charset));
+            $this->raw(sprintf($fmt, $content, $this->charset));
         } else {
             $content = $node->getContent();
             if (!preg_match('~^\$?[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$~', $content)) {
-                $this->raw('(' . $node->getContent() . ')');
+                $this->raw('(' . $content . ')');
             } else {
-                $this->raw($node->getContent());
+                $this->raw($content);
             }
         }
     }
@@ -70,17 +73,23 @@ class PhpRenderer extends RendererAbstract
     public function enterTopBlock(Run $node)
     {
         $this->addDebugInfos($node);
+
+        $content = $this->trimInlineComments($node->getContent());
+
         if (!$node->hasChilds()) {
-            $this->write(sprintf('<?php %s; ?>' , $node->getContent()));
+            $this->write(sprintf('<?php %s; ?>' , $content));
         } else {
-            $this->write(sprintf('<?php %s { ?>' , $node->getContent()));
+            $this->write(sprintf('<?php %s { ?>' , $content));
         }
     }
 
     public function enterMidBlock(Run $node)
     {
         $this->addDebugInfos($node);
-        $this->write(sprintf('<?php } %s { ?>' , $node->getContent()));
+
+        $content = $this->trimInlineComments($node->getContent());
+
+        $this->write(sprintf('<?php } %s { ?>' , $content));
     }
 
     public function leaveTopBlock(Run $node)
@@ -179,6 +188,33 @@ class PhpRenderer extends RendererAbstract
         $this->raw($this->stringLiteral($this->charset));
 
         $this->raw('); ?>');
+    }
+
+    public function trimInlineComments($code)
+    {
+        // Removes inlines comments ('//' and '#'), while ignoring '//' and '#'
+        // embedded in quoted strings.
+
+        $re = "!
+            (?P<code>
+                (?P<expr>(?:
+                    # anything except \", ', `
+                    [^\"'`]
+
+                    # double quoted string
+                    | \"(?: [^\"\\\\]+ | \\\\. )*\"
+
+                    # single quoted string
+                    | '(?: [^'\\\\]+ | \\\\. )*'
+
+                    # backticks string
+                    | `(?: [^`\\\\]+ | \\\\. )*`
+                )+?)
+            )
+            (?P<comment>\s*(?://|\#).*)?
+        $!xA";
+
+        return preg_replace($re, '$1', $code);
     }
 }
 
