@@ -1,0 +1,14 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('php', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+- foo()
+- foo();
+- case "foo":
+--EXPECT--
+<?php foo(); ?>
+<?php foo(); ?>
+<?php case "foo": ?>
+

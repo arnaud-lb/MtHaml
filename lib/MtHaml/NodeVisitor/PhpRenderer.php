@@ -77,7 +77,11 @@ class PhpRenderer extends RendererAbstract
         $content = $this->trimInlineComments($node->getContent());
 
         if (!$node->hasChilds()) {
-            $this->write(sprintf('<?php %s; ?>' , $content));
+            if (preg_match('~[:;]\s*$~', $content)) {
+                $this->write(sprintf('<?php %s ?>' , $content));
+            } else {
+                $this->write(sprintf('<?php %s; ?>' , $content));
+            }
         } else {
             $this->write(sprintf('<?php %s { ?>' , $content));
         }
