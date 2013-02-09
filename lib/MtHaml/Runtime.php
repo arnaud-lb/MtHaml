@@ -3,6 +3,7 @@
 namespace MtHaml;
 
 use MtHaml\Runtime\AttributeInterpolation;
+use MtHaml\Runtime\AttributeList;
 
 class Runtime
 {
@@ -34,6 +35,9 @@ class Runtime
 
             if ($item instanceof AttributeInterpolation) {
                 $attributes[] = $item;
+                continue;
+            } else if ($item instanceof AttributeList) {
+                $attributes = array_merge($attributes, $item->attributes);
                 continue;
             }
 

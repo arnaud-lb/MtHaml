@@ -15,6 +15,8 @@ use MtHaml\Exception;
 use MtHaml\Node\NodeAbstract;
 use MtHaml\Node\NestInterface;
 use MtHaml\Node\Run;
+use MtHaml\Node\TagAttributeInterpolation;
+use MtHaml\Node\TagAttributeList;
 
 abstract class RendererAbstract extends NodeVisitorAbstract
 {
@@ -129,6 +131,10 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             $nameNode = $attr->getName();
             $valueNode = $attr->getValue();
 
+            if ($attr instanceof TagAttributeList) {
+                $hasDynAttr = true;
+                break;
+            }
             if ($nameNode && (!$nameNode->isConst() || !$valueNode->isConst())) {
                 $hasDynAttr = true;
                 break;
@@ -176,7 +182,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         $this->raw('"');
     }
 
-    public function enterTagAttributeInterpolation(TagAttribute $node)
+    public function enterTagAttributeInterpolation(TagAttributeInterpolation $node)
     {
         $this->raw(' ');
     }

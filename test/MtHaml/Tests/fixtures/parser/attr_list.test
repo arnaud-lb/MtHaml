@@ -1,0 +1,14 @@
+--HAML--
+%p{list, :foo => "bar"}
+%p{list}
+--EXPECT--
+root(
+  tag(p
+    attr(insert(list))
+    attr(text(foo)interpolated(text(bar)))
+  )
+  tag(p
+    attr(insert(list))
+  )
+)
+

@@ -1,0 +1,12 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+%p{list}
+%p{list, :foo => "bar"}
+--EXPECT--
+<p {{ mthaml_attributes([mthaml_attribute_list(list)], 'html5', 'UTF-8')|raw }}></p>
+<p {{ mthaml_attributes([mthaml_attribute_list(list), ['foo', 'bar']], 'html5', 'UTF-8')|raw }}></p>
+

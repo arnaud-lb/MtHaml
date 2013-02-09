@@ -46,22 +46,15 @@ class TagAttribute extends NodeAbstract
     {
         if (false !== $visitor->enterTagAttribute($this)) {
 
-            if ($this->name) {
-                if (false !== $visitor->enterTagAttributeName($this)) {
-                    $this->getName()->accept($visitor);
-                }
-                $visitor->leaveTagAttributeName($this);
-
-                if (false !== $visitor->enterTagAttributeValue($this)) {
-                    $this->getValue()->accept($visitor);
-                }
-                $visitor->leaveTagAttributeValue($this);
-            } else {
-                if (false !== $visitor->enterTagAttributeInterpolation($this)) {
-                    $this->getValue()->accept($visitor);
-                }
-                $visitor->leaveTagAttributeInterpolation($this);
+            if (false !== $visitor->enterTagAttributeName($this)) {
+                $this->getName()->accept($visitor);
             }
+            $visitor->leaveTagAttributeName($this);
+
+            if (false !== $visitor->enterTagAttributeValue($this)) {
+                $this->getValue()->accept($visitor);
+            }
+            $visitor->leaveTagAttributeValue($this);
         }
         $visitor->leaveTagAttribute($this);
     }

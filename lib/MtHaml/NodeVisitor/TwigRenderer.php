@@ -9,6 +9,8 @@ use MtHaml\Node\Tag;
 use MtHaml\Node\ObjectRefClass;
 use MtHaml\Node\ObjectRefId;
 use MtHaml\Node\NodeAbstract;
+use MtHaml\Node\TagAttributeInterpolation;
+use MtHaml\Node\TagAttributeList;
 
 class TwigRenderer extends RendererAbstract
 {
@@ -180,8 +182,12 @@ class TwigRenderer extends RendererAbstract
                 $this->raw(', ');
             }
 
-            if (!$attr->getName()) {
+            if ($attr instanceof TagAttributeInterpolation) {
                 $this->raw('mthaml_attribute_interpolation(');
+                $attr->getValue()->accept($this);
+                $this->raw(')');
+            } else if ($attr instanceof TagAttributeList) {
+                $this->raw('mthaml_attribute_list(');
                 $attr->getValue()->accept($this);
                 $this->raw(')');
             } else {

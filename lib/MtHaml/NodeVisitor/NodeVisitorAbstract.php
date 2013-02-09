@@ -16,6 +16,8 @@ use MtHaml\Node\Filter;
 use MtHaml\Node\ObjectRefClass;
 use MtHaml\Node\NodeAbstract;
 use MtHaml\Node\ObjectRefId;
+use MtHaml\Node\TagAttributeInterpolation;
+use MtHaml\Node\TagAttributeList;
 
 /**
  * Abstract node visitor
@@ -161,10 +163,16 @@ abstract class NodeVisitorAbstract implements NodeVisitorInterface
     public function leaveTagAttributeValue(TagAttribute $node)
     {
     }
-    public function enterTagAttributeInterpolation(TagAttribute $node)
+    public function enterTagAttributeInterpolation(TagAttributeInterpolation $node)
     {
     }
-    public function leaveTagAttributeInterpolation(TagAttribute $node)
+    public function leaveTagAttributeInterpolation(TagAttributeInterpolation $node)
+    {
+    }
+    public function enterTagAttributeList(TagAttributeList $node)
+    {
+    }
+    public function leaveTagAttributeList(TagAttributeList $node)
     {
     }
     public function leaveTagAttribute(TagAttribute $node)

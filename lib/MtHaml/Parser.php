@@ -19,6 +19,8 @@ use MtHaml\Node\NestInterface;
 use MtHaml\Node\Filter;
 use MtHaml\Node\ObjectRefClass;
 use MtHaml\Node\ObjectRefId;
+use MtHaml\Node\TagAttributeInterpolation;
+use MtHaml\Node\TagAttributeList;
 
 /**
  * MtHaml Parser
@@ -498,18 +500,17 @@ class Parser
         if ($buf->match('/\{\s*/')) {
             do {
                 if ($expr = $this->parseInterpolation($buf)) {
-                    $attrs[] = new TagAttribute($expr->getPosition(), null, $expr);
+                    $attrs[] = new TagAttributeInterpolation($expr->getPosition(), $expr);
                 } else {
                     $name = $this->parseAttrExpression($buf, '=,');
 
                     $buf->skipWs();
                     if (!$buf->match('/=>\s*/A')) {
-                        $this->syntaxErrorExpected($buf, "'=>'");
+                        $attr = new TagAttributeList($name->getPosition(), $name);
+                    } else {
+                        $value = $this->parseAttrExpression($buf, ',');
+                        $attr = new TagAttribute($name->getPosition(), $name, $value);
                     }
-
-                    $value = $this->parseAttrExpression($buf, ',');
-
-                    $attr = new TagAttribute($name->getPosition(), $name, $value);
                     $attrs[] = $attr;
                 }
 
@@ -540,7 +541,7 @@ class Parser
         if ($buf->match('/\(\s*/A')) {
             do {
                 if ($expr = $this->parseInterpolation($buf)) {
-                    $attrs[] = new TagAttribute($expr->getPosition(), null, $expr);
+                    $attrs[] = new TagAttributeInterpolation($expr->getPosition(), $expr);
                 } else if ($buf->match('/[\w+:-]+/A', $match)) {
                     $name = new Text($match['pos'][0], $match[0]);
 
@@ -675,13 +676,13 @@ class Parser
                 | '(?: [^'\\\\]+ | \\\\['\\\\] )*'
 
                 # { ... } pair
-                | \{ (?: (?P>expr) | [$delims] )* \}
+                | \{ (?: (?P>expr) | [ $delims] )* \}
 
                 # ( ... ) pair
-                | \( (?: (?P>expr) | [$delims] )* \)
+                | \( (?: (?P>expr) | [ $delims] )* \)
 
                 # [ ... ] pair
-                | \[ (?: (?P>expr) | [$delims] )* \]
+                | \[ (?: (?P>expr) | [ $delims] )* \]
             )+)/xA";
 
         if ($buf->match($re, $match)) {

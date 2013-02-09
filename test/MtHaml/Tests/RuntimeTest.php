@@ -3,6 +3,7 @@
 namespace MtHaml\Tests;
 
 use MtHaml\Runtime;
+use MtHaml\Runtime\AttributeList;
 
 class RuntimeTest extends \PHPUnit_Framework_TestCase
 {
@@ -144,6 +145,17 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
                     array('data-bar>', 'bar>'),
                     array('id', array('bar>')),
                     array('class', array('bar>')),
+                ),
+            ),
+            'attribute list' => array(
+                'foo="bar" bar="baz" baz="qux" all="ok"',
+                array(
+                    array('foo', 'bar'),
+                    AttributeList::create(array(
+                        'bar' => 'baz',
+                        'baz' => 'qux',
+                    )),
+                    array('all', 'ok'),
                 ),
             ),
         );

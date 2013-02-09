@@ -9,6 +9,8 @@ use MtHaml\Node\Tag;
 use MtHaml\Node\ObjectRefClass;
 use MtHaml\Node\NodeAbstract;
 use MtHaml\Node\ObjectRefId;
+use MtHaml\Node\TagAttributeInterpolation;
+use MtHaml\Node\TagAttributeList;
 
 class PhpRenderer extends RendererAbstract
 {
@@ -167,8 +169,12 @@ class PhpRenderer extends RendererAbstract
                 $this->raw(', ');
             }
 
-            if (!$attr->getName()) {
+            if ($attr instanceof TagAttributeInterpolation) {
                 $this->raw('MtHaml\Runtime\AttributeInterpolation::create(');
+                $attr->getValue()->accept($this);
+                $this->raw(')');
+            } else if ($attr instanceof TagAttributeList) {
+                $this->raw('MtHaml\Runtime\AttributeList::create(');
                 $attr->getValue()->accept($this);
                 $this->raw(')');
             } else {
