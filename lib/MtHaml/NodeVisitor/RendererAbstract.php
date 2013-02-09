@@ -246,7 +246,8 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     public function enterDoctype(Doctype $node)
     {
-        $this->write($node->getDoctype($this->env->getOption('format')));
+        $doctype = $node->getDoctype($this->env->getOption('format'));
+        $this->write($this->escapeLanguage($doctype));
     }
 
     public function enterComment(Comment $comment)
