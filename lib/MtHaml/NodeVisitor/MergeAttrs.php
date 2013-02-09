@@ -6,6 +6,7 @@ use MtHaml\Node\Tag;
 use MtHaml\Node\TagAttribute;
 use MtHaml\Node\Text;
 use MtHaml\Node\InterpolatedString;
+use MtHaml\Node\Insert;
 
 class MergeAttrs extends NodeVisitorAbstract
 {
@@ -44,7 +45,7 @@ class MergeAttrs extends NodeVisitorAbstract
                     // Also unset $this->attrs[$name] so that following
                     // class arguments do not get merged into this one.
 
-                    if (!$new->isConst()) {
+                    if (!$new || !$new->isConst()) {
                         unset($this->attrs[$name]);
                         return;
                     }
@@ -81,9 +82,13 @@ class MergeAttrs extends NodeVisitorAbstract
     protected function mergeClasses($a, $b)
     {
         $new = new InterpolatedString($a->getPosition());
-        $this->mergeInto($new, $a);
+        if (false === $this->mergeInto($new, $a)) {
+            return;
+        }
         $new->addChild(new Text($b->getPosition(), ' '));
-        $this->mergeInto($new, $b);
+        if (false === $this->mergeInto($new, $b)) {
+            return;
+        }
         return $new;
     }
 
@@ -93,8 +98,10 @@ class MergeAttrs extends NodeVisitorAbstract
             foreach($src->getChilds() as $child) {
                 $dest->addChild($child);
             }
-        } else {
+        } else if ($src instanceof Text || $src instanceof Insert) {
             $dest->addChild($src);
+        } else {
+            return false;
         }
     }
 }
