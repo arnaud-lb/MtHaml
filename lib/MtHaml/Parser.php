@@ -774,9 +774,13 @@ class Parser
 
     protected function parseNestableStatement($buf)
     {
-        if ($buf->match('/([&!]?)[=~]\s*/A', $match)) {
+        if ($buf->match('/([&!]?)(==?|~)\s*/A', $match)) {
 
-            $node = new Insert($match['pos'][0], $buf->getLine());
+            if ($match[2] == '==') {
+                $node = $this->parseInterpolatedString($buf, false);
+            } else {
+                $node = new Insert($match['pos'][0], $buf->getLine());
+            }
 
             if ($match[1] == '&') {
                 $node->getEscaping()->setEnabled(true);

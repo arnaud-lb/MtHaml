@@ -1,0 +1,7 @@
+--HAML--
+==test
+--EXPECT--
+root(
+  interpolated(text(test))
+)
+
