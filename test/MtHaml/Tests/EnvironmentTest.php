@@ -23,7 +23,9 @@ class EnvironmentTest extends TestCase
             require $file . '.php';
             $out = ob_get_clean();
         } catch(\Exception $e) {
-            return $this->assertException($parts, $e);
+            $this->assertException($parts, $e);
+            $this->cleanup($file);
+            return;
         }
         $this->assertException($parts);
 
@@ -31,7 +33,14 @@ class EnvironmentTest extends TestCase
 
         $this->assertSame($parts['EXPECT'], $out);
 
-        unlink($file . '.out');
+        $this->cleanup($file);
+    }
+
+    protected function cleanup($file)
+    {
+        if (file_exists($file . '.out')) {
+            unlink($file . '.out');
+        }
         unlink($file . '.haml');
         unlink($file . '.php');
         unlink($file . '.exp');
