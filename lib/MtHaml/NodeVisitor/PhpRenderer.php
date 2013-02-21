@@ -78,7 +78,7 @@ class PhpRenderer extends RendererAbstract
 
         $content = $this->trimInlineComments($node->getContent());
 
-        if (!($node->hasChilds() || $node->hasMidblock())) {
+        if (!$node->isBlock()) {
             if (preg_match('~[:;]\s*$~', $content)) {
                 $this->write(sprintf('<?php %s ?>' , $content));
             } else {
@@ -100,7 +100,7 @@ class PhpRenderer extends RendererAbstract
 
     public function leaveTopBlock(Run $node)
     {
-        if ($node->hasChilds() || $node->hasMidblock()) {
+        if ($node->isBlock()) {
             $this->write('<?php } ?>');
         }
     }

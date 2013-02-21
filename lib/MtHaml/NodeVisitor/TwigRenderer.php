@@ -80,7 +80,7 @@ class TwigRenderer extends RendererAbstract
 
     public function leaveTopBlock(Run $node)
     {
-        if ($node->hasChilds() || $node->hasMidblock()) {
+        if ($node->isBlock()) {
             if (preg_match('~^(?:-\s*)?(\w+)~', $node->getContent(), $match)) {
                 $this->write($this->renderTag('end'.$match[1]));
             }
