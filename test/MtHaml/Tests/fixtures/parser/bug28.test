@@ -1,0 +1,15 @@
+--TEST--
+bug #28: Empty block gives parse error
+--HAML--
+- if a
+
+- else
+    1
+--EXPECT--
+root(
+  run(if a)
+  run(else
+    interpolated(text(1))
+  )
+)
+

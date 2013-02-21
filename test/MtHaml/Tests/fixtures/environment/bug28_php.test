@@ -1,0 +1,15 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('php', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+--HAML--
+- if ($a)
+
+- else
+  1
+--EXPECT--
+<?php if ($a) { ?>
+<?php } else { ?>
+  1
+<?php } ?>
+
