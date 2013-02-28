@@ -44,16 +44,7 @@ class Runtime
             list ($name, $value) = $item;
 
             if ('data' === $name) {
-                if (\is_array($value) || $value instanceof \Traversable) {
-                    foreach ($value as $subname => $subvalue) {
-                        $subname = 'data-' . $subname;
-                        if (!isset($attributes[$subname])) {
-                            $attributes[$subname] = $subvalue;
-                        }
-                    }
-                } else {
-                    $attributes[$name] = $value;
-                }
+                self::renderDataAttributes($attributes, $value);
             } else if ('id' === $name) {
                 $value = self::renderJoinedValue($value, '_');
                 if (null !== $value) {
@@ -111,6 +102,19 @@ class Runtime
         }
 
         return $result;
+    }
+
+    static private function renderDataAttributes(&$dest, $value, $prefix = 'data')
+    {
+        if (\is_array($value) || $value instanceof \Traversable) {
+            foreach ($value as $subname => $subvalue) {
+                self::renderDataAttributes($dest, $subvalue, $prefix.'-'.$subname);
+            }
+        } else {
+            if (!isset($dest[$prefix])) {
+                $dest[$prefix] = $value;
+            }
+        }
     }
 
     static private function renderJoinedValue($values, $separator)

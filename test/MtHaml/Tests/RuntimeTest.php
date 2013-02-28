@@ -57,6 +57,24 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
                     array('data', array('a' => 'A', 'b' => 'B')),
                 ),
             ),
+            'deeply nested data attribute' => array(
+                'foo="bar" data-a="A" data-b="B" data-c-d-e-f="F" data-c-g="G"',
+                array(
+                    array('foo', 'bar'),
+                    array('data', array(
+                        'a' => 'A',
+                        'b' => 'B',
+                        'c' => array(
+                            'd' => array(
+                                'e' => array(
+                                    'f' => 'F',
+                                ),
+                            ),
+                            'g' => 'G',
+                        ),
+                    )),
+                ),
+            ),
             'single id attribute' => array(
                 'id="a"',
                 array(
