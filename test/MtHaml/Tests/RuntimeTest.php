@@ -1,6 +1,6 @@
 <?php
 
-namespace MtHaml\Tests;
+namespace MtHaml\Tests {
 
 use MtHaml\Runtime;
 use MtHaml\Runtime\AttributeList;
@@ -184,7 +184,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetObjectRefClassStringData($expect, $class)
     {
-        $result = Runtime::getObjectRefClassString($class);
+        $result = Runtime::getObjectRefClassString(new $class);
         $this->assertSame($expect, $result);
     }
 
@@ -195,6 +195,37 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
             'underscores in name' => array('foo_bar', 'Foo_Bar'),
             'multiple upper case' => array('foo_bbar', 'FooBBar'),
             'namespace' => array('baz_qux', 'Foo\Bar\BazQux'),
+        );
+    }
+    
+    public function testGetArrayObjectRefData()
+    {
+        $result = Runtime::getObjectRefClassString(array(1));
+        $this->assertSame('array', $result);
+
+        $result = Runtime::renderObjectRefId(array(1));
+        $this->assertSame('array_1', $result);
+    }
+
+    /**
+     * @dataProvider getGetObjectRefScalarData
+     */
+    public function testGetNonObjectRefData($expect, $data)
+    {
+        $result = Runtime::getObjectRefClassString($data);
+        $this->assertSame($expect, $result);
+
+        $result = Runtime::renderObjectRefId($data);
+        $this->assertSame($expect.'_'.$data, $result);
+    }
+
+    public function getGetObjectRefScalarData()
+    {
+        return array(
+            'string' => array('string', 'user'),
+            'integer' => array('integer', 1),
+            'double' => array('double', 1.1),
+            'boolean' => array('boolean', true),
         );
     }
 
@@ -226,7 +257,28 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $object = new ObjectRefWithGetIdAndId;
         $object->getId = null;
         $result = Runtime::renderObjectRefId($object);
-        $this->assertSame('object_ref_with_get_id_and_id_new', $result);
+        $this->assertSame('object_ref_with_get_id_and_id_1', $result);
+    }
+    
+    public function testRenderObjectRefWithRefMethod()
+    {
+        $object = new ObjectRefWithRef;
+        $result = Runtime::renderObjectRefClass($object);
+        $this->assertSame('custom_ref', $result);
+    }
+    
+    public function testRenderObjectRefIncrementId()
+    {
+	    $obj1 = new ObjectRefWithoutId;
+	    $obj2 = new \Foo_Bar;
+		for ($i = 1; $i < 4; $i++)
+		{
+		    $result = Runtime::renderObjectRefId($obj1);
+		    $this->assertSame('object_ref_without_id_'.$i, $result);
+
+		    $result = Runtime::renderObjectRefId($obj2);
+		    $this->assertSame('foo_bar_'.$i, $result);
+		}
     }
 }
 
@@ -252,4 +304,30 @@ class ObjectRefWithId
     {
         return '>id';
     }
+}
+
+class ObjectRefWithRef
+{
+    public function hamlObjectRef()
+    {
+        return 'customRef';
+    }
+}
+
+class ObjectRefWithoutId
+{
+    protected function id()
+    {
+        return '>id';
+    }
+}
+}
+namespace {
+	class Foo_Bar {}
+	class FooBar {}
+	class FooBBar {}
+}
+
+namespace Foo\Bar {
+	class BazQux {}
 }
