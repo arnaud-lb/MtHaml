@@ -263,8 +263,8 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
     public function testRenderObjectRefWithRefMethod()
     {
         $object = new ObjectRefWithRef;
-        $result = Runtime::renderObjectRefClass($object);
-        $this->assertSame('custom_ref', $result);
+        $result = Runtime::getObjectRefName($object);
+        $this->assertSame('customRef', $result);
     }
     
     public function testRenderObjectRefIncrementId()
