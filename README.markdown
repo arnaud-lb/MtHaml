@@ -194,6 +194,7 @@ Example:
  - Drupal: https://github.com/antoinelafontaine/oxide
  - FuelPHP: https://github.com/fuel/parser
  - PHPixie: https://github.com/dracony/PHPixie-HAML
+ - Silex: https://github.com/arnaud-lb/Silex-MtHaml
  - Symfony2: https://github.com/arnaud-lb/MtHamlBundle
  - Zend Framework 1: https://github.com/bonndan/mthaml-zf1
 
