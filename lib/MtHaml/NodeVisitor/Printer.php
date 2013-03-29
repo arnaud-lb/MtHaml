@@ -20,7 +20,7 @@ class Printer extends NodeVisitorAbstract
 {
     protected $indent;
     protected $output = '';
-
+    
     public function getOutput()
     {
         return $this->output;
@@ -230,7 +230,7 @@ class Printer extends NodeVisitorAbstract
 
     public function enterFilter(Filter $node)
     {
-       $this->write('filter(' . $node->getFilter())->indent();
+       $this->write('filter(' . $node->getFilterName())->indent();
     }
 
     public function leaveFilter(Filter $node)
