@@ -144,7 +144,7 @@ class Runtime
 
     static public function renderObjectRefClass($object, $prefix = null)
     {
-        if (! $object) {
+        if (!$object) {
             return;
         }
 
@@ -159,9 +159,13 @@ class Runtime
 
     static public function renderObjectRefId($object, $prefix = null)
     {
-        $id = null;
-        
-        if (is_object($object)) {
+		if (!$object) {
+		    return;
+		}
+       
+		$id = null;
+		
+		if (is_object($object)) {
 	        if (is_callable(array($object, 'getId'))) {
 	            $id = $object->getId();
 	        } else if (is_callable(array($object, 'id'))) {
