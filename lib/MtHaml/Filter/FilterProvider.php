@@ -7,7 +7,7 @@ use ArrayIterator;
 use IteratorAggregate;
 use Exception;
 
-class FilterProvider implements ArrayAccess, IteratorAggregate {
+class FilterProvider implements ArrayAccess {
 	
 	protected $filters = array(
 		'css' => 'MtHaml\\Filter\\Css',
@@ -82,21 +82,12 @@ class FilterProvider implements ArrayAccess, IteratorAggregate {
 	
 	/**
 	 * @access public
-	 * @return void
-	 */
-	public function getIterator()
-	{
-		return new ArrayIterator($this->filters);
-	}
-	
-	/**
-	 * @access public
 	 * @param mixed $key
 	 * @return Boolean
 	 */
 	public function offsetExists($key)
 	{
-		return isset($key, $this->filters);
+		return isset($this->filters[$key]);
 	}
 	
 	/**

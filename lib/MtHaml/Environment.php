@@ -25,13 +25,13 @@ class Environment
 
     protected $target;
     
-    protected $filters;
+    protected $filter;
 
     public function __construct($target, array $options = array(), array $filters = array())
     {
         $this->target	= $target;
         $this->options 	= new ArrayObject($options + $this->options);
-        $this->filters 	= new FilterProvider($filters);
+        $this->filter 	= new FilterProvider($filters);
     }
 
     public function compileString($string, $filename)
@@ -51,12 +51,12 @@ class Environment
     
     public function addFilter($name, $nameOrClass = null)
     {
-    	return $this->filters->set($name, $nameOrClass);
+    	return $this->filter->set($name, $nameOrClass);
     }
     
     public function getFilter($name = null)
     {
-	    return $this->filters->get($name);
+	    return $this->filter->get($name);
     }
 
     public function getOption($name = null)
