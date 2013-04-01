@@ -162,23 +162,24 @@ class Runtime
 		if (!$object) {
 		    return;
 		}
-       
+		
 		$id = null;
 		
 		if (is_object($object)) {
-	        if (is_callable(array($object, 'getId'))) {
-	            $id = $object->getId();
-	        } else if (is_callable(array($object, 'id'))) {
-	            $id = $object->id();
-	        }   
-        }
-        
-        $id = self::getObjectRefClassString($object) . '_' . ($id ?: 'new');
-
-        if (false !== $prefix && null !== $prefix) {
-            $id = $prefix . '_' . $id;
-        }
-        return $id;
+		    if (is_callable(array($object, 'getId'))) {
+		        $id = $object->getId();
+		    } else if (is_callable(array($object, 'id'))) {
+		        $id = $object->id();
+		    }   
+		}
+		
+		$id = self::getObjectRefClassString($object) . '_' . ($id ?: 'new');
+		
+		if (false !== $prefix && null !== $prefix) {
+		    $id = $prefix . '_' . $id;
+		}
+		
+		return $id;
     }
     
     static public function getObjectRefClassString($object)

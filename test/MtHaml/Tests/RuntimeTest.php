@@ -199,7 +199,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getGetObjectRefScalarData
+     * @dataProvider getNonObjectRefData
      */
     public function testGetNonObjectRefData($expect, $data)
     {
@@ -210,7 +210,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect.'_new', $result);
     }
 
-    public function getGetObjectRefScalarData()
+    public function getNonObjectRefData()
     {
         return array(
         	'array' => array('array', array(1)),
@@ -218,6 +218,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
             'integer' => array('integer', 1),
             'double' => array('double', 1.1),
             'boolean' => array('boolean', true),
+            'resource' => array('resource', tmpfile())
         );
     }
 
