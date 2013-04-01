@@ -1,6 +1,6 @@
 <?php
 
-namespace MtHaml\Tests;
+namespace MtHaml\Tests {
 
 use MtHaml\Runtime;
 use MtHaml\Runtime\AttributeList;
@@ -184,7 +184,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetObjectRefClassStringData($expect, $class)
     {
-        $result = Runtime::getObjectRefClassString($class);
+        $result = Runtime::getObjectRefClassString(new $class);
         $this->assertSame($expect, $result);
     }
 
@@ -195,6 +195,30 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
             'underscores in name' => array('foo_bar', 'Foo_Bar'),
             'multiple upper case' => array('foo_bbar', 'FooBBar'),
             'namespace' => array('baz_qux', 'Foo\Bar\BazQux'),
+        );
+    }
+
+    /**
+     * @dataProvider getNonObjectRefData
+     */
+    public function testGetNonObjectRefData($expect, $data)
+    {
+        $result = Runtime::getObjectRefClassString($data);
+        $this->assertSame($expect, $result);
+
+        $result = Runtime::renderObjectRefId($data);
+        $this->assertSame($expect.'_new', $result);
+    }
+
+    public function getNonObjectRefData()
+    {
+        return array(
+        	'array' => array('array', array(1)),
+            'string' => array('string', 'new'),
+            'integer' => array('integer', 1),
+            'double' => array('double', 1.1),
+            'boolean' => array('boolean', true),
+            'resource' => array('resource', tmpfile())
         );
     }
 
@@ -228,6 +252,17 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $result = Runtime::renderObjectRefId($object);
         $this->assertSame('object_ref_with_get_id_and_id_new', $result);
     }
+    
+    public function testRenderObjectRefWithRefMethod()
+    {
+        $object = new ObjectRefWithRefAndId;
+        $result = Runtime::getObjectRefName($object);
+        $this->assertSame('customRef', $result);
+
+        $result = Runtime::renderObjectRefId($object);
+        $this->assertSame('custom_ref_>id', $result);
+    }
+    
 }
 
 class ObjectRefWithGetIdAndId
@@ -252,4 +287,30 @@ class ObjectRefWithId
     {
         return '>id';
     }
+}
+
+class ObjectRefWithRefAndId extends ObjectRefWithId
+{
+    public function hamlObjectRef()
+    {
+        return 'customRef';
+    }
+}
+
+class ObjectRefWithoutId
+{
+    protected function id()
+    {
+        return '>id';
+    }
+}
+}
+namespace {
+	class Foo_Bar {}
+	class FooBar {}
+	class FooBBar {}
+}
+
+namespace Foo\Bar {
+	class BazQux {}
 }
