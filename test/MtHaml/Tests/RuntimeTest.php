@@ -197,15 +197,6 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
             'namespace' => array('baz_qux', 'Foo\Bar\BazQux'),
         );
     }
-    
-    public function testGetArrayObjectRefData()
-    {
-        $result = Runtime::getObjectRefClassString(array(1));
-        $this->assertSame('array', $result);
-
-        $result = Runtime::renderObjectRefId(array(1));
-        $this->assertSame('array_1', $result);
-    }
 
     /**
      * @dataProvider getGetObjectRefScalarData
@@ -216,13 +207,14 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $result);
 
         $result = Runtime::renderObjectRefId($data);
-        $this->assertSame($expect.'_'.$data, $result);
+        $this->assertSame($expect.'_new', $result);
     }
 
     public function getGetObjectRefScalarData()
     {
         return array(
-            'string' => array('string', 'user'),
+        	'array' => array('array', array(1)),
+            'string' => array('string', 'new'),
             'integer' => array('integer', 1),
             'double' => array('double', 1.1),
             'boolean' => array('boolean', true),
@@ -257,7 +249,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $object = new ObjectRefWithGetIdAndId;
         $object->getId = null;
         $result = Runtime::renderObjectRefId($object);
-        $this->assertSame('object_ref_with_get_id_and_id_1', $result);
+        $this->assertSame('object_ref_with_get_id_and_id_new', $result);
     }
     
     public function testRenderObjectRefWithRefMethod()
@@ -267,19 +259,6 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('customRef', $result);
     }
     
-    public function testRenderObjectRefIncrementId()
-    {
-	    $obj1 = new ObjectRefWithoutId;
-	    $obj2 = new \Foo_Bar;
-		for ($i = 1; $i < 4; $i++)
-		{
-		    $result = Runtime::renderObjectRefId($obj1);
-		    $this->assertSame('object_ref_without_id_'.$i, $result);
-
-		    $result = Runtime::renderObjectRefId($obj2);
-		    $this->assertSame('foo_bar_'.$i, $result);
-		}
-    }
 }
 
 class ObjectRefWithGetIdAndId

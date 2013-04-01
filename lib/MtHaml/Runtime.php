@@ -159,43 +159,24 @@ class Runtime
 
     static public function renderObjectRefId($object, $prefix = null)
     {
-        if (!$object) {
-            return;
-        }
-        
         $id = null;
         
-        static $refIdCount = array();
-        $increment = function($key) use(&$refIdCount) {
-        	if (! array_key_exists($key, $refIdCount)) {
-	        	$refIdCount[$key] = 0;
-        	}
-	       	return ++$refIdCount[$key];
-        };
-
+        if (!$object) {
+            return $id;
+        }
+        
         if (is_object($object)) {
-        	        	
 	        if (is_callable(array($object, 'getId'))) {
 	            $id = $object->getId();
 	        } else if (is_callable(array($object, 'id'))) {
 	            $id = $object->id();
-	        }
-	        if (null === $id) {
-		       	$id = $increment(self::getObjectRefName($object));
-	        }
-	        
-		} elseif (is_array($object)) {
-			$id = $increment('array');
-		} else {
-			$id = (string)$object;
-		}
-        
-        $id = self::getObjectRefClassString($object) . '_' . $id;
+	        }   
+        }
+        $id = self::getObjectRefClassString($object) . '_' . ($id ?: 'new');
 
         if (false !== $prefix && null !== $prefix) {
             $id = $prefix . '_' . $id;
         }
-
         return $id;
     }
     
@@ -203,10 +184,10 @@ class Runtime
     {
 		if (is_object($object)) {
 			$class = self::getObjectRefName($object);
-			if (false !== $pos = \strrpos($class, '\\')) {
-            	$class = \substr($class, $pos+1);
+			if (false !== $pos = strrpos($class, '\\')) {
+            	$class = substr($class, $pos+1);
             }
-            $class = \strtolower(\preg_replace('#(?<=[a-z])[A-Z]+#', '_$0', $class));
+            $class = strtolower(preg_replace('#(?<=[a-z])[A-Z]+#', '_$0', $class));
 
 		} else {
 			$class = gettype($object);
