@@ -2,19 +2,27 @@
 
 namespace MtHaml\Filter;
 
+use MtHaml\NodeVisitor\RendererAbstract as Renderer;
+
 class Css extends FilterAbstract {
 	
-	public function enter()
+	protected $name = 'css';
+	
+	public function enter(Renderer $renderer, $options)
 	{
-		$this->renderer->write('<style type="text/css">')
-			->write('/*<![CDATA[*/')
-			->indent();
+		$renderer->write('<style type="text/css">');
+		if ($options['cdata'] === true) {
+			$renderer->write('/*<![CDATA[*/');
+		}
+		$renderer->indent();
 	}
 	
-	public function leave()
+	public function leave(Renderer $renderer, $options)
 	{
-		$this->renderer->undent()
-			->write('/*]]>*/')
-			->write('</style>');
+		$renderer->undent();
+		if ($options['cdata'] === true) {
+			$renderer->write('/*]]>*/');
+		}
+		$renderer->write('</style>');
 	}
 }

@@ -51,11 +51,6 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         $this->charset = $env->getOption('charset');
     }
     
-    public function getEnvironment()
-    {
-	    return $this->env;
-    }
-
     public function getOutput()
     {
         return $this->output;
@@ -323,12 +318,13 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     public function enterFilter(Filter $node)
     {
-    	$node->getFilter($this)->enter();
+	    $filter = $node->getFilter();
+	    $filter->enter($this, $this->env->getOption());
     }
 
     public function leaveFilter(Filter $node)
     {
-     	$node->getFilter($this)->leave();
+	    $node->getFilter()->leave($this, $this->env->getOption());
     }
 
     public function enterRun(Run $node)

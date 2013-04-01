@@ -2,19 +2,27 @@
 
 namespace MtHaml\Filter;
 
+use MtHaml\NodeVisitor\RendererAbstract as Renderer;
+
 class Javascript extends FilterAbstract {
 	
-	public function enter()
-	{
-		$this->renderer->write('<script type="text/javascript">')
-			->write('//<![CDATA[')
-			->indent();
-	}
+	protected $name = 'javascript';
 	
-	public function leave()
+	public function enter(Renderer $renderer, $options)
 	{
-		$this->renderer->undent()
-			->write('//]]>')
-			->write('</script>');
+		$renderer->write('<script type="text/javascript">');
+		if ($options['cdata'] === true) {
+			$renderer->write('//<![CDATA[');
+		}
+		$renderer->indent();
+	}
+		
+	public function leave(Renderer $renderer, $options)
+	{
+		$renderer->undent();
+		if ($options['cdata'] === true) {
+			$renderer->write('//]]>');
+		}
+		$renderer->write('</script>');
 	}
 }

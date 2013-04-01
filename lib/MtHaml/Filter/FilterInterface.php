@@ -6,13 +6,11 @@ use MtHaml\NodeVisitor\RendererAbstract;
 
 interface FilterInterface {
 	
-	public function setRenderer(RendererAbstract $renderer);
+	public function enter(RendererAbstract $renderer, $options);
 	
-	public function hasRenderer();
+	public function leave(RendererAbstract $renderer, $options);
 	
-	public function enter();
-	
-	public function leave();
+	public function line($line, $options);
 	
 	public function getName();
 	

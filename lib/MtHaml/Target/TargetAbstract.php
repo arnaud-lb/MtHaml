@@ -21,7 +21,7 @@ abstract class TargetAbstract implements TargetInterface
     public function getDefaultParserFactory()
     {
         return function(Environment $env, array $options) {
-            return new Parser;
+            return new Parser($env);
         };
     }
 

@@ -2,30 +2,26 @@
 
 namespace MtHaml\Filter;
 
-use MtHaml\NodeVisitor\RendererAbstract;
+use MtHaml\NodeVisitor\RendererAbstract as Renderer;
 
 abstract class FilterAbstract implements FilterInterface {
 	
-	protected $renderer;
-	
 	protected $name;
 	
-	public function __construct(RendererAbstract $renderer = null)
+	public function enter(Renderer $renderer, $options)
 	{
-		$renderer and $this->setRenderer($renderer);
+		$renderer->indent();
 	}
 	
-	public function setRenderer(RendererAbstract $renderer)
+	public function leave(Renderer $renderer, $options)
 	{
-		$this->renderer = $renderer;
-		return $this;
+		$renderer->undent();
 	}
-	
-	public function hasRenderer()
+
+	public function line($buffer, $options)
 	{
-		return !! $this->renderer;
 	}
-	
+
 	public function getName()
 	{
 		return $this->name;

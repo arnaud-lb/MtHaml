@@ -2,18 +2,22 @@
 
 namespace MtHaml\Filter;
 
+use MtHaml\NodeVisitor\RendererAbstract as Renderer;
+
 class Preserve extends FilterAbstract {
 	
-	public function enter()
+	protected $name = 'preserve';
+	
+	public function enter(Renderer $renderer, $options)
 	{
-		$this->renderer
-			->addSavedIndent($this->renderer->getIndent())
+		$renderer
+			->addSavedIndent($renderer->getIndent())
 			->setIndent(0);
 	}
 	
-	public function leave()
+	public function leave(Renderer $renderer, $options)
 	{
-		$indent = $this->renderer->getSavedIndent();
-		$this->renderer->setIndent(array_pop($indent));
+		$indent = $renderer->getSavedIndent();
+		$renderer->setIndent(array_pop($indent));
 	}
 }

@@ -2,9 +2,14 @@
 
 namespace MtHaml\Filter;
 
+use MtHaml\Node\Text;
+
 class Plain extends FilterAbstract {
 	
-	public function enter(){}
-	
-	public function leave(){}
+	protected $name = 'plain';
+		
+	public function line($buffer, $options)
+	{
+		return new Text($buffer->getPosition(), $buffer->getLine());
+	}
 }

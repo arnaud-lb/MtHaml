@@ -8,7 +8,8 @@ use MtHaml\NodeVisitor\Escaping as EscapingVisitor;
 use MtHaml\NodeVisitor\Autoclose;
 use MtHaml\NodeVisitor\Midblock;
 use MtHaml\NodeVisitor\MergeAttrs;
-use MtHaml\Filter\FilterInterface;
+use MtHaml\Filter\FilterProvider;
+use ArrayObject;
 
 class Environment
 {
@@ -17,26 +18,20 @@ class Environment
         'enable_escaper' => true,
         'escape_html' => true,
         'escape_attrs' => true,
+        'cdata'	=> true,
         'autoclose' => array('meta', 'img', 'link', 'br', 'hr', 'input', 'area', 'param', 'col', 'base'),
-        'charset' => 'UTF-8',
-        'filters' => array(
-	    	'javascript' => 'MtHaml\\Filter\\Javascript',
-	    	'preserve' => 'MtHaml\\Filter\\Preserve',
-	    	'plain' => 'MtHaml\\Filter\\Plain',
-	    	'css' => 'MtHaml\\Filter\\Css',
-	    )
+        'charset' => 'UTF-8'
     );
 
     protected $target;
+    
+    protected $filters;
 
-    public function __construct($target, array $options = array())
+    public function __construct($target, array $options = array(), array $filters = array())
     {
-        $this->target = $target;
-        
-        if (isset($options['filters'])) {
-	        $options['filters'] = $options['filters'] + $this->options['filters'];
-        }
-        $this->options = $options + $this->options;
+        $this->target	= $target;
+        $this->options 	= new ArrayObject($options + $this->options);
+        $this->filters 	= new FilterProvider($filters);
     }
 
     public function compileString($string, $filename)
@@ -54,46 +49,22 @@ class Environment
         return $code;
     }
     
-    /**
-     * Add / Replace Filter.
-     * if $name is an instance of FilterInterface,
-     * the filter name is provided by the instance, but
-     * can be overritten with $nameOrClass if present.
-     * 
-     * @access public
-     * @param mixed $name
-     * @param mixed $nameOrClass (default: null)
-     * @return $this
-     */
     public function addFilter($name, $nameOrClass = null)
     {
-    	if ($name instanceof FilterInterface) {
-	    	$class = $name;
-	    	$name= $nameOrClass ?: $class->getName();
-	    	$nameOrClass = $class;
-    	}
-	    $this->options['filters'][$name] = $nameOrClass;
-	    
-	    return $this;
+    	return $this->filters->set($name, $nameOrClass);
     }
     
-    /**
-     * Retunrs a filter by its name.
-     * 
-     * @access public
-     * @param mixed $name (default: null)
-     * @return void
-     */
     public function getFilter($name = null)
     {
-		return array_key_exists($name, $this->options['filters'])
-			? $this->options['filters'][$name]
-			: null;
+	    return $this->filters->get($name);
     }
 
-    public function getOption($name)
+    public function getOption($name = null)
     {
-        return $this->options[$name];
+    	if (null !== $name) {
+	    	return $this->options[$name];
+    	}
+        return $this->options;
     }
 
     public function getTarget()
