@@ -254,9 +254,12 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
     
     public function testRenderObjectRefWithRefMethod()
     {
-        $object = new ObjectRefWithRef;
+        $object = new ObjectRefWithRefAndId;
         $result = Runtime::getObjectRefName($object);
         $this->assertSame('customRef', $result);
+
+        $result = Runtime::renderObjectRefId($object);
+        $this->assertSame('custom_ref_>id', $result);
     }
     
 }
@@ -285,7 +288,7 @@ class ObjectRefWithId
     }
 }
 
-class ObjectRefWithRef
+class ObjectRefWithRefAndId extends ObjectRefWithId
 {
     public function hamlObjectRef()
     {

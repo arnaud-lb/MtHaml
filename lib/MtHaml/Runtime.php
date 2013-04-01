@@ -144,7 +144,7 @@ class Runtime
 
     static public function renderObjectRefClass($object, $prefix = null)
     {
-        if (!$object) {
+        if (! $object) {
             return;
         }
 
@@ -161,10 +161,6 @@ class Runtime
     {
         $id = null;
         
-        if (!$object) {
-            return $id;
-        }
-        
         if (is_object($object)) {
 	        if (is_callable(array($object, 'getId'))) {
 	            $id = $object->getId();
@@ -172,6 +168,7 @@ class Runtime
 	            $id = $object->id();
 	        }   
         }
+        
         $id = self::getObjectRefClassString($object) . '_' . ($id ?: 'new');
 
         if (false !== $prefix && null !== $prefix) {
