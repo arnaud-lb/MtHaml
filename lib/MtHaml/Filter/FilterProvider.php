@@ -3,11 +3,10 @@
 namespace MtHaml\Filter;
 
 use ArrayAccess;
-use ArrayIterator;
-use IteratorAggregate;
+use Iterator;
 use Exception;
 
-class FilterProvider implements ArrayAccess {
+class FilterProvider implements ArrayAccess, Iterator {
 	
 	protected $filters = array(
 		'css' => 'MtHaml\\Filter\\Css',
@@ -19,24 +18,11 @@ class FilterProvider implements ArrayAccess {
 		'preserve' => 'MtHaml\\Filter\\Preserve',
 	);
 	
-	/**
-	 * @access public
-	 * @param array $filters (default: array())
-	 * @return void
-	 */
 	public function __construct(array $filters)
 	{
 		$this->filters = $filters + $this->filters;
 	}
-	
-	/**
-	 * Get a filter.
-	 * if the filter is not instanciated, we will try to load it.
-	 * 
-	 * @access public
-	 * @param mixed $key
-	 * @return FilterInterface or Exception
-	 */
+	    
 	public function get($key)
 	{
 		if (! isset($this->filters[$key])) {
@@ -61,14 +47,6 @@ class FilterProvider implements ArrayAccess {
         return $filter;
 	}
 	
-	/**
-	 * Set a filter.
-	 * 
-	 * @access public
-	 * @param mixed $key
-	 * @param mixed $val
-	 * @return offsetSet() result
-	 */
 	public function set($key, $val = null)
 	{
 	    if ($key instanceof FilterInterface) {
@@ -80,43 +58,21 @@ class FilterProvider implements ArrayAccess {
 		return $this->filters[$key] = $val;
 	}
 	
-	/**
-	 * @access public
-	 * @param mixed $key
-	 * @return Boolean
-	 */
 	public function offsetExists($key)
 	{
 		return isset($this->filters[$key]);
 	}
 	
-	/**
-	 * offsetGet function.
-	 * 
-	 * @access public
-	 * @param mixed $key
-	 * @return get() result or false
-	 */
 	public function offsetGet($key)
 	{
 		return $this->get($key);
 	}
 	
-	/**
-	 * @access public
-	 * @param mixed $key
-	 * @param mixed $val
-	 */
 	public function offsetSet($key, $val = null)
 	{
 		return $this->set($key, $val);
 	}
 	
-	/**
-	 * @access public
-	 * @param mixed $key
-	 * @return void
-	 */
 	public function offsetUnset($key)
 	{
 		if (array_key_exists($key, $this->filters)) {
@@ -125,5 +81,31 @@ class FilterProvider implements ArrayAccess {
 		}
 		return false;
 	}
+
+    public function rewind()
+    {
+	    reset($this->filters);
+    }
+	
+	public function current()
+	{
+        return $this->get(key($this->filters));
+    }
+    
+    public function key()
+    {
+	    return key($this->filters);
+    }
+    
+    public function next()
+    {
+	    next($this->filters);
+    }
+    
+    public function valid()
+    {
+	    return isset($this->filters[key($this->filters)]);
+    }
+
 	
 }

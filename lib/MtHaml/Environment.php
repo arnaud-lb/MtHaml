@@ -30,7 +30,7 @@ class Environment
     public function __construct($target, array $options = array(), array $filters = array())
     {
         $this->target	= $target;
-        $this->options 	= new ArrayObject($options + $this->options);
+        $this->options 	= $options + $this->options;
         $this->filter 	= new FilterProvider($filters);
     }
 
@@ -56,7 +56,10 @@ class Environment
     
     public function getFilter($name = null)
     {
-	    return $this->filter->get($name);
+    	if (null !== $name) {
+	    	return $this->filter->get($name);
+    	}
+	    return $this->filter;
     }
 
     public function getOption($name = null)
