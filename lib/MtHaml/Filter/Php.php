@@ -4,7 +4,7 @@ namespace MtHaml\Filter;
 
 use MtHaml\NodeVisitor\RendererAbstract as Renderer;
 
-class Php extends FilterAbstract {
+class Php extends Plain {
 	
 	protected $name = 'php';
 	

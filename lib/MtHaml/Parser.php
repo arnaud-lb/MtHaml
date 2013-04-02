@@ -822,7 +822,7 @@ class Parser
         
         $filter = $this->env->getFilter($match[1]);
         $node = new Filter($match['pos'][0], $filter);
-
+        
         while (null !== $next = $buf->peekLine()) {
 
             $indent = '';
@@ -845,9 +845,7 @@ class Parser
             
             if ($nLine instanceof NodeAbstract) {
             	$str = $nLine;
-            }
-            
-            else {
+            } else {
             	if (is_string($nLine) and $nLine !== $bLine) {
 	            	$buf->replaceLine($nLine);
 		        }
