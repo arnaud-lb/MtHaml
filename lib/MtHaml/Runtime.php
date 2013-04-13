@@ -165,12 +165,10 @@ class Runtime
 
         $id = null;
 
-        if (\is_object($object)) {
-            if (\is_callable(array($object, 'getId'))) {
-                $id = $object->getId();
-            } else if (\is_callable(array($object, 'id'))) {
-                $id = $object->id();
-            }
+        if (\is_callable(array($object, 'getId'))) {
+            $id = $object->getId();
+        } else if (\is_callable(array($object, 'id'))) {
+            $id = $object->id();
         }
 
         if (false === $id || null === $id) {
@@ -188,18 +186,11 @@ class Runtime
 
     static public function getObjectRefClassString($object)
     {
-        if (\is_object($object)) {
-            $class = self::getObjectRefName($object);
-            if (false !== $pos = \strrpos($class, '\\')) {
-                $class = \substr($class, $pos+1);
-            }
-            $class = \strtolower(\preg_replace('#(?<=[a-z])[A-Z]+#', '_$0', $class));
-
-        } else {
-            $class = \gettype($object);
+        $class = self::getObjectRefName($object);
+        if (false !== $pos = \strrpos($class, '\\')) {
+            $class = \substr($class, $pos+1);
         }
-
-        return $class;
+        return \strtolower(\preg_replace('#(?<=[a-z])[A-Z]+#', '_$0', $class));
     }
 
     static public function getObjectRefName($object)

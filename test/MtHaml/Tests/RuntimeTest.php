@@ -198,30 +198,6 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider getNonObjectRefData
-     */
-    public function testGetNonObjectRefData($expect, $data)
-    {
-        $result = Runtime::getObjectRefClassString($data);
-        $this->assertSame($expect, $result);
-
-        $result = Runtime::renderObjectRefId($data);
-        $this->assertSame($expect.'_new', $result);
-    }
-
-    public function getNonObjectRefData()
-    {
-        return array(
-        	'array' => array('array', array(1)),
-            'string' => array('string', 'new'),
-            'integer' => array('integer', 1),
-            'double' => array('double', 1.1),
-            'boolean' => array('boolean', true),
-            'resource' => array('resource', tmpfile())
-        );
-    }
-
     public function testRenderObjectRefClass()
     {
         $object = new \stdClass;
