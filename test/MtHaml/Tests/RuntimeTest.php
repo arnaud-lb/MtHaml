@@ -228,7 +228,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $result = Runtime::renderObjectRefId($object);
         $this->assertSame('object_ref_with_get_id_and_id_new', $result);
     }
-    
+
     public function testRenderObjectRefWithRefMethod()
     {
         $object = new ObjectRefWithRefAndId;
@@ -238,7 +238,7 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
         $result = Runtime::renderObjectRefId($object);
         $this->assertSame('custom_ref_>id', $result);
     }
-    
+
 }
 
 class ObjectRefWithGetIdAndId
@@ -282,11 +282,11 @@ class ObjectRefWithoutId
 }
 }
 namespace {
-	class Foo_Bar {}
-	class FooBar {}
-	class FooBBar {}
+    class Foo_Bar {}
+    class FooBar {}
+    class FooBBar {}
 }
 
 namespace Foo\Bar {
-	class BazQux {}
+    class BazQux {}
 }
