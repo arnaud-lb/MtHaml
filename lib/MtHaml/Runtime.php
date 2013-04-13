@@ -159,50 +159,54 @@ class Runtime
 
     static public function renderObjectRefId($object, $prefix = null)
     {
-		if (!$object) {
-		    return;
-		}
-		
-		$id = null;
-		
-		if (is_object($object)) {
-		    if (is_callable(array($object, 'getId'))) {
-		        $id = $object->getId();
-		    } else if (is_callable(array($object, 'id'))) {
-		        $id = $object->id();
-		    }   
-		}
-		
-		$id = self::getObjectRefClassString($object) . '_' . ($id ?: 'new');
-		
-		if (false !== $prefix && null !== $prefix) {
-		    $id = $prefix . '_' . $id;
-		}
-		
-		return $id;
+        if (!$object) {
+            return;
+        }
+
+        $id = null;
+
+        if (\is_object($object)) {
+            if (\is_callable(array($object, 'getId'))) {
+                $id = $object->getId();
+            } else if (\is_callable(array($object, 'id'))) {
+                $id = $object->id();
+            }
+        }
+
+        if (false === $id || null === $id) {
+            $id = 'new';
+        }
+
+        $id = self::getObjectRefClassString($object) . '_' . $id;
+
+        if (false !== $prefix && null !== $prefix) {
+            $id = $prefix . '_' . $id;
+        }
+
+        return $id;
     }
-    
+
     static public function getObjectRefClassString($object)
     {
-		if (is_object($object)) {
-			$class = self::getObjectRefName($object);
-			if (false !== $pos = strrpos($class, '\\')) {
-            	$class = substr($class, $pos+1);
+        if (\is_object($object)) {
+            $class = self::getObjectRefName($object);
+            if (false !== $pos = \strrpos($class, '\\')) {
+                $class = \substr($class, $pos+1);
             }
-            $class = strtolower(preg_replace('#(?<=[a-z])[A-Z]+#', '_$0', $class));
+            $class = \strtolower(\preg_replace('#(?<=[a-z])[A-Z]+#', '_$0', $class));
 
-		} else {
-			$class = gettype($object);
-		}
-        
+        } else {
+            $class = \gettype($object);
+        }
+
         return $class;
     }
-    
+
     static public function getObjectRefName($object)
     {
-		return is_callable(array($object, 'hamlObjectRef'))
-			? $object->hamlObjectRef()
-			: get_class($object);
+        return \is_callable(array($object, 'hamlObjectRef'))
+            ? $object->hamlObjectRef()
+            : \get_class($object);
     }
 
 }
