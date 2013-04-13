@@ -148,7 +148,7 @@ class Runtime
             return;
         }
 
-        $class = self::getObjectRefClassString(get_class($object));
+        $class = self::getObjectRefClassString($object);
 
         if (false !== $prefix && null !== $prefix) {
             $class = $prefix . '_' . $class;
@@ -163,9 +163,11 @@ class Runtime
             return;
         }
 
-        if (method_exists($object, 'getId')) {
+        $id = null;
+
+        if (\is_callable(array($object, 'getId'))) {
             $id = $object->getId();
-        } else if (method_exists($object, 'id')) {
+        } else if (\is_callable(array($object, 'id'))) {
             $id = $object->id();
         }
 
@@ -173,7 +175,7 @@ class Runtime
             $id = 'new';
         }
 
-        $id = self::getObjectRefClassString(get_class($object)) . '_' . $id;
+        $id = self::getObjectRefClassString($object) . '_' . $id;
 
         if (false !== $prefix && null !== $prefix) {
             $id = $prefix . '_' . $id;
@@ -182,11 +184,20 @@ class Runtime
         return $id;
     }
 
-    static public function getObjectRefClassString($class)
+    static public function getObjectRefClassString($object)
     {
+        $class = self::getObjectRefName($object);
         if (false !== $pos = \strrpos($class, '\\')) {
             $class = \substr($class, $pos+1);
         }
         return \strtolower(\preg_replace('#(?<=[a-z])[A-Z]+#', '_$0', $class));
     }
+
+    static public function getObjectRefName($object)
+    {
+        return \is_callable(array($object, 'hamlObjectRef'))
+            ? $object->hamlObjectRef()
+            : \get_class($object);
+    }
+
 }
