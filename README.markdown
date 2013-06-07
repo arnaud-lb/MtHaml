@@ -197,6 +197,7 @@ Example:
  - Silex: https://github.com/arnaud-lb/Silex-MtHaml
  - Symfony2: https://github.com/arnaud-lb/MtHamlBundle
  - Zend Framework 1: https://github.com/bonndan/mthaml-zf1
+ - Sprockets-PHP: https://github.com/Nami-Doc/Sprockets-PHP
 
 
 Add yours: https://github.com/arnaud-lb/MtHaml/edit/master/README.markdown
