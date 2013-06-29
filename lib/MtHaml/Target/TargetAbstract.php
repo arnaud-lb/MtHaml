@@ -35,7 +35,7 @@ abstract class TargetAbstract implements TargetInterface
 
     public function setParserFactory($factory)
     {
-        $this->parserFactory = $parserFactory;
+        $this->parserFactory = $factory;
     }
 
     public function createParser(Environment $env, array $options)
