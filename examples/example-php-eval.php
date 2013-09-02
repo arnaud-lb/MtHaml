@@ -1,6 +1,10 @@
 <?php
 /**
  * This example shows how to integrate MtHaml with PHP templates.
+ * 
+ * This uses eval(), which is slower and evil, but simpler.
+ * 
+ * Prefer the non-eval example: example-php.php.
  */
 
 require __DIR__ . "/autoload.php";
@@ -23,7 +27,7 @@ extract([
     'foo' => 'bar',
 ]);
 
-// Not that it's slower than example-php.php because the HAML code is compiled
+// Note that it's slower than example-php.php because the HAML code is compiled
 // everytime. Also, you may not want to use eval().
 eval("?>" . $phpCode);
 
