@@ -4,6 +4,19 @@ namespace MtHaml\Support\Twig;
 
 use MtHaml\Environment;
 
+/**
+ * Example integration of MtHaml with Twig, by proxying the Loader
+ *
+ * This loader will parse Twig templates as HAML if their filename end with
+ * `.haml`, or if the code starts with `{% haml %}`.
+ *
+ * Alternatively, use MtHaml\Support\Twig\Lexer.
+ *
+ * <code>
+ * $origLoader = $twig->getLoader();
+ * $twig->setLoader($mthaml, new \MtHaml\Support\Twig\Loader($origLoader));
+ * </code>
+ */
 class Loader implements \Twig_LoaderInterface
 {
     protected $env;
@@ -21,6 +34,8 @@ class Loader implements \Twig_LoaderInterface
         if (preg_match('#^\s*{%\s*haml\s*%}#', $source, $match)) {
             $padding = str_repeat(' ', strlen($match[0]));
             $source = $padding . substr($source, strlen($match[0]));
+            $source = $this->env->compileString($source, $name);
+        } else if ('haml' === pathinfo($name, PATHINFO_EXTENSION)) {
             $source = $this->env->compileString($source, $name);
         }
         return $source;
