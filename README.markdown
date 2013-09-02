@@ -212,4 +212,4 @@ MtHaml is released under the MIT license (same as HAML/Ruby).
 [4]: http://www.twig-project.org/
 [5]: http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#attribute_methods
 [6]: http://sass-lang.com/
-[7]: https://github.com/arnaud-lb/MtHaml/blob/master/examples/example.php
+[7]: https://github.com/arnaud-lb/MtHaml/blob/master/examples/README.md
