@@ -8,6 +8,8 @@ use MtHaml\NodeVisitor\Escaping as EscapingVisitor;
 use MtHaml\NodeVisitor\Autoclose;
 use MtHaml\NodeVisitor\Midblock;
 use MtHaml\NodeVisitor\MergeAttrs;
+use MtHaml\Filter\FilterProvider;
+use ArrayObject;
 
 class Environment
 {
@@ -16,16 +18,20 @@ class Environment
         'enable_escaper' => true,
         'escape_html' => true,
         'escape_attrs' => true,
+        'cdata'	=> true,
         'autoclose' => array('meta', 'img', 'link', 'br', 'hr', 'input', 'area', 'param', 'col', 'base'),
-        'charset' => 'UTF-8',
+        'charset' => 'UTF-8'
     );
 
     protected $target;
+    
+    protected $filter;
 
-    public function __construct($target, array $options = array())
+    public function __construct($target, array $options = array(), array $filters = array())
     {
-        $this->target = $target;
-        $this->options = $options + $this->options;
+        $this->target	= $target;
+        $this->options 	= $options + $this->options;
+        $this->filter 	= new FilterProvider($filters);
     }
 
     public function compileString($string, $filename)
@@ -42,10 +48,26 @@ class Environment
 
         return $code;
     }
-
-    public function getOption($name)
+    
+    public function addFilter($name, $nameOrClass = null)
     {
-        return $this->options[$name];
+    	return $this->filter->set($name, $nameOrClass);
+    }
+    
+    public function getFilter($name = null)
+    {
+    	if (null !== $name) {
+	    	return $this->filter->get($name);
+    	}
+	    return $this->filter;
+    }
+
+    public function getOption($name = null)
+    {
+    	if (null !== $name) {
+	    	return $this->options[$name];
+    	}
+        return $this->options;
     }
 
     public function getTarget()

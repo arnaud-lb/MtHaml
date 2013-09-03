@@ -3,6 +3,7 @@
 namespace MtHaml;
 
 use MtHaml\Node\Root;
+use MtHaml\Environment;
 use MtHaml\Exception\SyntaxErrorException;
 use MtHaml\Node\NodeAbstract;
 use MtHaml\Parser\Buffer;
@@ -29,6 +30,7 @@ class Parser
 {
     protected $parentStack = array();
     protected $parent;
+    protected $env;
 
     protected $prev;
 
@@ -41,9 +43,10 @@ class Parser
     protected $column;
     protected $lineno;
 
-    public function __construct()
+    public function __construct(Environment $env)
     {
         $this->parent = new Root;
+        $this->env = $env;
     }
 
     /**
@@ -819,9 +822,10 @@ class Parser
         if (!$buf->match('/:(.*)/A', $match)) {
             return null;
         }
-
-        $node = new Filter($match['pos'][0], $match[1]);
-
+        
+        $filter = $this->env->getFilter($match[1]);
+        $node = new Filter($match['pos'][0], $filter);
+        
         while (null !== $next = $buf->peekLine()) {
 
             $indent = '';
@@ -838,8 +842,19 @@ class Parser
 
             $buf->nextLine();
             $buf->eatChars(strlen($indent));
-            $str = $this->parseInterpolatedString($buf, false);
-            $node->addChild(new Statement($str->getPosition(), $str));
+            
+            $bLine = $buf->getLine();
+            $nLine = $filter->line($buf, $this->env->getOption());
+            
+            if ($nLine instanceof NodeAbstract) {
+            	$str = $nLine;
+            } else {
+            	if (is_string($nLine) and $nLine !== $bLine) {
+	            	$buf->replaceLine($nLine);
+		        }
+	            $str = $this->parseInterpolatedString($buf, false);
+	        }
+	        $node->addChild(new Statement($str->getPosition(), $str));
         }
 
         return $node;

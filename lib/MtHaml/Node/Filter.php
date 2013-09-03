@@ -3,21 +3,25 @@
 namespace MtHaml\Node;
 
 use MtHaml\NodeVisitor\NodeVisitorInterface;
+use MtHaml\NodeVisitor\RendererAbstract;
+use MtHaml\Environment;
+use MtHaml\Filter\FilterInterface;
+use Exception;
 
 class Filter extends NodeAbstract
 {
     private $childs = array();
     private $filter;
 
-    public function __construct(array $position, $filter)
+    public function __construct(array $position, FilterInterface $filter)
     {
         parent::__construct($position);
         $this->filter = $filter;
     }
-
+    
     public function getFilter()
     {
-        return $this->filter;
+	    return $this->filter;
     }
 
     public function addChild(NodeAbstract $node)
@@ -34,7 +38,7 @@ class Filter extends NodeAbstract
     {
         return 'filter';
     }
-
+    
     public function accept(NodeVisitorInterface $visitor)
     {
         if (false !== $visitor->enterFilter($this)) {
