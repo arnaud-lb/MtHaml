@@ -1,0 +1,36 @@
+--HAML--
+%p This is #{quality} cake!
+%p "This is the #{quality} cake!"
+%p= "This is the #{quality} cake!"
+%html(foo="bar #{test}" bar="baz \#{no}")
+%p
+  Look at \\#{word} lack of backslash: \#{foo}
+  And yon presence thereof: \{foo}
+  Test \\\#{test}
+:javascript
+  $(document).ready(function() {
+    alert(#{message.to_json});
+  });
+
+--EXPECT--
+root(
+  tag(p interpolated(text(This is )insert(quality)text( cake!)))
+  tag(p interpolated(text("This is the )insert(quality)text( cake!")))
+  tag(p insert("This is the #{quality} cake!"))
+  tag(html
+    attr(text(foo)interpolated(text(bar )insert(test)))
+    attr(text(bar)interpolated(text(baz #{no})))
+  )
+  tag(p
+    interpolated(text(Look at \\)insert(word)text( lack of backslash: #{foo}))
+    interpolated(text(And yon presence thereof: \{foo}))
+    interpolated(text(Test \\#{test}))
+  )
+  filter(javascript
+    interpolated(text($(document).ready(function() {))
+    interpolated(text(  alert()insert(message.to_json)text();))
+    interpolated(text(});))
+    interpolated(text())
+  )
+)
+
