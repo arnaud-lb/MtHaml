@@ -663,16 +663,16 @@ class Parser
         // {}, and () (recursive)
 
         $re = "/(?P<expr>(?:
-                
+
                 # anything except \", ', (), {}, []
                 (?:[^(){}\[\]\"\'\\\\$delims]+(?=(?P>expr)))
                 |(?:[^(){}\[\]\"\'\\\\ $delims]+)
 
                 # double quoted string
-                | \"(?: [^\"\\\\]+ | \\\\[\"\\\\] )*\"
+                | \"(?: [^\"\\\\]+ | \\\\[\#\"\\\\] )*\"
 
                 # single quoted string
-                | '(?: [^'\\\\]+ | \\\\['\\\\] )*'
+                | '(?: [^'\\\\]+ | \\\\[\#'\\\\] )*'
 
                 # { ... } pair
                 | \{ (?: (?P>expr) | [ $delims] )* \}
@@ -710,14 +710,15 @@ class Parser
 
         if ($quoted) {
             $stringRegex = '/(
-                    [^\#"\\\\]+     # anything without hash or " or \
-                    |\\\\["\\\\]    # or escaped quote slash
-                    |\#(?!\{)       # or hash, but not followed by {
+                    [^\#"\\\\]+           # anything without hash or " or \
+                    |\\\\(?:["\\\\]|\#\{) # or escaped quote slash or hash followed by {
+                    |\#(?!\{)             # or hash, but not followed by {
                 )+/Ax';
         } else {
             $stringRegex = '/(
-                    [^\#]+      # anything without hash
-                    |\#(?!\{)   # or hash, but not followed by {
+                    [^\#\\\\]+          # anything without hash or \
+                    |\\\\(?:\#\{|[^\#]) # or escaped hash followed by { or anything without hash
+                    |\#(?!\{)           # or hash, but not followed by {
                 )+/Ax';
         }
 
@@ -728,6 +729,8 @@ class Parser
                     // strip slashes
                     $text = preg_replace('/\\\\(["\\\\])/', '\\1', $match[0]);
                 }
+                // strip back slash before hash followed by {
+                $text = preg_replace('/\\\\\#\{/', '#{', $text);
                 $text = new Text($match['pos'][0], $text);
                 $node->addChild($text);
             } else if ($expr = $this->parseInterpolation($buf)) {
