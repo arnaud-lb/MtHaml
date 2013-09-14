@@ -160,7 +160,13 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             $break = $this->shouldBreakAfterOpen($node);
         }
 
-        $this->write(($close ? ' /' : '') . '>', false, $break);
+        if ($close && 'xhtml' === $this->env->getOption('format')) {
+            $str = ' />';
+        } else {
+            $str = '>';
+        }
+
+        $this->write($str, false, $break);
 
         if (!$close && $break) {
             $this->indent();

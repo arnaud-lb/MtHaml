@@ -1,6 +1,4 @@
 <?php
 
-require __DIR__ . '/../lib/MtHaml/Autoloader.php';
-
-MtHaml\Autoloader::register();
+require __DIR__ . '/../vendor/autoload.php';
 
