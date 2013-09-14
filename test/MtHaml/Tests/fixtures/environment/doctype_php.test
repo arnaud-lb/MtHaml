@@ -10,7 +10,7 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 !!! XML iso-8859-15
 --EXPECT--
 <!DOCTYPE html>
-<?php echo '<?'; ?>xml version='1.0' encoding='utf-8' ?>
-<?php echo '<?'; ?>xml version='1.0' encoding='utf-8' ?>
-<?php echo '<?'; ?>xml version='1.0' encoding='iso-8859-15' ?>
+
+
+
 

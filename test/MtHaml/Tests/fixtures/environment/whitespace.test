@@ -44,10 +44,10 @@ echo $env->compileString($parts['HAML'], "$file.haml");
   <blockquote><div>
     Foo!
   </div></blockquote>
-  <img />
+  <img>
   <pre>foo
   bar</pre>
-  <img />
+  <img>
   <foo></foo>
   <div><a>
     test
@@ -56,8 +56,8 @@ echo $env->compileString($parts['HAML'], "$file.haml");
     test
   </b></div>
   <p>{% line 21 %}{{ "Foo\nBar" }}</p>
-  <img /><img /><img />
-  <img /><pre>foo
-  bar</pre><img />
+  <img><img><img>
+  <img><pre>foo
+  bar</pre><img>
 </html>
 

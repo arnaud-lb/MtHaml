@@ -59,7 +59,7 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
   <head>
     <title>This is some title</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   </head>
   <body>
     <!-- Hey, a comment! -->

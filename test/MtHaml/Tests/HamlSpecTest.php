@@ -57,7 +57,7 @@ class HamlSpecTest extends \PHPUnit_Framework_TestCase
     {
         $inputPath = getenv('HAML_SPEC_TEST_JSON_PATH');
         if (!$inputPath) {
-            return array(array());
+            return array(array(null, null));
         }
 
         $input = json_decode(file_get_contents($inputPath), true);

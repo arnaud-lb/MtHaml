@@ -45,7 +45,7 @@ class DoctypeTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('html5', "No such doctype '!!! invalid' for the format 'html5'. Available doctypes for the current format are: '!!!'"),
-            array('xhtml', "No such doctype '!!! invalid' for the format 'xhtml'. Available doctypes for the current format are: '!!!', '!!! Strict', '!!! Frameset', '!!! 5', '!!! 1.1', '!!! Basic', '!!! Mobile', '!!! RDFa'"),
+            array('xhtml', "No such doctype '!!! invalid' for the format 'xhtml'. Available doctypes for the current format are: '!!!', '!!! strict', '!!! frameset', '!!! 5', '!!! 1.1', '!!! basic', '!!! mobile', '!!! rdfa'"),
         );
     }
 }
