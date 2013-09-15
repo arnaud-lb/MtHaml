@@ -1,0 +1,30 @@
+
+@import "default.css";
+
+.container.code-cols ul.simple em {
+    font-size: small;
+}
+
+.container.code-cols .highlight-html\+jinja, .container.code-cols .highlight-haml {
+    width: 46%;
+    margin: 0 2% 0 0;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.container.code-cols .highlight-html\+jinja:before {
+    content: "Twig";
+    font-size: small;
+    font-style: italic;
+}
+
+.container.code-cols .highlight-haml:before {
+    content: "Haml";
+    font-size: small;
+    font-style: italic;
+}
+
+.container.code-cols pre {
+    margin-top: 0;
+}
+
