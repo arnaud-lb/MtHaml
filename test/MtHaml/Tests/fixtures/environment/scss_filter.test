@@ -1,0 +1,33 @@
+--FILE--
+<?php
+$filter = new MtHaml\Filter\Scss(new scssc);
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('scss' => $filter));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+:scss
+  @mixin color ($color) {
+    color: $color;
+  }
+
+  p {
+    @include color(blue);
+  }
+:scss
+  p.#{class} {
+    text-align: left;
+  }
+--EXPECT--
+<style type="text/css">
+/*<![CDATA[*/
+p {
+  color: blue; }
+
+/*]]>*/
+</style>
+{% filter mthaml_scss %}
+ p.{% line 10 %}{{ class }} {
+   text-align: left;
+ }
+{% endfilter %}
+

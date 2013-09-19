@@ -16,6 +16,15 @@
     },
     "require-dev": {
         "twig/twig": "~1.11",
+        "leafo/lessphp": "*",
+        "leafo/scssphp": "*",
+        "coffeescript/coffeescript": "~1"
+    },
+    "suggest": {
+        "twig/twig": "If you want to use Twig templating engine",
+        "leafo/lessphp": "If you want to use :less filter",
+        "leafo/scssphp": "If you want to use :scss filter",
+        "coffeescript/coffeescript": "If you want to use :coffee or :coffeescript filter"
     },
     "conflict": {
         "mthaml/mthaml-bundle": "<1.1.0"

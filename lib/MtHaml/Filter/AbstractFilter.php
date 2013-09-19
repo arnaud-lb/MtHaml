@@ -27,4 +27,17 @@ abstract class AbstractFilter implements FilterInterface
             $child->accept($renderer);
         }
     }
+
+    protected function getContent(Filter $node)
+    {
+        $content = '';
+        foreach ($node->getChilds() as $line) {
+            foreach ($line->getContent()->getChilds() as $child) {
+                $content .= $child->getContent();
+            }
+            $content .= "\n";
+        }
+
+        return $content;
+    }
 }
