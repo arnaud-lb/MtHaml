@@ -1,0 +1,42 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('php', array('enable_escaper' => false, 'mthaml_variable' => '$mthaml'));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+#php
+  :php
+    echo $a;
+  :php
+    foreach (array(#{var_export(foo, true)}) as $item) {
+    }
+#twig
+  :twig
+    {{ foo|filter }}
+    {% for i in 1..5 %}
+        {{ "- \#{i}" }}
+    {% endfor %}
+  :twig
+    {{ #{$foo}|filter }}
+--EXPECT--
+<div id="php">
+  <?php
+    echo $a;
+  ?>
+  <?php echo MtHaml\Runtime::filter($mthaml, 'php', get_defined_vars(),
+    ('foreach (array(' . (var_export(foo, true)) . ') as $item) {'). "\n" .
+    '}'. "\n"
+  ) ?>
+</div>
+<div id="twig">
+  <?php echo MtHaml\Runtime::filter($mthaml, 'twig', get_defined_vars(),
+    '{{ foo|filter }}'. "\n" .
+    '{% for i in 1..5 %}'. "\n" .
+    '    {{ "- #{i}" }}'. "\n" .
+    '{% endfor %}'. "\n"
+  ) ?>
+  <?php echo MtHaml\Runtime::filter($mthaml, 'twig', get_defined_vars(),
+    ('{{ ' . $foo . '|filter }}'). "\n"
+  ) ?>
+</div>
+
