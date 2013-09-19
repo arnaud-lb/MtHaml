@@ -24,6 +24,8 @@ class Environment
 
     protected $filters = array(
         'css' => 'MtHaml\\Filter\\Css',
+        'cdata' => 'MtHaml\\Filter\\Cdata',
+        'escaped' => 'MtHaml\\Filter\\Escaped',
         'javascript' => 'MtHaml\\Filter\\Javascript',
         'plain' => 'MtHaml\\Filter\\Plain',
         'preserve' => 'MtHaml\\Filter\\Preserve',
