@@ -18,13 +18,15 @@
         "twig/twig": "~1.11",
         "leafo/lessphp": "*",
         "leafo/scssphp": "*",
-        "coffeescript/coffeescript": "~1"
+        "coffeescript/coffeescript": "~1",
+        "michelf/php-markdown": "~1.3"
     },
     "suggest": {
         "twig/twig": "If you want to use Twig templating engine",
         "leafo/lessphp": "If you want to use :less filter",
         "leafo/scssphp": "If you want to use :scss filter",
-        "coffeescript/coffeescript": "If you want to use :coffee or :coffeescript filter"
+        "coffeescript/coffeescript": "If you want to use :coffee or :coffeescript filter",
+        "michelf/php-markdown": "If you want to use :markdown filter"
     },
     "conflict": {
         "mthaml/mthaml-bundle": "<1.1.0"
