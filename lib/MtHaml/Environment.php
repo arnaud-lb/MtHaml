@@ -8,6 +8,7 @@ use MtHaml\NodeVisitor\Escaping as EscapingVisitor;
 use MtHaml\NodeVisitor\Autoclose;
 use MtHaml\NodeVisitor\Midblock;
 use MtHaml\NodeVisitor\MergeAttrs;
+use MtHaml\Filter\FilterInterface;
 
 class Environment
 {
@@ -16,16 +17,26 @@ class Environment
         'enable_escaper' => true,
         'escape_html' => true,
         'escape_attrs' => true,
+        'cdata' => true,
         'autoclose' => array('meta', 'img', 'link', 'br', 'hr', 'input', 'area', 'param', 'col', 'base'),
         'charset' => 'UTF-8',
     );
 
+    protected $filters = array(
+        'css' => 'MtHaml\\Filter\\Css',
+        'javascript' => 'MtHaml\\Filter\\Javascript',
+        'plain' => 'MtHaml\\Filter\\Plain',
+        'preserve' => 'MtHaml\\Filter\\Preserve',
+    );
+
     protected $target;
 
-    public function __construct($target, array $options = array())
+
+    public function __construct($target, array $options = array(), $filters = array())
     {
         $this->target = $target;
         $this->options = $options + $this->options;
+        $this->filters = $filters + $this->filters;
     }
 
     public function compileString($string, $filename)
@@ -43,9 +54,55 @@ class Environment
         return $code;
     }
 
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
     public function getOption($name)
     {
         return $this->options[$name];
+    }
+
+    /**
+     * Returns a filter
+     *
+     * @param $name A name of filter
+     *
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     *
+     * @return FilterInterface
+     */
+    public function getFilter($name)
+    {
+        if (!isset($this->filters[$name])) {
+            throw new \InvalidArgumentException(sprintf('Unknown filter name "%s"', $name));
+        }
+
+        $filter = $this->filters[$name];
+
+        if (is_string($filter)) {
+            if (!class_exists($filter)) {
+                throw new \RuntimeException(sprintf('Class "%s" for filter "%s" does not exists', $filter, $name));
+            }
+
+            $filter = new $filter;
+            $this->addFilter($name, $filter);
+        }
+
+        return $filter;
+    }
+
+    public function addFilter($name, $filter)
+    {
+        if (!is_string($filter) && !(is_object($filter) && $filter instanceof FilterInterface)) {
+            throw new \InvalidArgumentException('Filter should be a class name or an instance of FilterInterface');
+        }
+
+        $this->filters[$name] = $filter;
+
+        return $this;
     }
 
     public function getTarget()

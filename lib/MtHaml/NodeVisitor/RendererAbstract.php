@@ -56,19 +56,43 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         return $this->output;
     }
 
-    protected function indent()
+    public function getIndent()
+    {
+        return $this->indent;
+    }
+
+    public function setIndent($indent)
+    {
+        $this->indent = (int) $indent;
+
+        return $this;
+    }
+
+    public function indent()
     {
         $this->indent += 1;
         return $this;
     }
 
-    protected function undent()
+    public function undent()
     {
         $this->indent -= 1;
         return $this;
     }
 
-    protected function write($string, $indent = true, $break = true)
+    public function pushSavedIndent($indent)
+    {
+        $this->savedIndent[] = (int) $indent;
+
+        return $this;
+    }
+
+    public function popSavedIndent()
+    {
+        return array_pop($this->savedIndent);
+    }
+
+    public function write($string, $indent = true, $break = true)
     {
         if ($indent) {
             $this->writeIndentation();
@@ -82,7 +106,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         return $this;
     }
 
-    protected function raw($string)
+    public function raw($string)
     {
         $this->output .= $string;
         $this->lineno += substr_count($string, "\n");
@@ -300,50 +324,14 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         }
     }
 
-    public function enterFilter(Filter $node)
+    public function enterFilterChilds(Filter $node)
     {
-        // TODO: make filters modular
+        $filter = $this->env->getFilter($node->getFilter());
 
-        switch($node->getFilter()) {
-        case 'javascript':
-            $this->write('<script type="text/javascript">')
-                ->write('//<![CDATA[')
-                ->indent();
-            break;
-        case 'css':
-            $this->write('<style type="text/css">')
-                ->write('/*<![CDATA[*/')
-                ->indent();
-            break;
-        case 'plain':
-            break;
-        case 'preserve':
-            $this->savedIndent[] = $this->indent;
-            $this->indent = 0;
-            break;
-        default:
-            throw new Exception("unknown filter " . $node->getFilter());
-        }
-    }
+        if ($filter->isOptimizable($this, $node, $this->env->getOptions())) {
+            $filter->optimize($this, $node, $this->env->getOptions());
 
-    public function leaveFilter(Filter $node)
-    {
-        switch($node->getFilter()) {
-        case 'javascript':
-            $this->undent()
-                ->write('//]]>')
-                ->write('</script>');
-            break;
-        case 'css':
-            $this->undent()
-                ->write('/*]]>*/')
-                ->write('</style>');
-            break;
-        case 'plain':
-            break;
-        case 'preserve':
-            $this->indent = array_pop($this->savedIndent);
-            break;
+            return false;
         }
     }
 

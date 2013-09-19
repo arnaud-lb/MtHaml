@@ -14,10 +14,10 @@ echo $env->compileString($parts['HAML'], "$file.haml");
             border: 1px;
                     }
   :plain
-            text
+            text & <strong>strong</strong> \#{foo} #{foo} {{ foo }}
     text
   :preserve
-    foo
+    foo #{foo}
     bar
 --EXPECT--
 <html>
@@ -35,9 +35,9 @@ echo $env->compileString($parts['HAML'], "$file.haml");
                     }
   /*]]>*/
   </style>
-          text
+          text & <strong>strong</strong> #{foo} {% line 11 %}{{ foo }} {{ '{{' }} foo }}
   text
-foo
+foo {% line 14 %}{{ foo }}
 bar
 </html>
 
