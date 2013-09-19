@@ -2,6 +2,7 @@
 
 namespace MtHaml\NodeVisitor;
 
+use MtHaml\Node\Filter;
 use MtHaml\Node\Insert;
 use MtHaml\Node\Run;
 use MtHaml\Node\InterpolatedString;
@@ -138,7 +139,23 @@ class TwigRenderer extends RendererAbstract
         $this->raw(', ');
     }
 
+    public function enterFilter(Filter $node)
+    {
+        $filter = $this->env->getFilter($node->getFilter());
 
+        if (!$filter->isOptimizable($this, $node, $this->env->getOptions())) {
+            $this->write('{% filter mthaml_'.$node->getFilter().' %}');
+        }
+    }
+
+    public function leaveFilter(Filter $node)
+    {
+        $filter = $this->env->getFilter($node->getFilter());
+
+        if (!$filter->isOptimizable($this, $node, $this->env->getOptions())) {
+            $this->write('{% endfilter %}');
+        }
+    }
 
     protected function renderTag($content)
     {

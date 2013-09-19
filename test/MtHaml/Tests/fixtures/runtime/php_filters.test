@@ -1,0 +1,28 @@
+--FILE--
+<?php
+$mthaml = new MtHaml\Environment('php', array('mthaml_variable' => '$mthaml'));
+$mthaml->addFilter('twig', new MtHaml\Filter\Twig(new Twig_Environment(new Twig_Loader_String())));
+
+$source = $mthaml->compileString($parts['HAML'], "$file.haml");
+$foo = '-foo-';
+eval('?>'.$source);
+
+--HAML--
+%body
+  :twig
+    <p>Ahoj</p>
+  :twig
+    <p>#{$foo}</p>
+  :php
+    echo "<strong>a</strong>\n";
+  :php
+    $x = 5;
+    echo "<strong>{$x}#{$foo}</strong>\n";
+--EXPECT--
+<body>
+  <p>Ahoj</p>
+  <p>-foo-</p>
+  <strong>a</strong>
+  <strong>5-foo-</strong>
+</body>
+

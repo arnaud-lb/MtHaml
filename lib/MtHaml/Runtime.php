@@ -90,10 +90,10 @@ class Runtime
             if ($value instanceof AttributeInterpolation) {
                 $result .= $value->value;
             } else if (true === $value) {
-                $result .= 
+                $result .=
                     htmlspecialchars($name, ENT_QUOTES, $charset);
             } else {
-                $result .= 
+                $result .=
                     htmlspecialchars($name, ENT_QUOTES, $charset)
                     .'="'
                     . htmlspecialchars($value, ENT_QUOTES, $charset)
@@ -200,4 +200,8 @@ class Runtime
             : \get_class($object);
     }
 
+    static public function filter(Environment $mthaml, $filter, array $context, $content)
+    {
+        return $mthaml->getFilter($filter)->filter($content, $context, $mthaml->getOptions());
+    }
 }

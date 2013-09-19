@@ -27,8 +27,10 @@ class Environment
         'cdata' => 'MtHaml\\Filter\\Cdata',
         'escaped' => 'MtHaml\\Filter\\Escaped',
         'javascript' => 'MtHaml\\Filter\\Javascript',
+        'php' => 'MtHaml\\Filter\\Php',
         'plain' => 'MtHaml\\Filter\\Plain',
         'preserve' => 'MtHaml\\Filter\\Preserve',
+        'twig' => 'MtHaml\\Filter\\Twig',
     );
 
     protected $target;
