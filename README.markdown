@@ -185,17 +185,21 @@ Example with the `javascript` filter:
 </script>
 ```
 
-The following filtes are enabled by default:
+The following filters are available:
 
- - css: wraps with style tags
- - cdata: wraps with CDATA markup
- - escaped: html escapes
- - javascript: wraps with script tags
- - php: executes the input as php code
- - preseve: preserves preformated text
- - twig: executes the input as twig code
+ - **css**: wraps with style tags
+ - **cdata**: wraps with CDATA markup
+ - **coffee***: compiles coffeescript to javascript
+ - **escaped**: html escapes
+ - **javascript**: wraps with script tags
+ - **less***: compiles as Lesscss
+ - **markdown***: converts markdown to html
+ - **php**: executes the input as php code
+ - **preseve**: preserves preformatted text
+ - **scss***: converts scss to css
+ - **twig**: executes the input as twig code
 
-Other filters have runtime dependencies and need to be provided to MtHaml\Environment explicitly:
+Filter marked with `*` have runtime dependencies and are not enabled by default. Such filters need to be provided to MtHaml\Environment explicitly.
 
 Example with the Coffee filter:
 
@@ -210,13 +214,6 @@ $env = new MtHaml\Environment('twig', array(
     'coffee' => $coffeeFilter,
 ));
 ```
-
-The following filters are available and not enabled by default:
-
- - coffee: compiles coffeescript to javascript
- - less: compiles as Lesscss
- - markdown: converts markdown to html
- - scss: converts scss to css
 
 ## Sass
 
