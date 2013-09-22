@@ -166,9 +166,9 @@ In HAML/Twig you can use all of Twig's functions, filters and tags. In PHP, you 
 
 ## Filters
 
-Supported filters are `plain`, `preserve`, `javascript` and `css`. Others may be added in the future.
+Filters take plain text input (with support for `#{...}` interpolations) and transform it, or wrap it.
 
-Example:
+Example with the `javascript` filter:
 
 ``` haml
 %p something
@@ -184,6 +184,39 @@ Example:
 //]]>
 </script>
 ```
+
+The following filtes are enabled by default:
+
+ - css: wraps with style tags
+ - cdata: wraps with CDATA markup
+ - escaped: html escapes
+ - javascript: wraps with script tags
+ - php: executes the input as php code
+ - preseve: preserves preformated text
+ - twig: executes the input as twig code
+
+Other filters have runtime dependencies and need to be provided to MtHaml\Environment explicitly:
+
+Example with the Coffee filter:
+
+``` php
+<?php
+
+$coffeeFilter = new MtHaml\Filter\CoffeeScript(new CoffeeScript\Compiler);
+
+$env = new MtHaml\Environment('twig', array(
+    'enable_escaper' => false,
+), array(
+    'coffee' => $coffeeFilter,
+));
+```
+
+The following filters are available and not enabled by default:
+
+ - coffee: compiles coffeescript to javascript
+ - less: compiles as Lesscss
+ - markdown: converts markdown to html
+ - scss: converts scss to css
 
 ## Sass
 
