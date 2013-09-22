@@ -1,0 +1,25 @@
+--FILE--
+<?php
+$filter = new MtHaml\Filter\Markdown(new Michelf\MarkdownExtra);
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('markdown' => $filter));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+:markdown
+ ## Header
+
+ Foo *c*
+:markdown
+ ## #{header}
+
+ Foo *c*
+--EXPECT--
+<h2>Header</h2>
+
+<p>Foo <em>c</em></p>
+{% filter mthaml_markdown %}
+## {% line 6 %}{{ header }}
+
+Foo *c*
+{% endfilter %}
+

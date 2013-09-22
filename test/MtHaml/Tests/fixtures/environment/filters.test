@@ -14,11 +14,15 @@ echo $env->compileString($parts['HAML'], "$file.haml");
             border: 1px;
                     }
   :plain
-            text
+            text & <strong>strong</strong> \#{foo} #{foo} {{ foo }}
     text
   :preserve
-    foo
+    foo #{foo}
     bar
+  :escaped
+            text & <strong class="error">strong</strong> \#{foo} #{foo} {{ foo }}
+  :cdata
+    a < b && a < 0
 --EXPECT--
 <html>
   <script type="text/javascript">
@@ -35,9 +39,13 @@ echo $env->compileString($parts['HAML'], "$file.haml");
                     }
   /*]]>*/
   </style>
-          text
+          text & <strong>strong</strong> #{foo} {% line 11 %}{{ foo }} {{ '{{' }} foo }}
   text
-foo
+foo {% line 14 %}{{ foo }}
 bar
+          text &amp; &lt;strong class=&quot;error&quot;&gt;strong&lt;/strong&gt; #{foo} {% line 17 %}{{ (foo)|escape }} {{ '{{' }} foo }}
+  <![CDATA[
+    a < b && a < 0
+  ]]>
 </html>
 

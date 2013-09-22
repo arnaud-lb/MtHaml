@@ -1,0 +1,40 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+#php
+  :php
+    echo $a;
+  :php
+    foreach (array(#{foo}) as $item) {
+    }
+#twig
+  :twig
+    {{ foo|filter }}
+    {% for i in 1..5 %}
+        {{ "- \#{i}" }}
+    {% endfor %}
+  :twig
+    {{ #{foo}|filter }}
+--EXPECT--
+<div id="php">
+  {% filter mthaml_php %}
+  echo $a;
+  {% endfilter %}
+  {% filter mthaml_php %}
+  foreach (array({% line 5 %}{{ foo }}) as $item) {
+  }
+  {% endfilter %}
+</div>
+<div id="twig">
+  {{ foo|filter }}
+  {% for i in 1..5 %}
+      {{ "- #{i}" }}
+  {% endfor %}
+  {% filter mthaml_twig %}
+  {{ '{{' }} {% line 14 %}{{ foo }}|filter }}
+  {% endfilter %}
+</div>
+

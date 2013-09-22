@@ -5,12 +5,14 @@ namespace MtHaml\NodeVisitor;
 use MtHaml\Node\Insert;
 use MtHaml\Node\Run;
 use MtHaml\Node\InterpolatedString;
+use MtHaml\Node\Statement;
 use MtHaml\Node\Tag;
 use MtHaml\Node\ObjectRefClass;
 use MtHaml\Node\NodeAbstract;
 use MtHaml\Node\ObjectRefId;
 use MtHaml\Node\TagAttributeInterpolation;
 use MtHaml\Node\TagAttributeList;
+use MtHaml\Node\Filter;
 
 class PhpRenderer extends RendererAbstract
 {
@@ -148,6 +150,44 @@ class PhpRenderer extends RendererAbstract
     public function enterObjectRefPrefix(NodeAbstract $node)
     {
         $this->raw(', ');
+    }
+
+    public function enterFilter(Filter $node)
+    {
+        $filter = $this->env->getFilter($node->getFilter());
+
+        if (!$filter->isOptimizable($this, $node, $this->env->getOptions())) {
+            $this->pushEchoMode(false);
+            $this->write('<?php echo MtHaml\Runtime::filter('.$this->env->getOption('mthaml_variable').', '.var_export($node->getFilter(), true).', get_defined_vars(),');
+            $this->indent();
+
+            $first = true;
+            foreach ($node->getChilds() as $statement) {
+                if ($first) {
+                    $first = false;
+                } else {
+                    $this->raw(" .\n");
+                }
+
+                $this->writeIndentation();
+                $statement->getContent()->accept($this);
+                $this->raw('. "\n"');
+            }
+            $this->raw("\n");
+
+            return false;
+        }
+    }
+
+    public function leaveFilter(Filter $node)
+    {
+        $filter = $this->env->getFilter($node->getFilter());
+
+        if (!$filter->isOptimizable($this, $node, $this->env->getOptions())) {
+            $this->undent();
+            $this->write(') ?>');
+            $this->popEchoMode();
+        }
     }
 
     protected function writeDebugInfos($lineno)

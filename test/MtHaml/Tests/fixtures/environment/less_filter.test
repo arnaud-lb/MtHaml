@@ -1,0 +1,34 @@
+--FILE--
+<?php
+$filter = new MtHaml\Filter\Less(new lessc);
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('less' => $filter));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+:less
+  .mixin (@color) {
+    color: @color;
+  }
+
+  p {
+    .mixin(blue);
+  }
+:less
+  p.#{class} {
+    text-align: left;
+  }
+--EXPECT--
+<style type="text/css">
+/*<![CDATA[*/
+p {
+  color: blue;
+}
+
+/*]]>*/
+</style>
+{% filter mthaml_less %}
+ p.{% line 10 %}{{ class }} {
+   text-align: left;
+ }
+{% endfilter %}
+
