@@ -144,7 +144,9 @@ class TwigRenderer extends RendererAbstract
         $filter = $this->env->getFilter($node->getFilter());
 
         if (!$filter->isOptimizable($this, $node, $this->env->getOptions())) {
-            $this->write('{% filter mthaml_'.$node->getFilter().' %}');
+            $this->write('{% filter mthaml_'.$node->getFilter().' %}', true, false);
+            $this->savedIndent[] = $this->indent;
+            $this->indent = 0;
         }
     }
 
@@ -154,6 +156,7 @@ class TwigRenderer extends RendererAbstract
 
         if (!$filter->isOptimizable($this, $node, $this->env->getOptions())) {
             $this->write('{% endfilter %}');
+            $this->indent = $this->popSavedIndent();
         }
     }
 

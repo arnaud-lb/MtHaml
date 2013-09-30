@@ -20,21 +20,18 @@ echo $env->compileString($parts['HAML'], "$file.haml");
     {{ #{foo}|filter }}
 --EXPECT--
 <div id="php">
-  {% filter mthaml_php %}
-  echo $a;
-  {% endfilter %}
-  {% filter mthaml_php %}
-  foreach (array({% line 5 %}{{ foo }}) as $item) {
-  }
-  {% endfilter %}
+  {% filter mthaml_php %}echo $a;
+{% endfilter %}
+  {% filter mthaml_php %}foreach (array({% line 5 %}{{ foo }}) as $item) {
+}
+{% endfilter %}
 </div>
 <div id="twig">
   {{ foo|filter }}
   {% for i in 1..5 %}
       {{ "- #{i}" }}
   {% endfor %}
-  {% filter mthaml_twig %}
-  {{ '{{' }} {% line 14 %}{{ foo }}|filter }}
-  {% endfilter %}
+  {% filter mthaml_twig %}{{ '{{' }} {{ foo }}|filter }}
+{% endfilter %}
 </div>
 

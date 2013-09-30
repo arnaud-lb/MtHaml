@@ -6,17 +6,17 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 
 --HAML--
 :scss
-  @mixin color ($color) {
-    color: $color;
-  }
+ @mixin color ($color) {
+   color: $color;
+ }
 
-  p {
-    @include color(blue);
-  }
+ p {
+   @include color(blue);
+ }
 :scss
-  p.#{class} {
-    text-align: left;
-  }
+ p.#{class} {
+   text-align: left;
+ }
 --EXPECT--
 <style type="text/css">
 /*<![CDATA[*/
@@ -25,9 +25,8 @@ p {
 
 /*]]>*/
 </style>
-{% filter mthaml_scss %}
- p.{% line 10 %}{{ class }} {
-   text-align: left;
- }
+{% filter mthaml_scss %}p.{% line 10 %}{{ class }} {
+  text-align: left;
+}
 {% endfilter %}
 
