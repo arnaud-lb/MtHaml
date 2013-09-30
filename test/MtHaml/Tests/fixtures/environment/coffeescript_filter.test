@@ -6,10 +6,10 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 
 --HAML--
 :coffee
-  square = (x) -> x * x
+ square = (x) -> x * x
 :coffee
-  number = #{number}
-  square = (x) -> x * x
+ number = #{number}
+ square = (x) -> x * x
 --EXPECT--
 <script type="text/javascript">
 //<![CDATA[
@@ -25,8 +25,7 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 
 //]]
 </script>
-{% filter mthaml_coffee %}
- number = {% line 4 %}{{ number }}
- square = (x) -> x * x
+{% filter mthaml_coffee %}number = {% line 4 %}{{ number }}
+square = (x) -> x * x
 {% endfilter %}
 

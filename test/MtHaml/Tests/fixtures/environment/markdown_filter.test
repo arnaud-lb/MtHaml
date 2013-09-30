@@ -9,17 +9,26 @@ echo $env->compileString($parts['HAML'], "$file.haml");
  ## Header
 
  Foo *c*
+
+ * list
 :markdown
  ## #{header}
 
  Foo *c*
+
+ * list
 --EXPECT--
 <h2>Header</h2>
 
 <p>Foo <em>c</em></p>
-{% filter mthaml_markdown %}
-## {% line 6 %}{{ header }}
+
+<ul>
+<li>list</li>
+</ul>
+{% filter mthaml_markdown %}## {{ header }}
 
 Foo *c*
+
+* list
 {% endfilter %}
 
