@@ -23,6 +23,8 @@ $phpCode = $haml->compileString($hamlCode, $template);
  * Execute the compiled template
  */
 
+echo "\n\nExecuted Template:\n\n";
+
 extract([
     'foo' => 'bar',
 ]);
@@ -31,7 +33,7 @@ extract([
 // everytime. Also, you may not want to use eval().
 eval("?>" . $phpCode);
 
-echo "\nrendered template:\n";
+echo "\n\nRendered Template:\n\n";
 
-readfile($template.'.php');
+echo $phpCode;
 

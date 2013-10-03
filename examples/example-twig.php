@@ -17,6 +17,18 @@ $twig = new Twig_Environment(new Twig_Loader_Filesystem(array(
     __DIR__,
 )));
 
+/*
+ * Register the Twig extension. Compiled templates sometimes need this to
+ * execute, depending on HAML features in use (some filters, some attributes).
+ */
+
+$twig->addExtension(new MtHaml\Support\Twig\Extension($haml));
+
+/*
+ * Set our customer Lexer. This lexer is reponsible of passing the template
+ * through MtHaml before passing to Twig.
+ */
+
 $lexer = new MtHaml\Support\Twig\Lexer($haml);
 $lexer->setLexer($twig->getLexer());
 $twig->setLexer($lexer);
@@ -25,7 +37,7 @@ $twig->setLexer($lexer);
  * Execute the template:
  */
 
-echo "executed template:\n";
+echo "\n\nExecuted Template:\n\n";
 
 if (true) {
     // parsed as haml because of extension
@@ -42,7 +54,7 @@ if (true) {
 $template = __DIR__ . '/example-twig.haml';
 $compiled = $haml->compileString(file_get_contents($template), $template);
 
-echo "rendered template:\n";
+echo "\n\nRendered Template:\n\n";
 
 echo $compiled;
 

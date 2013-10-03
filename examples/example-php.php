@@ -29,13 +29,15 @@ if (!file_exists($template.'.php') || filemtime($template.'.php') != filemtime($
  * Execute the compiled template
  */
 
+echo "\n\nExecuted Template:\n\n";
+
 extract([
     'foo' => 'bar',
 ]);
 
 require $template.'.php';
 
-echo "\nrendered template:\n";
+echo "\n\nRendered Template:\n\n";
 
 readfile($template.'.php');
 
