@@ -30,6 +30,7 @@ class Doctype extends NodeAbstract
         ),
         'html5' => array(
             '' => '<!DOCTYPE html>',
+            '5' => '<!DOCTYPE html>',
         ),
     );
 

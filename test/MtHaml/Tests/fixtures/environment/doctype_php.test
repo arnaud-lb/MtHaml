@@ -5,10 +5,12 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 
 --HAML--
 !!!
+!!! 5
 !!! XML
 !!! XML utf-8
 !!! XML iso-8859-15
 --EXPECT--
+<!DOCTYPE html>
 <!DOCTYPE html>
 
 

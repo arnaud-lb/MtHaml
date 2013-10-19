@@ -44,7 +44,7 @@ class DoctypeTest extends \PHPUnit_Framework_TestCase
     public function getGetDoctypeTriggersWarningWhenInvalidData()
     {
         return array(
-            array('html5', "No such doctype '!!! invalid' for the format 'html5'. Available doctypes for the current format are: '!!!'"),
+            array('html5', "No such doctype '!!! invalid' for the format 'html5'. Available doctypes for the current format are: '!!!', '!!! 5'"),
             array('xhtml', "No such doctype '!!! invalid' for the format 'xhtml'. Available doctypes for the current format are: '!!!', '!!! strict', '!!! frameset', '!!! 5', '!!! 1.1', '!!! basic', '!!! mobile', '!!! rdfa'"),
         );
     }
