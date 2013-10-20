@@ -9,4 +9,4 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 
 --EXCEPTION--
 PHPUnit_Framework_Error_Warning
-No such doctype '!!! invalid' for the format 'html5'. Available doctypes for the current format are: '!!!'
+No such doctype '!!! invalid' for the format 'html5'. Available doctypes for the current format are: '!!!', '!!! 5'
