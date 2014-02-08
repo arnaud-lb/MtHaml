@@ -183,8 +183,6 @@ class TwigRenderer extends RendererAbstract
 
     protected function renderDynamicAttributes(Tag $tag)
     {
-        $list = array();
-
         $this->raw(' ');
 
         foreach ($tag->getAttributes() as $attr) {
@@ -214,7 +212,7 @@ class TwigRenderer extends RendererAbstract
                 $this->raw('[');
                 $attr->getName()->accept($this);
                 $this->raw(', ');
-                if ($value = $attr->getValue()) {
+                if ($attr->getValue()) {
                     $attr->getValue()->accept($this);
                 } else {
                     $this->raw('true');

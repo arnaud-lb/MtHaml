@@ -800,11 +800,6 @@ class Parser
             return $comment;
         }
 
-        $position = array(
-            'lineno' => $buf->getLineno(),
-            'column' => $buf->getColumn(),
-        );
-
         if ('\\' === $buf->peekChar()) {
             $buf->eatChar();
         }

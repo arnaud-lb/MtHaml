@@ -196,7 +196,6 @@ class PhpRenderer extends RendererAbstract
 
     protected function renderDynamicAttributes(Tag $tag)
     {
-        $list = array();
         $n = 0;
 
         $this->raw(' <?php echo MtHaml\Runtime::renderAttributes(array(');
@@ -221,7 +220,7 @@ class PhpRenderer extends RendererAbstract
                 $this->raw('array(');
                 $attr->getName()->accept($this);
                 $this->raw(', ');
-                if ($value = $attr->getValue()) {
+                if ($attr->getValue()) {
                     $attr->getValue()->accept($this);
                 } else {
                     $this->raw('TRUE');

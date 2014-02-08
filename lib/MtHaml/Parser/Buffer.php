@@ -72,7 +72,6 @@ class Buffer
     public function match($pattern, &$match = null, $eat = true)
     {
         if ($count = preg_match($pattern, $this->line, $match, PREG_OFFSET_CAPTURE)) {
-            $column = $match[0][1];
             $pos = array();
 
             foreach($match as $key => &$capture) {
