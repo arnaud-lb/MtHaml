@@ -3,7 +3,6 @@
 namespace MtHaml\Target;
 
 use MtHaml\Environment;
-use MtHaml\NodeVisitor\RendererAbstract;
 use MtHaml\Node\NodeAbstract;
 use MtHaml\Parser;
 

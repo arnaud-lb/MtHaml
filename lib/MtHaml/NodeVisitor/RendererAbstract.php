@@ -11,7 +11,6 @@ use MtHaml\Node\Doctype;
 use MtHaml\Node\Comment;
 use MtHaml\Environment;
 use MtHaml\Node\Filter;
-use MtHaml\Exception;
 use MtHaml\Node\NodeAbstract;
 use MtHaml\Node\NestInterface;
 use MtHaml\Node\Run;

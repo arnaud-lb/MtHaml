@@ -5,7 +5,6 @@ namespace MtHaml\NodeVisitor;
 use MtHaml\Node\Insert;
 use MtHaml\Node\Run;
 use MtHaml\Node\InterpolatedString;
-use MtHaml\Node\Statement;
 use MtHaml\Node\Tag;
 use MtHaml\Node\ObjectRefClass;
 use MtHaml\Node\NodeAbstract;
