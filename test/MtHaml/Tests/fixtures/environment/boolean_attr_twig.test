@@ -9,8 +9,8 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 %p(bar="baz" foo)
 %p(foo class=baz)
 --EXPECT--
-<p {{ mthaml_attributes([['foo', true], ['bar', 'baz']], 'html5', 'UTF-8')|raw }}></p>
-<p {{ mthaml_attributes([['foo', true]], 'html5', 'UTF-8')|raw }}></p>
-<p {{ mthaml_attributes([['bar', 'baz'], ['foo', true]], 'html5', 'UTF-8')|raw }}></p>
-<p {{ mthaml_attributes([['foo', true], ['class', baz]], 'html5', 'UTF-8')|raw }}></p>
+<p {{ mthaml_attributes([['foo', true], ['bar', 'baz']], 'html5', 'UTF-8', false)|raw }}></p>
+<p {{ mthaml_attributes([['foo', true]], 'html5', 'UTF-8', false)|raw }}></p>
+<p {{ mthaml_attributes([['bar', 'baz'], ['foo', true]], 'html5', 'UTF-8', false)|raw }}></p>
+<p {{ mthaml_attributes([['foo', true], ['class', baz]], 'html5', 'UTF-8', false)|raw }}></p>
 

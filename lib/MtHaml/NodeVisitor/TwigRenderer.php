@@ -229,6 +229,8 @@ class TwigRenderer extends RendererAbstract
         $this->raw($this->stringLiteral($this->env->getOption('format')));
         $this->raw(', ');
         $this->raw($this->stringLiteral($this->charset));
+        $this->raw( ($this->env->getOption('enable_escaper') && $this->env->getOption('escape_attrs'))?
+            '' : ', false');
 
         $this->raw(')|raw }}');
     }

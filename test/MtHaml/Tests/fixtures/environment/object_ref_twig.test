@@ -8,7 +8,7 @@ $env = new MtHaml\Environment('twig', array('enable_escaper' => false));
 echo $env->compileString($parts['HAML'], "$file.haml");
 
 --EXPECT--
-<p {{ mthaml_attributes([['class', mthaml_object_ref_class(a)], ['id', mthaml_object_ref_id(a)]], 'html5', 'UTF-8')|raw }}></p>
-<p {{ mthaml_attributes([['class', mthaml_object_ref_class(a, ("b"))], ['id', mthaml_object_ref_id(a, ("b"))]], 'html5', 'UTF-8')|raw }}></p>
+<p {{ mthaml_attributes([['class', mthaml_object_ref_class(a)], ['id', mthaml_object_ref_id(a)]], 'html5', 'UTF-8', false)|raw }}></p>
+<p {{ mthaml_attributes([['class', mthaml_object_ref_class(a, ("b"))], ['id', mthaml_object_ref_id(a, ("b"))]], 'html5', 'UTF-8', false)|raw }}></p>
 <p></p>
 

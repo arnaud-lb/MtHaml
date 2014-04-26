@@ -13,6 +13,6 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 
 --EXPECT--
 <div class="foo bar baz"></div>
-<div {% line 4 %}{{ mthaml_attributes([['class', ('foo' ~ ' ' ~ 'bar')], ['class', ('abc ' ~ def)], ['id', 'x']], 'html5', 'UTF-8')|raw }}></div>
+<div {% line 4 %}{{ mthaml_attributes([['class', ('foo' ~ ' ' ~ 'bar')], ['class', ('abc ' ~ def)], ['id', 'x']], 'html5', 'UTF-8', false)|raw }}></div>
 <p a="c"></p>
 

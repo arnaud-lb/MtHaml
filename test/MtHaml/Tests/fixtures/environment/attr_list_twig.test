@@ -7,6 +7,6 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 %p{list}
 %p{list, :foo => "bar"}
 --EXPECT--
-<p {{ mthaml_attributes([mthaml_attribute_list(list)], 'html5', 'UTF-8')|raw }}></p>
-<p {{ mthaml_attributes([mthaml_attribute_list(list), ['foo', 'bar']], 'html5', 'UTF-8')|raw }}></p>
+<p {{ mthaml_attributes([mthaml_attribute_list(list)], 'html5', 'UTF-8', false)|raw }}></p>
+<p {{ mthaml_attributes([mthaml_attribute_list(list), ['foo', 'bar']], 'html5', 'UTF-8', false)|raw }}></p>
 
