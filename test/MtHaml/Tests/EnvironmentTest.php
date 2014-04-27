@@ -33,6 +33,13 @@ class EnvironmentTest extends TestCase
 
         $this->assertSame($parts['EXPECT'], $out);
 
+        if(isset($parts['EVAL'])) {
+            ob_start();
+            eval('?>' . $out);
+            $eval = ob_get_clean();
+            $this->assertSame($parts['EVAL'], $eval);
+        }
+
         $this->cleanup($file);
     }
 

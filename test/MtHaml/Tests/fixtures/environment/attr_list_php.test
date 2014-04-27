@@ -2,7 +2,24 @@
 <?php
 $env = new MtHaml\Environment('php', array('enable_escaper' => false));
 echo $env->compileString($parts['HAML'], "$file.haml");
-
+function html_attrs() {
+    $arg_list = func_get_args();
+    $list = array(
+        array('name0'=>'val0'),
+        array('name1'=>'val1'),
+        array('name2'=>'val2'),
+        array('name3'=>'val3'),
+    );
+    $return = array();
+    foreach ($arg_list as $arg) {
+        if(is_int($arg)) {
+            $return = array_merge($return, $list[$arg]);
+        }
+    }
+    return $return;
+}
+$foo = array('lang'=>'en');
+$list = array('class'=>'list');
 --HAML--
 %html{html_attrs()}
 %html{html_attrs(1, 2, 3)}
@@ -17,4 +34,12 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 <html <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create((html_attrs(1, 2, 3, array("foo" => "bar")))), MtHaml\Runtime\AttributeList::create($foo)), 'html5', 'UTF-8', false); ?>></html>
 <p <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create($list)), 'html5', 'UTF-8', false); ?>></p>
 <p <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create($list), array('foo', 'bar')), 'html5', 'UTF-8', false); ?>></p>
+
+--EVAL--
+<html ></html>
+<html name1="val1" name2="val2" name3="val3"></html>
+<html name1="val1" name2="val2" name3="val3"></html>
+<html name1="val1" name2="val2" name3="val3" lang="en"></html>
+<p class="list"></p>
+<p class="list" foo="bar"></p>
 
