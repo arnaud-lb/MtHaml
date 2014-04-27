@@ -9,8 +9,8 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 %p(bar="baz" foo)
 %p(foo class=baz)
 --EXPECT--
-<p <?php echo MtHaml\Runtime::renderAttributes(array(array('foo', TRUE), array('bar', 'baz')), 'html5', 'UTF-8'); ?>></p>
-<p <?php echo MtHaml\Runtime::renderAttributes(array(array('foo', TRUE)), 'html5', 'UTF-8'); ?>></p>
-<p <?php echo MtHaml\Runtime::renderAttributes(array(array('bar', 'baz'), array('foo', TRUE)), 'html5', 'UTF-8'); ?>></p>
-<p <?php echo MtHaml\Runtime::renderAttributes(array(array('foo', TRUE), array('class', baz)), 'html5', 'UTF-8'); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('foo', TRUE), array('bar', 'baz')), 'html5', 'UTF-8', false); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('foo', TRUE)), 'html5', 'UTF-8', false); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('bar', 'baz'), array('foo', TRUE)), 'html5', 'UTF-8', false); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('foo', TRUE), array('class', baz)), 'html5', 'UTF-8', false); ?>></p>
 

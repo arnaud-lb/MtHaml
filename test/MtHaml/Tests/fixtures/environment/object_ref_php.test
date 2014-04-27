@@ -8,7 +8,7 @@ $env = new MtHaml\Environment('php', array('enable_escaper' => false));
 echo $env->compileString($parts['HAML'], "$file.haml");
 
 --EXPECT--
-<p <?php echo MtHaml\Runtime::renderAttributes(array(array('class', MtHaml\Runtime::renderObjectRefClass($a)), array('id', MtHaml\Runtime::renderObjectRefId($a))), 'html5', 'UTF-8'); ?>></p>
-<p <?php echo MtHaml\Runtime::renderAttributes(array(array('class', MtHaml\Runtime::renderObjectRefClass($a, ("b"))), array('id', MtHaml\Runtime::renderObjectRefId($a, ("b")))), 'html5', 'UTF-8'); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('class', MtHaml\Runtime::renderObjectRefClass($a)), array('id', MtHaml\Runtime::renderObjectRefId($a))), 'html5', 'UTF-8', false); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(array('class', MtHaml\Runtime::renderObjectRefClass($a, ("b"))), array('id', MtHaml\Runtime::renderObjectRefId($a, ("b")))), 'html5', 'UTF-8', false); ?>></p>
 <p></p>
 

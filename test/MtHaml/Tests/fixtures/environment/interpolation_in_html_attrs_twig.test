@@ -22,10 +22,10 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 <p {{ test }} foo="bar"></p>
 <p {{ test }}></p>
 <p bar="baz" {{ test }} foo="bar"></p>
-<p {{ mthaml_attributes([['bar', 'baz'], mthaml_attribute_interpolation(test), ['class', ('abc ' ~ def)]], 'html5', 'UTF-8')|raw }}></p>
+<p {{ mthaml_attributes([['bar', 'baz'], mthaml_attribute_interpolation(test), ['class', ('abc ' ~ def)]], 'html5', 'UTF-8', false)|raw }}></p>
 <p foo="bar" {% line 8 %}{{ test }}></p>
 <p {{ test }} foo="bar"></p>
 <p {{ test }}></p>
 <p bar="baz" {{ test }} foo="bar"></p>
-<p {{ mthaml_attributes([['bar', 'baz'], mthaml_attribute_interpolation(test), ['class', ('abc ' ~ def)]], 'html5', 'UTF-8')|raw }}></p>
+<p {{ mthaml_attributes([['bar', 'baz'], mthaml_attribute_interpolation(test), ['class', ('abc ' ~ def)]], 'html5', 'UTF-8', false)|raw }}></p>
 

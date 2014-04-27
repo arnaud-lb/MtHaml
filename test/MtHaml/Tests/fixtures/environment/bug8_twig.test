@@ -6,5 +6,5 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 --HAML--
 %foo(bar="" data=trigger_dyn_attrs)
 --EXPECT--
-<foo {{ mthaml_attributes([['bar', ''], ['data', trigger_dyn_attrs]], 'html5', 'UTF-8')|raw }}></foo>
+<foo {{ mthaml_attributes([['bar', ''], ['data', trigger_dyn_attrs]], 'html5', 'UTF-8', false)|raw }}></foo>
 

@@ -11,10 +11,10 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 %p{$list}
 %p{$list, :foo => "bar"}
 --EXPECT--
-<html <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create((html_attrs()))), 'html5', 'UTF-8'); ?>></html>
-<html <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create((html_attrs(1, 2, 3)))), 'html5', 'UTF-8'); ?>></html>
-<html <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create((html_attrs(1, 2, 3, array("foo" => "bar"))))), 'html5', 'UTF-8'); ?>></html>
-<html <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create((html_attrs(1, 2, 3, array("foo" => "bar")))), MtHaml\Runtime\AttributeList::create($foo)), 'html5', 'UTF-8'); ?>></html>
-<p <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create($list)), 'html5', 'UTF-8'); ?>></p>
-<p <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create($list), array('foo', 'bar')), 'html5', 'UTF-8'); ?>></p>
+<html <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create((html_attrs()))), 'html5', 'UTF-8', false); ?>></html>
+<html <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create((html_attrs(1, 2, 3)))), 'html5', 'UTF-8', false); ?>></html>
+<html <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create((html_attrs(1, 2, 3, array("foo" => "bar"))))), 'html5', 'UTF-8', false); ?>></html>
+<html <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create((html_attrs(1, 2, 3, array("foo" => "bar")))), MtHaml\Runtime\AttributeList::create($foo)), 'html5', 'UTF-8', false); ?>></html>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create($list)), 'html5', 'UTF-8', false); ?>></p>
+<p <?php echo MtHaml\Runtime::renderAttributes(array(MtHaml\Runtime\AttributeList::create($list), array('foo', 'bar')), 'html5', 'UTF-8', false); ?>></p>
 

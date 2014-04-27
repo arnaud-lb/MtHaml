@@ -40,20 +40,20 @@ echo $env->compileString($parts['HAML'], "$file.haml");
   <q>Foo</q>
 </p>
 <p>
-  <q {% line 4 %}{{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8')|raw }}>Foo</q>
+  <q {% line 4 %}{{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8', false)|raw }}>Foo</q>
 </p>
 <p>
   <q>Foo Bar</q>
 </p>
 <p>
-  <q {% line 8 %}{{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8')|raw }}>Foo Bar</q>
+  <q {% line 8 %}{{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8', false)|raw }}>Foo Bar</q>
 </p>
 <p>
   <q>Foo
   Bar</q>
 </p>
 <p>
-  <q {% line 14 %}{{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8')|raw }}>Foo
+  <q {% line 14 %}{{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8', false)|raw }}>Foo
   Bar</q>
 </p>
 <p>
@@ -63,14 +63,14 @@ echo $env->compileString($parts['HAML'], "$file.haml");
   </div></q>
 </p>
 <p>
-  <q {% line 23 %}{{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8')|raw }}><div>
+  <q {% line 23 %}{{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8', false)|raw }}><div>
     Foo
     Bar
   </div></q>
 </p>
 <p>
   <q>foo</q>
-  <q {{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8')|raw }}>
+  <q {{ mthaml_attributes([['a', (1 + 1)]], 'html5', 'UTF-8', false)|raw }}>
     bar
   </q>
 </p>
