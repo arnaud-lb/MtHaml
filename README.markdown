@@ -162,7 +162,7 @@ Helpers in HAML/Ruby are just ruby functions exposed to templates.
 Any function can be made available to HAML templates by the target language
 (the function only have to be available at runtime).
 
-In HAML/Twig you can use all of Twig's functions, filters and tags. In PHP, you can use all PHP functions.
+In HAML/Twig you can use all of Twig's functions, filters, and tags. In HAML/PHP, you can use all PHP functions.
 
 ## Filters
 
@@ -217,7 +217,7 @@ $env = new MtHaml\Environment('twig', array(
 
 ## Sass
 
-[Sass][6] can be used in PHP projects without problem.It only depends on Ruby and does not need to be installed on production servers. So MtHaml will not re-implement Sass.
+[Sass][6] can be used in PHP projects without problem. It only depends on Ruby and does not need to be installed on production servers. So MtHaml will not re-implement Sass.
 
 ## Frameworks and CMS support
  
