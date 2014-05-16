@@ -336,16 +336,12 @@ class Parser
 
             $node = new Comment($pos, $rendered, $condition);
 
-            if ($rendered) {
-                if (null !== $nested = $this->parseNestableStatement($buf)) {
-                    $node->setContent($nested);
-                }
-            } else {
+            if ('' !== $line = trim($buf->getLine())) {
+                $content = new Text($buf->getPosition(), $line);
+                $node->setContent($content);
+            }
 
-                if ('' !== $line = trim($buf->getLine())) {
-                    $content = new Text($buf->getPosition(), $line);
-                    $node->setContent($content);
-                }
+            if (!$rendered) {
 
                 while (null !== $next = $buf->peekLine()) {
 

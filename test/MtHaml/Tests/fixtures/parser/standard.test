@@ -57,7 +57,7 @@ root(
       )
     )
     tag(body
-      comment(interpolated(text(Hey, a comment!)))
+      comment(text(Hey, a comment!))
       tag(div
         attr(text(class)text(header))
         interpolated(text(This is the header,))
