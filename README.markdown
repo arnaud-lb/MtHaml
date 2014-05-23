@@ -71,7 +71,7 @@ $executor = new MtHaml\Support\Php\Executor($haml, array(
 
 // Compiles and executes the HAML template, with variables given as second
 // argument
-$executor->display($haml_template, array(
+$executor->display('template.haml', array(
     'var' => 'value',
 ));
 
@@ -93,7 +93,7 @@ $lexer->setLexer($twig->getLexer());
 $twig->setLexer($lexer);
 
 // Render templates as usual
-$twig->render('file.haml', ...);
+$twig->render('template.haml', ...);
 ```
 
 See [examples][7] and [MtHaml with Twig](https://github.com/arnaud-lb/MtHaml/wiki/Use-MtHaml-with-Twig)
