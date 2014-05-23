@@ -54,7 +54,7 @@ if (true) {
 $template = __DIR__ . '/example-twig.haml';
 $compiled = $haml->compileString(file_get_contents($template), $template);
 
-echo "\n\nRendered Template:\n\n";
+echo "\n\nHow the template was compiled:\n\n";
 
 echo $compiled;
 

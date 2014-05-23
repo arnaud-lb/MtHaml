@@ -65,7 +65,16 @@ PHP:
 ``` php
 <?php
 $haml = new MtHaml\Environment('php');
-$compiled = $haml->compileString($haml_template, "filename");
+$executor = new MtHaml\Support\Php\Executor($haml, array(
+    'cache' => sys_get_temp_dir().'/haml',
+));
+
+// Compiles and executes the HAML template, with variables given as second
+// argument
+$executor->display($haml_template, array(
+    'var' => 'value',
+));
+
 ```
 
 [Twig][4]:
@@ -73,11 +82,18 @@ $compiled = $haml->compileString($haml_template, "filename");
 ``` php
 <?php
 $haml = new MtHaml\Environment('twig', array('enable_escaper' => false));
-$compiled = $haml->compileString($haml_template, "filename");
 
-// Register the MtHaml extension before executing the template:
+// Register the Twig extension before executing a HAML template
 $twig->addExtension(new MtHaml\Support\Twig\Extension());
-$twig->render(...);
+
+// Use a custom lexer to automatically convert HAML templates to Twig, before
+// executing them
+$lexer = new MtHaml\Support\Twig\Lexer($haml);
+$lexer->setLexer($twig->getLexer());
+$twig->setLexer($lexer);
+
+// Render templates as usual
+$twig->render('file.haml', ...);
 ```
 
 See [examples][7] and [MtHaml with Twig](https://github.com/arnaud-lb/MtHaml/wiki/Use-MtHaml-with-Twig)

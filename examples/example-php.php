@@ -6,38 +6,32 @@
 require __DIR__ . "/autoload.php";
 
 $haml = new MtHaml\Environment('php');
+$hamlExecutor = new MtHaml\Support\Php\Executor($haml, array(
+    'cache' => sys_get_temp_dir().'/haml',
+));
 
 /*
- * Compile the template to PHP
- */
-
-$template = __DIR__ . '/example-php.haml';
-$hamlCode = file_get_contents($template);
-
-// no need to compile if already compiled and up to date
-if (!file_exists($template.'.php') || filemtime($template.'.php') != filemtime($template)) {
-
-    $phpCode = $haml->compileString($hamlCode, $template);
-
-    $tempnam = tempnam(dirname($template), basename($template));
-    file_put_contents($tempnam, $phpCode);
-    rename($tempnam, $template.'.php');
-    touch($template.'.php', filemtime($template));
-}
-
-/*
- * Execute the compiled template
+ * Execute the template
  */
 
 echo "\n\nExecuted Template:\n\n";
 
-extract([
+$template = __DIR__ . '/example-php.haml';
+$variables = array(
     'foo' => 'bar',
-]);
+);
 
-require $template.'.php';
+try {
+    $hamlExecutor->display($template, $variables);
+} catch (MtHaml\Exception $e) {
+    echo "Failed to execute template: ", $e->getMessage(), "\n";
+}
 
-echo "\n\nRendered Template:\n\n";
+/*
+ * See how it was compiled
+ */ 
+ 
+echo "\n\nHow the template was compiled:\n\n";
 
-readfile($template.'.php');
+echo $haml->compileString(file_get_contents($template), $template), "\n";
 

@@ -1,6 +1,7 @@
 * 1.4.0
 
  * Now attributes are escaped only if escape is activated (Hassan Amouhzi)
+ * Added an Executor, to easily execute compiled php-based templates
 
 * 1.3.0 (2013-10-04)
 
