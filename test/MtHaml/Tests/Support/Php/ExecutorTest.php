@@ -2,7 +2,6 @@
 
 namespace MtHaml\Tests\Support\Php;
 
-use org\bovigo\vfs\vfsStream;
 use MtHaml\Support\Php\Executor;
 
 class ExecutorTest extends \PHPUnit_Framework_TestCase
