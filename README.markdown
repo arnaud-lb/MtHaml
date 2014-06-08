@@ -83,14 +83,13 @@ $executor->display('template.haml', array(
 <?php
 $haml = new MtHaml\Environment('twig', array('enable_escaper' => false));
 
+// Use a custom loader, whose responsibility is to convert HAML templates
+// to Twig syntax, before handing them out to Twig:
+$hamlLoader = new MtHaml\Support\Twig\Loader($haml, $twig->getLoader());
+$twig->setLoader($hamlLoader);
+
 // Register the Twig extension before executing a HAML template
 $twig->addExtension(new MtHaml\Support\Twig\Extension());
-
-// Use a custom lexer to automatically convert HAML templates to Twig, before
-// executing them
-$lexer = new MtHaml\Support\Twig\Lexer($haml);
-$lexer->setLexer($twig->getLexer());
-$twig->setLexer($lexer);
 
 // Render templates as usual
 $twig->render('template.haml', ...);
