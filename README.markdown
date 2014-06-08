@@ -133,7 +133,7 @@ Using [Twig][4] in HAML gives more control over what can be executed, what varia
 
 ### Integration in Twig
 
-MtHaml comes with an example Twig_Loader that will automatically convert HAML into Twig at loading time (Twig will then compile the resulting Twig script and cache it). Scripts starting with `{% haml %}` will be parsed as HAML, and the others will be left untouched.
+MtHaml comes with an example Twig_Loader that will automatically convert HAML into Twig at loading time (Twig will then compile the resulting Twig script and cache it). Templates with a `.haml` extension, or whose source starts with `{% haml %}` will be converted, and the others will be left untouched.
 
 The loader acts as a proxy and takes an other loader as parameter:
 
@@ -143,7 +143,7 @@ The loader acts as a proxy and takes an other loader as parameter:
 $haml = new MtHaml\Environment(...);
 
 $twig_loader = new Twig_Loader_Filesystem(...);
-$twig_loader = new MtHaml\Support\Twig\Loader($twig_loader);
+$twig_loader = new MtHaml\Support\Twig\Loader($haml, $twig_loader);
 ```
 
 ### Runtime support
