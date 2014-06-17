@@ -75,4 +75,3 @@ abstract class NodeAbstract
         return false;
     }
 }
-

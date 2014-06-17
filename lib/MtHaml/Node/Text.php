@@ -35,4 +35,3 @@ class Text extends EscapableAbstract
         return true;
     }
 }
-

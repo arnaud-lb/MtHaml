@@ -23,7 +23,7 @@ abstract class AbstractFilter implements FilterInterface
 
     protected function renderFilter(Renderer $renderer, Filter $node)
     {
-        foreach($node->getChilds() as $child) {
+        foreach ($node->getChilds() as $child) {
             $child->accept($renderer);
         }
     }

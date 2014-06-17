@@ -16,9 +16,8 @@ class Twig extends TargetAbstract
 
     public function getDefaultRendererFactory()
     {
-        return function(Environment $env, array $options) {
+        return function (Environment $env, array $options) {
             return new TwigRenderer($env);
         };
     }
 }
-

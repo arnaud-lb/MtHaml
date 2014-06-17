@@ -43,4 +43,3 @@ class Statement extends NodeAbstract
         $visitor->leaveStatement($this);
     }
 }
-

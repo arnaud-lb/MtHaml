@@ -10,6 +10,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             if (null !== $e) {
                 throw $e;
             }
+
             return;
         }
 
@@ -46,4 +47,3 @@ class TestCase extends \PHPUnit_Framework_TestCase
         return $parts;
     }
 }
-

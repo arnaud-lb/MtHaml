@@ -46,7 +46,7 @@ class BufferTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(' ', $buffer->eatChar());
         $this->assertSame("   def", $buffer->getLine());
         $this->assertSame(2, $buffer->getColumn());
-        
+
         $buffer->skipWs();
         $this->assertSame('def', $buffer->getLine());
         $this->assertSame(5, $buffer->getColumn());
@@ -75,4 +75,3 @@ class BufferTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(7, $buffer->getColumn());
     }
 }
-

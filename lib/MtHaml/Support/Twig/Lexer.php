@@ -39,9 +39,10 @@ class Lexer implements \Twig_LexerInterface
             $padding = str_repeat(' ', strlen($match[0]));
             $code = $padding . substr($code, strlen($match[0]));
             $code = $this->env->compileString($code, $filename);
-        } else if (null !== $filename && 'haml' === pathinfo($filename, PATHINFO_EXTENSION)) {
+        } elseif (null !== $filename && 'haml' === pathinfo($filename, PATHINFO_EXTENSION)) {
             $code = $this->env->compileString($code, $filename);
         }
+
         return $this->lexer->tokenize($code, $filename);
     }
 }

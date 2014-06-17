@@ -7,7 +7,6 @@ use MtHaml\Node\NodeAbstract;
 
 interface TargetInterface
 {
-    function parse(Environment $env, $string, $filename);
-    function compile(Environment $env, NodeAbstract $node);
+    public function parse(Environment $env, $string, $filename);
+    public function compile(Environment $env, NodeAbstract $node);
 }
-

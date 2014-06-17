@@ -23,11 +23,11 @@ class Runtime
      * - multiple class attributes and class attributes with iterable values are
      *   rendered concatenated with spaces
      *
-     * @param array $list A list of attributes (items are array($name, $value))
-     * @param string $format Output format (e.g. html5)
+     * @param array  $list    A list of attributes (items are array($name, $value))
+     * @param string $format  Output format (e.g. html5)
      * @param string $charset Output charset
      */
-    static public function renderAttributes($list, $format, $charset, $escape = true)
+    public static function renderAttributes($list, $format, $charset, $escape = true)
     {
         $attributes = array();
 
@@ -36,7 +36,7 @@ class Runtime
             if ($item instanceof AttributeInterpolation) {
                 $attributes[] = $item;
                 continue;
-            } else if ($item instanceof AttributeList) {
+            } elseif ($item instanceof AttributeList) {
                 $attributes = array_merge($attributes, $item->attributes);
                 continue;
             }
@@ -45,7 +45,7 @@ class Runtime
 
             if ('data' === $name) {
                 self::renderDataAttributes($attributes, $value);
-            } else if ('id' === $name) {
+            } elseif ('id' === $name) {
                 $value = self::renderJoinedValue($value, '_');
                 if (null !== $value) {
                     if (isset($attributes['id'])) {
@@ -54,7 +54,7 @@ class Runtime
                         $attributes['id'] = $value;
                     }
                 }
-            } else if ('class' === $name) {
+            } elseif ('class' === $name) {
                 $value = self::renderJoinedValue($value, ' ');
                 if (null !== $value) {
                     if (isset($attributes['class'])) {
@@ -63,13 +63,13 @@ class Runtime
                         $attributes['class'] = $value;
                     }
                 }
-            } else if (true === $value) {
+            } elseif (true === $value) {
                 if ('html5' === $format) {
                     $attributes[$name] = true;
                 } else {
                     $attributes[$name] = $name;
                 }
-            } else if (false === $value || null === $value) {
+            } elseif (false === $value || null === $value) {
                 // do not output
             } else {
                 if (isset($attributes[$name])) {
@@ -89,7 +89,7 @@ class Runtime
             }
             if ($value instanceof AttributeInterpolation) {
                 $result .= $value->value;
-            } else if (true === $value) {
+            } elseif (true === $value) {
                 $result .= $escape ?
                     htmlspecialchars($name, ENT_QUOTES, $charset) : $name;
             } else {
@@ -105,7 +105,7 @@ class Runtime
         return $result;
     }
 
-    static private function renderDataAttributes(&$dest, $value, $prefix = 'data')
+    private static function renderDataAttributes(&$dest, $value, $prefix = 'data')
     {
         if (\is_array($value) || $value instanceof \Traversable) {
             foreach ($value as $subname => $subvalue) {
@@ -118,7 +118,7 @@ class Runtime
         }
     }
 
-    static private function renderJoinedValue($values, $separator)
+    private static function renderJoinedValue($values, $separator)
     {
         $result = null;
 
@@ -143,7 +143,7 @@ class Runtime
         return $result;
     }
 
-    static public function renderObjectRefClass($object, $prefix = null)
+    public static function renderObjectRefClass($object, $prefix = null)
     {
         if (!$object) {
             return;
@@ -158,7 +158,7 @@ class Runtime
         return $class;
     }
 
-    static public function renderObjectRefId($object, $prefix = null)
+    public static function renderObjectRefId($object, $prefix = null)
     {
         if (!$object) {
             return;
@@ -168,7 +168,7 @@ class Runtime
 
         if (\is_callable(array($object, 'getId'))) {
             $id = $object->getId();
-        } else if (\is_callable(array($object, 'id'))) {
+        } elseif (\is_callable(array($object, 'id'))) {
             $id = $object->id();
         }
 
@@ -185,23 +185,24 @@ class Runtime
         return $id;
     }
 
-    static public function getObjectRefClassString($object)
+    public static function getObjectRefClassString($object)
     {
         $class = self::getObjectRefName($object);
         if (false !== $pos = \strrpos($class, '\\')) {
             $class = \substr($class, $pos+1);
         }
+
         return \strtolower(\preg_replace('#(?<=[a-z])[A-Z]+#', '_$0', $class));
     }
 
-    static public function getObjectRefName($object)
+    public static function getObjectRefName($object)
     {
         return \is_callable(array($object, 'hamlObjectRef'))
             ? $object->hamlObjectRef()
             : \get_class($object);
     }
 
-    static public function filter(Environment $mthaml, $filter, array $context, $content)
+    public static function filter(Environment $mthaml, $filter, array $context, $content)
     {
         return $mthaml->getFilter($filter)->filter($content, $context, $mthaml->getOptions());
     }

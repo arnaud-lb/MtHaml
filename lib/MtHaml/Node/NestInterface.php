@@ -8,4 +8,3 @@ interface NestInterface
     public function hasContent();
     public function allowsNestingAndContent();
 }
-

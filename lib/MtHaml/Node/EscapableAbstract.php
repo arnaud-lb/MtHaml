@@ -13,7 +13,7 @@ abstract class EscapableAbstract extends NodeAbstract
         if (null === $this->escaping) {
             $this->escaping = new Escaping;
         }
+
         return $this->escaping;
     }
 }
-

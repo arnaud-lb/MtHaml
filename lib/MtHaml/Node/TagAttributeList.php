@@ -2,7 +2,6 @@
 
 namespace MtHaml\Node;
 
-use MtHaml\Node\TagAttribute;
 use MtHaml\NodeVisitor\NodeVisitorInterface;
 
 class TagAttributeList extends TagAttribute

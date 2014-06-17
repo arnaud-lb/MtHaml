@@ -33,4 +33,3 @@ class Root extends NestAbstract
       $visitor->leaveRoot($this);
   }
 }
-

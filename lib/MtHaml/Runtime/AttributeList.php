@@ -6,10 +6,11 @@ class AttributeList
 {
     public $attributes;
 
-    static public function create($attributes)
+    public static function create($attributes)
     {
         $instance = new AttributeList;
         $instance->attributes = $attributes;
+
         return $instance;
     }
 }

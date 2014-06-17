@@ -41,6 +41,7 @@ class Loader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
             $source = $padding . substr($source, strlen($match[0]));
             $source = $this->env->compileString($source, $name);
         }
+
         return $source;
     }
 
@@ -78,4 +79,3 @@ class Loader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
         }
     }
 }
-

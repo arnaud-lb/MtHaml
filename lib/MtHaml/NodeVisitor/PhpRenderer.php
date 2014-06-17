@@ -22,7 +22,7 @@ class PhpRenderer extends RendererAbstract
 
     protected function stringLiteral($string)
     {
-        return var_export((string)$string, true);
+        return var_export((string) $string, true);
     }
 
     public function enterInterpolatedString(InterpolatedString $node)
@@ -211,7 +211,7 @@ class PhpRenderer extends RendererAbstract
                 $this->raw('MtHaml\Runtime\AttributeInterpolation::create(');
                 $attr->getValue()->accept($this);
                 $this->raw(')');
-            } else if ($attr instanceof TagAttributeList) {
+            } elseif ($attr instanceof TagAttributeList) {
                 $this->raw('MtHaml\Runtime\AttributeList::create(');
                 $attr->getValue()->accept($this);
                 $this->raw(')');
@@ -271,4 +271,3 @@ class PhpRenderer extends RendererAbstract
         return preg_replace($re, '$1', $code);
     }
 }
-
