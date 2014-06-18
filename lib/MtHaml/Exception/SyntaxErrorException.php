@@ -7,4 +7,3 @@ use MtHaml\Exception;
 class SyntaxErrorException extends Exception
 {
 }
-

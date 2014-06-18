@@ -22,7 +22,7 @@ class TwigRenderer extends RendererAbstract
 
     protected function stringLiteral($string)
     {
-        return var_export((string)$string, true);
+        return var_export((string) $string, true);
     }
 
     public function enterInterpolatedString(InterpolatedString $node)
@@ -52,7 +52,7 @@ class TwigRenderer extends RendererAbstract
             $escaping = $node->getEscaping()->isEnabled();
             if (true === $escaping) {
                 $fmt = '{{ (%s)|escape }}';
-            } else if (false === $escaping) {
+            } elseif (false === $escaping) {
                 $fmt = '{{ (%s)|raw }}';
             } else {
                 $fmt = '{{ %s }}';
@@ -204,7 +204,7 @@ class TwigRenderer extends RendererAbstract
                 $this->raw('mthaml_attribute_interpolation(');
                 $attr->getValue()->accept($this);
                 $this->raw(')');
-            } else if ($attr instanceof TagAttributeList) {
+            } elseif ($attr instanceof TagAttributeList) {
                 $this->raw('mthaml_attribute_list(');
                 $attr->getValue()->accept($this);
                 $this->raw(')');
@@ -235,4 +235,3 @@ class TwigRenderer extends RendererAbstract
         $this->raw(')|raw }}');
     }
 }
-

@@ -40,4 +40,3 @@ class Insert extends EscapableAbstract
         $visitor->leaveInsert($this);
     }
 }
-

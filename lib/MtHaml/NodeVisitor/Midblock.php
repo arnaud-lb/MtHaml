@@ -35,4 +35,3 @@ class Midblock extends NodeVisitorAbstract
         } while (false);
     }
 }
-

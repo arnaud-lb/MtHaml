@@ -44,6 +44,7 @@ class Escaping extends NodeVisitorAbstract
             // are plain HTML and should not be escaped
             if ($this->inInterpolatedString && !$this->inAttr) {
                 $node->getEscaping()->setEnabled(false);
+
                 return;
             }
         }
@@ -59,16 +60,16 @@ class Escaping extends NodeVisitorAbstract
 
     protected function setEscape(NodeAbstract $node, $mode)
     {
-        switch($mode) {
-        case self::ESCAPE_FALSE:
-            $node->getEscaping()->setEnabled(false);
-            break;
-        case self::ESCAPE_ONCE:
-            $node->getEscaping()->setEnabled(true)->setOnce(true);
-            break;
-        case self::ESCAPE_TRUE:
-            $node->getEscaping()->setEnabled(true);
-            break;
+        switch ($mode) {
+            case self::ESCAPE_FALSE:
+                $node->getEscaping()->setEnabled(false);
+                break;
+            case self::ESCAPE_ONCE:
+                $node->getEscaping()->setEnabled(true)->setOnce(true);
+                break;
+            case self::ESCAPE_TRUE:
+                $node->getEscaping()->setEnabled(true);
+                break;
         }
     }
 
@@ -102,4 +103,3 @@ class Escaping extends NodeVisitorAbstract
         $this->escape($node);
     }
 }
-

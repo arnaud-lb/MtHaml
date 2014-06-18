@@ -108,4 +108,3 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(4, count($dst_node->getChilds()));
     }
 }
-

@@ -47,6 +47,7 @@ class MergeAttrs extends NodeVisitorAbstract
 
                     if (!$new || !$new->isConst()) {
                         unset($this->attrs[$name]);
+
                         return;
                     }
 
@@ -68,13 +69,14 @@ class MergeAttrs extends NodeVisitorAbstract
         }
         if ($node instanceof InterpolatedString) {
             $ret = '';
-            foreach($node->getChilds() as $child) {
+            foreach ($node->getChilds() as $child) {
                 if (null !== $string = $this->getString($child)) {
                     $ret .= $string;
                 } else {
                     return null;
                 }
             }
+
             return $ret;
         }
     }
@@ -89,20 +91,20 @@ class MergeAttrs extends NodeVisitorAbstract
         if (false === $this->mergeInto($new, $b)) {
             return;
         }
+
         return $new;
     }
 
     protected function mergeInto(InterpolatedString $dest, $src)
     {
         if ($src instanceof InterpolatedString) {
-            foreach($src->getChilds() as $child) {
+            foreach ($src->getChilds() as $child) {
                 $dest->addChild($child);
             }
-        } else if ($src instanceof Text || $src instanceof Insert) {
+        } elseif ($src instanceof Text || $src instanceof Insert) {
             $dest->addChild($src);
         } else {
             return false;
         }
     }
 }
-

@@ -3,7 +3,6 @@
 namespace MtHaml\Node;
 
 use MtHaml\NodeVisitor\NodeVisitorInterface;
-use MtHaml\Node\TagAttribute;
 
 class Tag extends NestAbstract
 {
@@ -70,7 +69,7 @@ class Tag extends NestAbstract
         if (false !== $visitor->enterTag($this)) {
 
             if (false !== $visitor->enterTagAttributes($this)) {
-                foreach($this->getAttributes() as $attribute) {
+                foreach ($this->getAttributes() as $attribute) {
                     $attribute->accept($visitor);
                 }
             }
@@ -89,4 +88,3 @@ class Tag extends NestAbstract
         $visitor->leaveTag($this);
     }
 }
-

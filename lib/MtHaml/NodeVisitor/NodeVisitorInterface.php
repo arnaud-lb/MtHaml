@@ -95,4 +95,3 @@ interface NodeVisitorInterface
     public function leaveFilterChilds(Filter $node);
     public function leaveFilter(Filter $node);
 }
-

@@ -20,7 +20,7 @@ class ParserTest extends TestCase
 
             $renderer = new Printer;
             $node->accept($renderer);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $this->assertException($parts, $e);
         }
         $this->assertException($parts);
@@ -39,9 +39,9 @@ class ParserTest extends TestCase
         } else {
             $files = glob(__DIR__ . '/fixtures/parser/*.test');
         }
-        return array_map(function($file) {
+
+        return array_map(function ($file) {
             return array($file);
         }, $files);
     }
 }
-

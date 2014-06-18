@@ -58,6 +58,7 @@ class Parser
 
         if (0 === strlen($indent)) {
             $this->indentLevel = 0;
+
             return;
         }
 
@@ -107,17 +108,18 @@ class Parser
      * Returns the string that should be used for indentation in regard to the
      * current indentation state.
      *
-     * @param int       $levelOffset    Identation level offset
-     * @param string    $fallback       Fallback indent string. If there is
-     *                                  currently no indentation level and
-     *                                  fallback is not null, the first char of
-     *                                  $fallback is returned instead
-     * @return string   A string of zero or more spaces or tabs
+     * @param  int    $levelOffset Identation level offset
+     * @param  string $fallback    Fallback indent string. If there is
+     *                             currently no indentation level and
+     *                             fallback is not null, the first char of
+     *                             $fallback is returned instead
+     * @return string A string of zero or more spaces or tabs
      */
     public function getIndentString($levelOffset = 0, $fallback = null)
     {
         if (null !== $this->indentChar) {
             $width = $this->indentWidth * ($this->indentLevel + $levelOffset);
+
             return str_repeat($this->indentChar, $width);
         }
 
@@ -135,8 +137,8 @@ class Parser
      * Inserts a new $node in the tree, given the current and previous
      * indentation level.
      *
-     * @param Buffer        $buf
-     * @param NodeAbstract  $node   Node to insert in the tree
+     * @param Buffer       $buf
+     * @param NodeAbstract $node Node to insert in the tree
      */
     public function processStatement($buf, NodeAbstract $node)
     {
@@ -149,7 +151,7 @@ class Parser
 
         // close tag or block
 
-        } else if ($this->indentLevel < $this->prevIndentLevel) {
+        } elseif ($this->indentLevel < $this->prevIndentLevel) {
 
             $diff = $this->prevIndentLevel - $this->indentLevel;
             for ($i = 0; $i < $diff; ++$i) {
@@ -190,10 +192,10 @@ class Parser
     /**
      * Parses a HAML document
      *
-     * @param string    $string     A HAML document
-     * @param string    $fileaname  Filename to report in error messages
-     * @param string    $lineno     Line number of the first line of $string in
-     *                              $filename (for error messages)
+     * @param string $string    A HAML document
+     * @param string $fileaname Filename to report in error messages
+     * @param string $lineno    Line number of the first line of $string in
+     *                          $filename (for error messages)
      */
     public function parse($string, $filename, $lineno = 1)
     {
@@ -271,24 +273,21 @@ class Parser
     protected function parseStatement($buf)
     {
         if (null !== $node = $this->parseTag($buf)) {
-
             return $node;
 
-        } else if (null !== $node = $this->parseFilter($buf)) {
-
+        } elseif (null !== $node = $this->parseFilter($buf)) {
             return $node;
 
-        } else if (null !== $comment = $this->parseComment($buf)) {
-
+        } elseif (null !== $comment = $this->parseComment($buf)) {
             return $comment;
 
-        } else if ($buf->match('/-(?!#)/A', $match)) {
+        } elseif ($buf->match('/-(?!#)/A', $match)) {
 
             $buf->skipWs();
+
             return new Run($match['pos'][0], $buf->getLine());
 
-        } else if (null !== $doctype = $this->parseDoctype($buf)) {
-
+        } elseif (null !== $doctype = $this->parseDoctype($buf)) {
             return $doctype;
 
         } else {
@@ -313,6 +312,7 @@ class Parser
             $type = empty($match['type']) ? null : $match['type'];
             $options = empty($match['options']) ? null : $match['options'];
             $node = new Doctype($match['pos'][0], $type, $options);
+
             return $node;
         }
     }
@@ -379,8 +379,7 @@ class Parser
                                     # ( .class or #id )
             /xA';
 
-        if ($buf->match($tagRegex, $match))
-        {
+        if ($buf->match($tagRegex, $match)) {
             $tag_name = empty($match['tag_name']) ? 'div' : $match['tag_name'];
 
             $attributes = $this->parseTagAttributes($buf);
@@ -409,7 +408,7 @@ class Parser
     {
         $flags = 0;
         while (null !== $char = $buf->peekChar()) {
-            switch($char) {
+            switch ($char) {
                 case '<':
                     $flags |= Tag::FLAG_REMOVE_INNER_WHITESPACES;
                     $buf->eatChar();
@@ -538,7 +537,7 @@ class Parser
             do {
                 if ($expr = $this->parseInterpolation($buf)) {
                     $attrs[] = new TagAttributeInterpolation($expr->getPosition(), $expr);
-                } else if ($buf->match('/[\w+:-]+/A', $match)) {
+                } elseif ($buf->match('/[\w+:-]+/A', $match)) {
                     $name = new Text($match['pos'][0], $match[0]);
 
                     if (!$buf->match('/\s*=\s*/A')) {
@@ -596,7 +595,7 @@ class Parser
 
             if ($buf->match('/\s*\]\s*/A')) {
                 break;
-            } else if (!$buf->match('/\s*,\s*/A')) {
+            } elseif (!$buf->match('/\s*,\s*/A')) {
                 $this->syntaxErrorExpected($buf, "',' or ']'");
             }
 
@@ -634,18 +633,20 @@ class Parser
                 $string = $this->parseInterpolatedString($sub);
                 if ($sub->getColumn() >= $buf->getColumn()) {
                     $buf->eatChars($sub->getColumn() - $buf->getColumn());
+
                     return $string;
                 }
-            } catch(SyntaxErrorException $e) {
+            } catch (SyntaxErrorException $e) {
             }
-        } else if (preg_match('/:/A', $expr)) {
+        } elseif (preg_match('/:/A', $expr)) {
             try {
                 $sym = $this->parseSymbol($sub);
                 if ($sub->getColumn() >= $buf->getColumn()) {
                     $buf->eatChars($sub->getColumn() - $buf->getColumn());
+
                     return $sym;
                 }
-            } catch(SyntaxErrorException $e) {
+            } catch (SyntaxErrorException $e) {
             }
         }
 
@@ -729,11 +730,11 @@ class Parser
                 $text = preg_replace('/\\\\\#\{/', '#{', $text);
                 $text = new Text($match['pos'][0], $text);
                 $node->addChild($text);
-            } else if ($expr = $this->parseInterpolation($buf)) {
+            } elseif ($expr = $this->parseInterpolation($buf)) {
                 $node->addChild($expr);
-            } else if ($quoted && $buf->match('/"/A')) {
+            } elseif ($quoted && $buf->match('/"/A')) {
                 break;
-            } else if (!$quoted && $buf->match('/$/A')) {
+            } elseif (!$quoted && $buf->match('/$/A')) {
                 break;
             } else {
                 $this->syntaxErrorExpected($buf, 'string or #{...}');
@@ -783,7 +784,7 @@ class Parser
 
             if ($match[1] == '&') {
                 $node->getEscaping()->setEnabled(true);
-            } else if ($match[1] == '!') {
+            } elseif ($match[1] == '!') {
                 $node->getEscaping()->setEnabled(false);
             }
 
@@ -875,4 +876,3 @@ class Parser
     }
 
 }
-

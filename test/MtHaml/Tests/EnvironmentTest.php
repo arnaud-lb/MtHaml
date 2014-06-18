@@ -2,9 +2,6 @@
 
 namespace MtHaml\Tests;
 
-use MtHaml\Parser;
-use MtHaml\NodeVisitor\Printer;
-
 require_once __DIR__ . '/TestCase.php';
 
 class EnvironmentTest extends TestCase
@@ -22,9 +19,10 @@ class EnvironmentTest extends TestCase
             ob_start();
             require $file . '.php';
             $out = ob_get_clean();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->assertException($parts, $e);
             $this->cleanup($file);
+
             return;
         }
         $this->assertException($parts);
@@ -53,10 +51,9 @@ class EnvironmentTest extends TestCase
         } else {
             $files = glob(__DIR__ . '/fixtures/environment/*.test');
         }
-        return array_map(function($file) {
+
+        return array_map(function ($file) {
             return array($file);
         }, $files);
     }
 }
-
-

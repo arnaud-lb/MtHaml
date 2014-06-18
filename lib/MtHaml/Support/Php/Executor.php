@@ -97,6 +97,7 @@ class Executor
         }
 
         require_once $cacheFile;
+
         return $funName;
     }
 

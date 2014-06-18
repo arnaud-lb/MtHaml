@@ -53,4 +53,3 @@ class PhpRendererTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-

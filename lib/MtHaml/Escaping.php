@@ -10,6 +10,7 @@ class Escaping
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+
         return $this;
     }
 
@@ -21,6 +22,7 @@ class Escaping
     public function setOnce($once)
     {
         $this->once = $once;
+
         return $this;
     }
 
@@ -29,4 +31,3 @@ class Escaping
         return $this->once;
     }
 }
-

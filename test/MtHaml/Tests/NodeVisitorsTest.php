@@ -1,15 +1,13 @@
 <?php
 
-namespace MtHaml\Tests\NodeVisitor;
+namespace MtHaml\Tests;
 
-use MtHaml\Tests\TestCase;
-use MtHaml\NodeVisitor\Autoclose;
 use MtHaml\NodeVisitor\Printer;
 use MtHaml\Parser;
 
 require_once __DIR__ . '/TestCase.php';
 
-class AutocloseTest extends TestCase
+class NodeVisitorsTest extends TestCase
 {
     /** @dataProvider getAutocloseFixtures */
     public function testAutoclose($file)
@@ -24,7 +22,7 @@ class AutocloseTest extends TestCase
 
             $renderer = new Printer;
             $node->accept($renderer);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $this->assertException($parts, $e);
         }
         $this->assertException($parts);
@@ -39,9 +37,8 @@ class AutocloseTest extends TestCase
 
     public function getAutocloseFixtures()
     {
-        return array_map(function($file) {
+        return array_map(function ($file) {
             return array($file);
         }, glob(__DIR__ . '/fixtures/nodevisitors/*.test'));
     }
 }
-

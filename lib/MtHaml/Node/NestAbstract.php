@@ -110,9 +110,8 @@ abstract class NestAbstract extends NodeAbstract implements NestInterface
 
     public function visitChilds(NodeVisitorInterface $visitor)
     {
-        foreach($this->getChilds() as $child) {
+        foreach ($this->getChilds() as $child) {
             $child->accept($visitor);
         }
     }
 }
-

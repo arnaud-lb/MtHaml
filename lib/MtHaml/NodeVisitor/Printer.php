@@ -29,12 +29,14 @@ class Printer extends NodeVisitorAbstract
     protected function indent()
     {
         $this->indent += 1;
+
         return $this;
     }
 
     protected function undent()
     {
         $this->indent -= 1;
+
         return $this;
     }
 
@@ -47,21 +49,23 @@ class Printer extends NodeVisitorAbstract
         if ($break) {
             $this->output .= "\n";
         }
+
         return $this;
     }
 
     protected function raw($string)
     {
         $this->output .= $string;
+
         return $this;
     }
 
     protected function writeIndentation()
     {
         $this->output .= str_repeat(' ', $this->indent * 2);
+
         return $this;
     }
-
 
     public function enterRoot(Root $node)
     {
@@ -140,7 +144,7 @@ class Printer extends NodeVisitorAbstract
                 $flag .= '!';
             }
             $content = $flag . $content;
-        } else if (false === $escaping->isEnabled()) {
+        } elseif (false === $escaping->isEnabled()) {
             $content = '!' . $content;
         }
 
@@ -158,7 +162,7 @@ class Printer extends NodeVisitorAbstract
                 $flag .= '!';
             }
             $content = $flag . $content;
-        } else if (false === $escaping->isEnabled()) {
+        } elseif (false === $escaping->isEnabled()) {
             $content = '!' . $content;
         }
 
@@ -194,7 +198,7 @@ class Printer extends NodeVisitorAbstract
     {
         $this->raw('interpolated(');
     }
-    
+
     public function leaveInterpolatedString(InterpolatedString $node)
     {
         $this->raw(')');
@@ -259,4 +263,3 @@ class Printer extends NodeVisitorAbstract
     }
 
 }
-

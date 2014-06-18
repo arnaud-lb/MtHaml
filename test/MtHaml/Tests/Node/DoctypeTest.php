@@ -32,7 +32,7 @@ class DoctypeTest extends \PHPUnit_Framework_TestCase
 
         try {
             $node->getDoctype($format);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
         }
 
         $this->assertNotNull($e);
@@ -49,4 +49,3 @@ class DoctypeTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-

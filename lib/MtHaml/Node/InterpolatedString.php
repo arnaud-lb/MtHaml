@@ -51,7 +51,7 @@ class InterpolatedString extends NodeAbstract
         if (false !== $visitor->enterInterpolatedString($this)) {
 
             if (false !== $visitor->enterInterpolatedStringChilds($this)) {
-                foreach($this->getChilds() as $child) {
+                foreach ($this->getChilds() as $child) {
                     $child->accept($visitor);
                 }
                 $visitor->leaveInterpolatedStringChilds($this);
@@ -71,4 +71,3 @@ class InterpolatedString extends NodeAbstract
         return true;
     }
 }
-

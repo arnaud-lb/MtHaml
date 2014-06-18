@@ -45,4 +45,3 @@ class Extension extends \Twig_Extension
         return 'mthaml';
     }
 }
-

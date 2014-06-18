@@ -4,12 +4,12 @@ namespace MtHaml;
 
 class Autoloader
 {
-    static public function register()
+    public static function register()
     {
         spl_autoload_register(array(new self, 'autoload'));
     }
 
-    static public function autoload($class)
+    public static function autoload($class)
     {
         if (strncmp($class, 'MtHaml', 6) !== 0) {
             return;

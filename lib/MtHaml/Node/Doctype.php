@@ -58,7 +58,7 @@ class Doctype extends NodeAbstract
 
         if (empty($lcid)) {
             return $this->doctypes[$format][''];
-        } else if (isset($this->doctypes[$format][$lcid])) {
+        } elseif (isset($this->doctypes[$format][$lcid])) {
             return $this->doctypes[$format][$lcid];
         } else {
 
@@ -94,4 +94,3 @@ class Doctype extends NodeAbstract
         $visitor->leaveDoctype($this);
     }
 }
-

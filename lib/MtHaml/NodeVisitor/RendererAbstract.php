@@ -70,12 +70,14 @@ abstract class RendererAbstract extends NodeVisitorAbstract
     public function indent()
     {
         $this->indent += 1;
+
         return $this;
     }
 
     public function undent()
     {
         $this->indent -= 1;
+
         return $this;
     }
 
@@ -102,6 +104,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             $this->output .= "\n";
             $this->lineno++;
         }
+
         return $this;
     }
 
@@ -109,12 +112,14 @@ abstract class RendererAbstract extends NodeVisitorAbstract
     {
         $this->output .= $string;
         $this->lineno += substr_count($string, "\n");
+
         return $this;
     }
 
     protected function writeIndentation()
     {
         $this->output .= str_repeat(' ', $this->indent * 2);
+
         return $this;
     }
 
@@ -299,7 +304,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
         if ($comment->hasContent()) {
             $this->write($open . ' ', $comment->hasParent(), false);
-        } else if ($comment->hasChilds()) {
+        } elseif ($comment->hasChilds()) {
             $this->write($open, true, true)->indent();
         }
     }
@@ -318,7 +323,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
         if ($comment->hasContent()) {
             $this->write(' ' . $close, false, $comment->hasParent());
-        } else if ($comment->hasChilds()) {
+        } elseif ($comment->hasChilds()) {
             $this->undent()->write($close, true, true);
         }
     }
@@ -395,6 +400,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         if (null !== $node->getPreviousSibling()) {
             return;
         }
+
         return $this->getParentTag($node);
     }
 
@@ -403,6 +409,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         if (null !== $node->getNextSibling()) {
             return;
         }
+
         return $this->getParentTag($node);
     }
 
@@ -426,6 +433,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         if (!($first instanceof Tag)) {
             return;
         }
+
         return $first;
     }
 
@@ -440,6 +448,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         if (!($last instanceof Tag)) {
             return;
         }
+
         return $last;
     }
 
@@ -451,6 +460,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         if (!($tag instanceof Tag)) {
             return;
         }
+
         return $tag;
     }
 
@@ -462,6 +472,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         if (!($tag instanceof Tag)) {
             return;
         }
+
         return $tag;
     }
 
@@ -482,6 +493,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
                 return false;
             }
         }
+
         return true;
     }
 
@@ -519,6 +531,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
                 return false;
             }
         }
+
         return true;
     }
 
@@ -539,6 +552,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
                 return false;
             }
         }
+
         return true;
     }
 
@@ -563,4 +577,3 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         $this->echoMode = array_pop($this->echoModeStack);
     }
 }
-

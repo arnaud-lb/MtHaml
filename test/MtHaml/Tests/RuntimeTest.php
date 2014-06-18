@@ -252,9 +252,10 @@ class RuntimeTest extends TestCase
             ob_start();
             require $file . '.php';
             $out = ob_get_clean();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->assertException($parts, $e);
             $this->cleanup($file);
+
             return;
         }
         $this->assertException($parts);
@@ -283,7 +284,8 @@ class RuntimeTest extends TestCase
         } else {
             $files = glob(__DIR__ . '/fixtures/runtime/*.test');
         }
-        return array_map(function($file) {
+
+        return array_map(function ($file) {
                 return array($file);
             }, $files);
     }
