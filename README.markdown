@@ -238,12 +238,13 @@ $env = new MtHaml\Environment('twig', array(
  
  - Drupal: https://github.com/antoinelafontaine/oxide
  - FuelPHP: https://github.com/fuel/parser
+ - Laravel (PHP): https://github.com/BKWLD/laravel-haml
+ - Laravel (Twig): https://github.com/SimonDegraeve/laravel-twigbridge
  - PHPixie: https://github.com/dracony/PHPixie-HAML
  - Silex: https://github.com/arnaud-lb/Silex-MtHaml
+ - Sprockets-PHP: https://github.com/Nami-Doc/Sprockets-PHP
  - Symfony2: https://github.com/arnaud-lb/MtHamlBundle
  - Zend Framework 1: https://github.com/bonndan/mthaml-zf1
- - Sprockets-PHP: https://github.com/Nami-Doc/Sprockets-PHP
-
 
 Add yours: https://github.com/arnaud-lb/MtHaml/edit/master/README.markdown
 
