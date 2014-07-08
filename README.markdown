@@ -236,6 +236,7 @@ $env = new MtHaml\Environment('twig', array(
 
 ## Frameworks and CMS support
  
+ - CakePHP: https://github.com/TiuTalk/haml
  - Drupal: https://github.com/antoinelafontaine/oxide
  - FuelPHP: https://github.com/fuel/parser
  - Laravel (PHP): https://github.com/BKWLD/laravel-haml
