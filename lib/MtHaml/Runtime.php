@@ -31,55 +31,7 @@ class Runtime
     {
         $attributes = array();
 
-        foreach ($list as $item) {
-
-            if ($item instanceof AttributeInterpolation) {
-                $attributes[] = $item;
-                continue;
-            } elseif ($item instanceof AttributeList) {
-                $attributes = array_merge($attributes, $item->attributes);
-                continue;
-            }
-
-            list ($name, $value) = $item;
-
-            if ('data' === $name) {
-                self::renderDataAttributes($attributes, $value);
-            } elseif ('id' === $name) {
-                $value = self::renderJoinedValue($value, '_');
-                if (null !== $value) {
-                    if (isset($attributes['id'])) {
-                        $attributes['id'] .= '_' . $value;
-                    } else {
-                        $attributes['id'] = $value;
-                    }
-                }
-            } elseif ('class' === $name) {
-                $value = self::renderJoinedValue($value, ' ');
-                if (null !== $value) {
-                    if (isset($attributes['class'])) {
-                        $attributes['class'] .= ' ' . $value;
-                    } else {
-                        $attributes['class'] = $value;
-                    }
-                }
-            } elseif (true === $value) {
-                if ('html5' === $format) {
-                    $attributes[$name] = true;
-                } else {
-                    $attributes[$name] = $name;
-                }
-            } elseif (false === $value || null === $value) {
-                // do not output
-            } else {
-                if (isset($attributes[$name])) {
-                    // so that next assignment puts the attribute
-                    // at the end for the array
-                    unset($attributes[$name]);
-                }
-                $attributes[$name] = $value;
-            }
-        }
+        self::mergeAttributes($attributes, $list, $format);
 
         $result = null;
 
@@ -103,6 +55,63 @@ class Runtime
         }
 
         return $result;
+    }
+
+    private static function mergeAttributes(&$dest, $list, $format)
+    {
+        foreach ($list as $item) {
+
+            if ($item instanceof AttributeInterpolation) {
+                $dest[] = $item;
+                continue;
+            } elseif ($item instanceof AttributeList) {
+                $pairs = array();
+                foreach ($item->attributes as $name => $value) {
+                    $pairs[] = array($name, $value);
+                }
+                self::mergeAttributes($dest, $pairs, $format);
+                continue;
+            }
+
+            list ($name, $value) = $item;
+
+            if ('data' === $name) {
+                self::renderDataAttributes($dest, $value);
+            } elseif ('id' === $name) {
+                $value = self::renderJoinedValue($value, '_');
+                if (null !== $value) {
+                    if (isset($dest['id'])) {
+                        $dest['id'] .= '_' . $value;
+                    } else {
+                        $dest['id'] = $value;
+                    }
+                }
+            } elseif ('class' === $name) {
+                $value = self::renderJoinedValue($value, ' ');
+                if (null !== $value) {
+                    if (isset($dest['class'])) {
+                        $dest['class'] .= ' ' . $value;
+                    } else {
+                        $dest['class'] = $value;
+                    }
+                }
+            } elseif (true === $value) {
+                if ('html5' === $format) {
+                    $dest[$name] = true;
+                } else {
+                    $dest[$name] = $name;
+                }
+            } elseif (false === $value || null === $value) {
+                // do not output
+            } else {
+                if (isset($dest[$name])) {
+                    // so that next assignment puts the attribute
+                    // at the end for the array
+                    unset($dest[$name]);
+                }
+                $dest[$name] = $value;
+            }
+        }
     }
 
     private static function renderDataAttributes(&$dest, $value, $prefix = 'data')

@@ -5,6 +5,8 @@ namespace MtHaml\Tests {
 use MtHaml\Runtime;
 use MtHaml\Runtime\AttributeList;
 
+require_once __DIR__ . '/TestCase.php';
+
 class RuntimeTest extends TestCase
 {
     /**
@@ -172,6 +174,18 @@ class RuntimeTest extends TestCase
                     AttributeList::create(array(
                         'bar' => 'baz',
                         'baz' => 'qux',
+                    )),
+                    array('all', 'ok'),
+                ),
+            ),
+            'attribute list are properly merged' => array(
+                'class="foo bar" id="x_43" all="ok"',
+                array(
+                    array('class', 'foo'),
+                    array('id', 'x'),
+                    AttributeList::create(array(
+                        'class' => 'bar',
+                        'id' => '43',
                     )),
                     array('all', 'ok'),
                 ),
