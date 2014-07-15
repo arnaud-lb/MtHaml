@@ -1,0 +1,5 @@
+--HAML--
+%img{ "src" => "http://placehold.it/200x200",
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Unexpected end of line, expected target language expression in .* on line 2, column 46

@@ -36,6 +36,20 @@ class Buffer
         }
     }
 
+    public function hasNextLine()
+    {
+        return isset($this->lines[0]);
+    }
+
+    public function mergeNextLine()
+    {
+        if (!isset($this->lines[0])) {
+            return;
+        }
+        ++$this->lineno;
+        $this->line .= "\n" . array_shift($this->lines);
+    }
+
     public function replaceLine($string)
     {
         $this->line = $string;

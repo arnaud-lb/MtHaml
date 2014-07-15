@@ -1,0 +1,23 @@
+--HAML--
+%img{ "src" => "http://placehold.it/200x200",
+      "data" => {foo: "bar",
+                 bar: "baz" }}
+%img{ "multi,
+       line,
+      " => "attr,
+            "}
+--EXPECT--
+root(
+  tag(img
+    attr(interpolated(text(src))interpolated(text(http://placehold.it/200x200)))
+    attr(interpolated(text(data))insert({foo: "bar",
+                 bar: "baz" }))
+  )
+  tag(img
+    attr(interpolated(text(multi,
+       line,
+      ))interpolated(text(attr,
+            )))
+  )
+)
+

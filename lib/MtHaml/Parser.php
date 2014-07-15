@@ -494,22 +494,10 @@ class Parser
 
         if ($buf->match('/\{\s*/')) {
             do {
-                if ($expr = $this->parseInterpolation($buf)) {
-                    $attrs[] = new TagAttributeInterpolation($expr->getPosition(), $expr);
-                } else {
-                    $name = $this->parseAttrExpression($buf, '=,');
-
-                    $buf->skipWs();
-                    if (!$buf->match('/=>\s*/A')) {
-                        $attr = new TagAttributeList($name->getPosition(), $name);
-                    } else {
-                        $value = $this->parseAttrExpression($buf, ',');
-                        $attr = new TagAttribute($name->getPosition(), $name, $value);
-                    }
-                    $attrs[] = $attr;
-                }
+                $attrs[] = $this->parseTagAttributeRuby($buf);
 
                 $buf->skipWs();
+
                 if ($buf->match('/}/A')) {
                     break;
                 }
@@ -527,6 +515,50 @@ class Parser
         }
 
         return $attrs;
+    }
+
+    protected function parseTagAttributeRuby($buf)
+    {
+        try {
+            if ($expr = $this->parseInterpolation($buf)) {
+                return new TagAttributeInterpolation($expr->getPosition(), $expr);
+            }
+
+            $name = $this->parseAttrExpression($buf, '=,');
+        } catch (SyntaxErrorException $e) {
+            // Allow line break after comma
+            if ($buf->match('/,\s*$/', $match, false) && $buf->hasNextLine()) {
+                $buf->mergeNextLine();
+                return $this->parseTagAttributeRuby($buf);
+            } else {
+                throw $e;
+            }
+        }
+
+        $buf->skipWs();
+
+        if (!$buf->match('/=>\s*/A')) {
+            return new TagAttributeList($name->getPosition(), $name);
+        }
+
+        $value = $this->parseTagAttributeValueRuby($buf);
+
+        return new TagAttribute($name->getPosition(), $name, $value);
+    }
+
+    protected function parseTagAttributeValueRuby($buf)
+    {
+        try {
+            return $this->parseAttrExpression($buf, ',');
+        } catch (SyntaxErrorException $e) {
+            // Allow line break after comma
+            if ($buf->match('/,\s*$/', $match, false) && $buf->hasNextLine()) {
+                $buf->mergeNextLine();
+                return $this->parseTagAttributeValueRuby($buf);
+            } else {
+                throw $e;
+            }
+        }
     }
 
     protected function parseTagAttributesHtml($buf)
