@@ -281,11 +281,8 @@ class Parser
         } elseif (null !== $comment = $this->parseComment($buf)) {
             return $comment;
 
-        } elseif ($buf->match('/-(?!#)/A', $match)) {
-
-            $buf->skipWs();
-
-            return new Run($match['pos'][0], $buf->getLine());
+        } else if (null !== $run = $this->parseRun($buf)) {
+            return $run;
 
         } elseif (null !== $doctype = $this->parseDoctype($buf)) {
             return $doctype;
@@ -368,6 +365,28 @@ class Parser
             }
 
             return $node;
+        }
+    }
+
+    protected function getMultilineCode($buf)
+    {
+        $code = $buf->getLine();
+        while (preg_match('/,\s*$/', $code)) {
+            $buf->nextLine();
+            $line = trim($buf->getLine());
+            if ('' !== $line) {
+                $code .= ' ' . $line;
+            }
+        }
+        return $code;
+    }
+
+    protected function parseRun($buf)
+    {
+        if ($buf->match('/-(?!#)/A', $match)) {
+            $buf->skipWs();
+            $code = $this->getMultilineCode($buf);
+            return new Run($match['pos'][0], $code);
         }
     }
 
@@ -806,23 +825,8 @@ class Parser
 
     protected function parseNestableStatement($buf)
     {
-        if ($buf->match('/([&!]?)(==?|~)\s*/A', $match)) {
-
-            if ($match[2] == '==') {
-                $node = $this->parseInterpolatedString($buf, false);
-            } else {
-                $node = new Insert($match['pos'][0], $buf->getLine());
-            }
-
-            if ($match[1] == '&') {
-                $node->getEscaping()->setEnabled(true);
-            } elseif ($match[1] == '!') {
-                $node->getEscaping()->setEnabled(false);
-            }
-
-            $buf->skipWs();
-
-            return $node;
+        if ($insert = $this->parseInsert($buf)) {
+            return $insert;
         }
 
         if (null !== $comment = $this->parseComment($buf)) {
@@ -835,6 +839,29 @@ class Parser
 
         if (strlen(trim($buf->getLine())) > 0) {
             return $this->parseInterpolatedString($buf, false);
+        }
+    }
+
+    protected function parseInsert($buf)
+    {
+        if ($buf->match('/([&!]?)(==?|~)\s*/A', $match)) {
+
+            if ($match[2] == '==') {
+                $node = $this->parseInterpolatedString($buf, false);
+            } else {
+                $code = $this->getMultilineCode($buf);
+                $node = new Insert($match['pos'][0], $code);
+            }
+
+            if ($match[1] == '&') {
+                $node->getEscaping()->setEnabled(true);
+            } elseif ($match[1] == '!') {
+                $node->getEscaping()->setEnabled(false);
+            }
+
+            $buf->skipWs();
+
+            return $node;
         }
     }
 

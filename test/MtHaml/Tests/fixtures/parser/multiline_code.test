@@ -1,0 +1,59 @@
+--HAML--
+%p
+  - f({foo: bar,
+       bar: baz,
+       baz: qux})
+  = ok
+%p
+  - f({foo: bar,
+bar: baz,
+baz: qux})
+  = ok
+%p
+  - foo,
+    bar,
+    baz
+  = ok
+%p
+  = f({foo: bar,
+       bar: baz,
+       baz: qux})
+  = ok
+%p
+  = f({foo: bar,
+bar: baz,
+baz: qux})
+  = ok
+%p
+  = foo,
+    bar,
+    baz
+  = ok
+--EXPECT--
+root(
+  tag(p
+    run(f({foo: bar, bar: baz, baz: qux}))
+    insert(ok)
+  )
+  tag(p
+    run(f({foo: bar, bar: baz, baz: qux}))
+    insert(ok)
+  )
+  tag(p
+    run(foo, bar, baz)
+    insert(ok)
+  )
+  tag(p
+    insert(f({foo: bar, bar: baz, baz: qux}))
+    insert(ok)
+  )
+  tag(p
+    insert(f({foo: bar, bar: baz, baz: qux}))
+    insert(ok)
+  )
+  tag(p
+    insert(foo, bar, baz)
+    insert(ok)
+  )
+)
+
