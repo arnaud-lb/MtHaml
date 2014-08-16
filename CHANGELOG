@@ -1,3 +1,12 @@
+* 1.6.0 (2014-08-16)
+
+ * Code statements continue on the next line when the current one is terminated by
+   a comma
+ * Ruby-style attributes continue on the next line when braces are not balanced
+   and the current one is terminated by a comma
+ * Attributes defined by attribute methods or expressions are merged with
+   existing .class and #id instead of overriding them (%p.class{attrs()})
+
 * 1.5.0 (2014-07-08)
 
  * Improved the Twig Loader (hason)
