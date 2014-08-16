@@ -265,7 +265,7 @@ class Parser
         $this->checkIndent($buf, $indent);
 
         if (null === $node = $this->parseStatement($buf)) {
-            $this->syntaxErrorExect($buf, 'statement');
+            $this->syntaxErrorExpected($buf, 'statement');
         }
         $this->processStatement($buf, $node);
     }

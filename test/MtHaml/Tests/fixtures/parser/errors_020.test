@@ -1,0 +1,5 @@
+--HAML--
+\
+--EXCEPTION--
+MtHaml\Exception\SyntaxErrorException
+Unexpected end of line, expected statement in .* on line 2, column 2
