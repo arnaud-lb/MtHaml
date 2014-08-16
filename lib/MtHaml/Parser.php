@@ -538,31 +538,47 @@ class Parser
 
     protected function parseTagAttributeRuby($buf)
     {
-        try {
-            if ($expr = $this->parseInterpolation($buf)) {
-                return new TagAttributeInterpolation($expr->getPosition(), $expr);
-            }
-
-            $name = $this->parseAttrExpression($buf, '=,');
-        } catch (SyntaxErrorException $e) {
-            // Allow line break after comma
-            if ($buf->match('/,\s*$/', $match, false) && $buf->hasNextLine()) {
-                $buf->mergeNextLine();
-                return $this->parseTagAttributeRuby($buf);
-            } else {
-                throw $e;
-            }
+        if ($expr = $this->parseInterpolation($buf)) {
+            return new TagAttributeInterpolation($expr->getPosition(), $expr);
         }
+
+        list ($name, $ruby19) = $this->parseTagAttributeNameRuby($buf);
 
         $buf->skipWs();
 
-        if (!$buf->match('/=>\s*/A')) {
+        if (!$ruby19 && !$buf->match('/=>\s*/A')) {
             return new TagAttributeList($name->getPosition(), $name);
         }
 
         $value = $this->parseTagAttributeValueRuby($buf);
 
         return new TagAttribute($name->getPosition(), $name, $value);
+    }
+
+    protected function parseTagAttributeNameRuby($buf)
+    {
+        try {
+            if ($name = $this->parseTagAttributeNameRuby19($buf)) {
+                return array($name, true);
+            }
+
+            return array($this->parseAttrExpression($buf, '=,'), false);
+        } catch (SyntaxErrorException $e) {
+            // Allow line break after comma
+            if ($buf->match('/,\s*$/', $match, false) && $buf->hasNextLine()) {
+                $buf->mergeNextLine();
+                return $this->parseTagAttributeNameRuby($buf);
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    protected function parseTagAttributeNameRuby19($buf)
+    {
+        if ($buf->match('/(\w+):/A', $match)) {
+            return new Text($match['pos'][0], $match[1]);
+        }
     }
 
     protected function parseTagAttributeValueRuby($buf)

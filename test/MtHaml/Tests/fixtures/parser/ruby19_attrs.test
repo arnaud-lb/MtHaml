@@ -1,0 +1,11 @@
+--HAML--
+%p{foo: bar, attrs(), "bar" => baz}
+--EXPECT--
+root(
+  tag(p
+    attr(text(foo)insert(bar))
+    attr(insert(attrs()))
+    attr(interpolated(text(bar))insert(baz))
+  )
+)
+
