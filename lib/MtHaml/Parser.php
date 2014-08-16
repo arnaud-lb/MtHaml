@@ -52,7 +52,7 @@ class Parser
      * @param Buffer $buf
      * @param string $indent The indentation characters of the current line
      */
-    public function checkIndent($buf, $indent)
+    public function checkIndent(Buffer $buf, $indent)
     {
         $this->prevIndentLevel = $this->indentLevel;
 
@@ -140,7 +140,7 @@ class Parser
      * @param Buffer       $buf
      * @param NodeAbstract $node Node to insert in the tree
      */
-    public function processStatement($buf, NodeAbstract $node)
+    public function processStatement(Buffer $buf, NodeAbstract $node)
     {
         // open tag or block
 
@@ -223,7 +223,7 @@ class Parser
      *
      * @param Buffer $buf
      */
-    public function handleMultiline($buf)
+    public function handleMultiline(Buffer $buf)
     {
         $line = $buf->getLine();
 
@@ -254,7 +254,7 @@ class Parser
     /**
      * Parses a HAML line
      */
-    protected function parseLine($buf)
+    protected function parseLine(Buffer $buf)
     {
         if ('' === trim($buf->getLine())) {
             return;
@@ -270,7 +270,7 @@ class Parser
         $this->processStatement($buf, $node);
     }
 
-    protected function parseStatement($buf)
+    protected function parseStatement(Buffer $buf)
     {
         if (null !== $node = $this->parseTag($buf)) {
             return $node;
@@ -294,7 +294,7 @@ class Parser
         }
     }
 
-    protected function parseDoctype($buf)
+    protected function parseDoctype(Buffer $buf)
     {
         $doctypeRegex = '/
             !!!                         # start of doctype decl
@@ -314,7 +314,7 @@ class Parser
         }
     }
 
-    protected function parseComment($buf)
+    protected function parseComment(Buffer $buf)
     {
         if ($buf->match('!(-#|/)\s*!A', $match)) {
             $pos = $match['pos'][0];
@@ -368,7 +368,7 @@ class Parser
         }
     }
 
-    protected function getMultilineCode($buf)
+    protected function getMultilineCode(Buffer $buf)
     {
         $code = $buf->getLine();
         while (preg_match('/,\s*$/', $code)) {
@@ -381,7 +381,7 @@ class Parser
         return $code;
     }
 
-    protected function parseRun($buf)
+    protected function parseRun(Buffer $buf)
     {
         if ($buf->match('/-(?!#)/A', $match)) {
             $buf->skipWs();
@@ -390,7 +390,7 @@ class Parser
         }
     }
 
-    protected function parseTag($buf)
+    protected function parseTag(Buffer $buf)
     {
         $tagRegex = '/
             %(?P<tag_name>[\w:-]+)  # explicit tag name ( %tagname )
@@ -423,7 +423,7 @@ class Parser
         }
     }
 
-    protected function parseTagFlags($buf)
+    protected function parseTagFlags(Buffer $buf)
     {
         $flags = 0;
         while (null !== $char = $buf->peekChar()) {
@@ -448,7 +448,7 @@ class Parser
         return $flags;
     }
 
-    protected function parseTagAttributes($buf)
+    protected function parseTagAttributes(Buffer $buf)
     {
         $attrs = array();
 
@@ -507,7 +507,7 @@ class Parser
         return $attrs;
     }
 
-    protected function parseTagAttributesRuby($buf)
+    protected function parseTagAttributesRuby(Buffer $buf)
     {
         $attrs = array();
 
@@ -536,7 +536,7 @@ class Parser
         return $attrs;
     }
 
-    protected function parseTagAttributeRuby($buf)
+    protected function parseTagAttributeRuby(Buffer $buf)
     {
         if ($expr = $this->parseInterpolation($buf)) {
             return new TagAttributeInterpolation($expr->getPosition(), $expr);
@@ -555,7 +555,7 @@ class Parser
         return new TagAttribute($name->getPosition(), $name, $value);
     }
 
-    protected function parseTagAttributeNameRuby($buf)
+    protected function parseTagAttributeNameRuby(Buffer $buf)
     {
         try {
             if ($name = $this->parseTagAttributeNameRuby19($buf)) {
@@ -574,14 +574,14 @@ class Parser
         }
     }
 
-    protected function parseTagAttributeNameRuby19($buf)
+    protected function parseTagAttributeNameRuby19(Buffer $buf)
     {
         if ($buf->match('/(\w+):/A', $match)) {
             return new Text($match['pos'][0], $match[1]);
         }
     }
 
-    protected function parseTagAttributeValueRuby($buf)
+    protected function parseTagAttributeValueRuby(Buffer $buf)
     {
         try {
             return $this->parseAttrExpression($buf, ',');
@@ -596,7 +596,7 @@ class Parser
         }
     }
 
-    protected function parseTagAttributesHtml($buf)
+    protected function parseTagAttributesHtml(Buffer $buf)
     {
         $attrs = array();
 
@@ -641,7 +641,7 @@ class Parser
         return $attrs;
     }
 
-    protected function parseTagAttributesObject($buf)
+    protected function parseTagAttributesObject(Buffer $buf)
     {
         $nodes = array();
         $attrs = array();
@@ -686,7 +686,7 @@ class Parser
         return $attrs;
     }
 
-    protected function parseAttrExpression($buf, $delims)
+    protected function parseAttrExpression(Buffer $buf, $delims)
     {
         $sub = clone $buf;
 
@@ -720,7 +720,7 @@ class Parser
         return new Insert($pos, $expr);
     }
 
-    protected function parseExpression($buf, $delims)
+    protected function parseExpression(Buffer $buf, $delims)
     {
         // matches everything until a delimiter is found
         // delimiters are allowed inside quoted strings,
@@ -755,7 +755,7 @@ class Parser
         $this->syntaxErrorExpected($buf, 'target language expression');
     }
 
-    protected function parseSymbol($buf)
+    protected function parseSymbol(Buffer $buf)
     {
         if (!$buf->match('/:(\w+)/A', $match)) {
             $this->syntaxErrorExpected($buf, 'symbol');
@@ -764,7 +764,7 @@ class Parser
         return new Text($match['pos'][0], $match[1]);
     }
 
-    protected function parseInterpolatedString($buf, $quoted = true)
+    protected function parseInterpolatedString(Buffer $buf, $quoted = true)
     {
         if ($quoted && !$buf->match('/"/A', $match)) {
             $this->syntaxErrorExpected($buf, 'double quoted string');
@@ -817,7 +817,7 @@ class Parser
         return $node;
     }
 
-    protected function parseInterpolation($buf)
+    protected function parseInterpolation(Buffer $buf)
     {
         // This matches an interpolation:
         // #{ expr... }
@@ -839,7 +839,7 @@ class Parser
         }
     }
 
-    protected function parseNestableStatement($buf)
+    protected function parseNestableStatement(Buffer $buf)
     {
         if ($insert = $this->parseInsert($buf)) {
             return $insert;
@@ -858,7 +858,7 @@ class Parser
         }
     }
 
-    protected function parseInsert($buf)
+    protected function parseInsert(Buffer $buf)
     {
         if ($buf->match('/([&!]?)(==?|~)\s*/A', $match)) {
 
@@ -881,7 +881,7 @@ class Parser
         }
     }
 
-    protected function parseFilter($buf)
+    protected function parseFilter(Buffer $buf)
     {
         if (!$buf->match('/:(.*)/A', $match)) {
             return null;
@@ -912,7 +912,7 @@ class Parser
         return $node;
     }
 
-    protected function syntaxErrorExpected($buf, $expected)
+    protected function syntaxErrorExpected(Buffer $buf, $expected)
     {
         $unexpected = $buf->peekChar();
         if ($unexpected) {
@@ -924,7 +924,7 @@ class Parser
         $this->syntaxError($buf, $msg);
     }
 
-    protected function syntaxError($buf, $msg)
+    protected function syntaxError(Buffer $buf, $msg)
     {
         $this->column = $buf->getColumn();
         $this->lineno = $buf->getLineno();
