@@ -2,7 +2,6 @@
 
 namespace MtHaml;
 
-use MtHaml\Node\Root;
 use MtHaml\Exception\SyntaxErrorException;
 use MtHaml\Node\NodeAbstract;
 use MtHaml\Parser\Buffer;
@@ -15,24 +14,19 @@ use MtHaml\Node\Text;
 use MtHaml\Node\InterpolatedString;
 use MtHaml\Node\Run;
 use MtHaml\Node\Statement;
-use MtHaml\Node\NestInterface;
 use MtHaml\Node\Filter;
 use MtHaml\Node\ObjectRefClass;
 use MtHaml\Node\ObjectRefId;
 use MtHaml\Node\TagAttributeInterpolation;
 use MtHaml\Node\TagAttributeList;
 use MtHaml\Indentation\IndentationException;
+use MtHaml\TreeBuilder;
 
 /**
  * MtHaml Parser
  */
 class Parser
 {
-    protected $parentStack = array();
-    protected $parent;
-
-    protected $prev;
-
     protected $filename;
     protected $column;
     protected $lineno;
@@ -47,9 +41,14 @@ class Parser
      */
     private $indent;
 
+    /**
+     * @var \MtHaml\TreeBuilder
+     */
+    private $treeBuilder;
+
     public function __construct()
     {
-        $this->parent = new Root;
+        $this->treeBuilder = new TreeBuilder;
         $this->indent = new Indentation\Undefined();
         $this->prevIndent = $this->indent;
     }
@@ -70,7 +69,7 @@ class Parser
             throw $this->syntaxError($buf, $e->getMessage());
         }
 
-        if (null === $this->prev && 0 < $this->indent->getLevel()) {
+        if (!$this->treeBuilder->hasStatements() && 0 < $this->indent->getLevel()) {
             throw $this->syntaxError($buf, 'Indenting at the beginning of the document is illegal');
         }
     }
@@ -78,62 +77,20 @@ class Parser
     /**
      * Processes a statement
      *
-     * Inserts a new $node in the tree, given the current and previous
-     * indentation level.
+     * Inserts a new $node in the tree
      *
      * @param Buffer       $buf
      * @param NodeAbstract $node Node to insert in the tree
      */
     public function processStatement(Buffer $buf, NodeAbstract $node)
     {
-        $diff = $this->indent->getLevel() - $this->prevIndent->getLevel();
+        $level = $this->indent->getLevel() - $this->prevIndent->getLevel();
 
-        // open tag or block
-
-        if ($diff > 0) {
-
-            $this->parentStack[] = $this->parent;
-            $this->parent = $this->prev;
-
-        // close tag or block
-
-        } elseif ($diff < 0) {
-
-            for ($i = $diff; $i < 0; ++$i) {
-                $this->parent = array_pop($this->parentStack);
-            }
+        try {
+            $this->treeBuilder->addChild($level, $node);
+        } catch(TreeBuilderException $e) {
+            throw $this->syntaxError($buf, $e->getMessage());
         }
-
-        $this->addChild($buf, $node);
-        $this->prev = $node;
-    }
-
-    private function addChild(Buffer $buf, NodeAbstract $node)
-    {
-        if (!$this->parent instanceof NestInterface) {
-            $parent = $this->parent;
-            if ($parent instanceof Statement) {
-                $parent = $parent->getContent();
-            }
-            $msg = sprintf('Illegal nesting: nesting within %s is illegal', $parent->getNodeName());
-            throw $this->syntaxError($buf, $msg);
-        }
-
-        if ($this->parent->hasContent() && !$this->parent->allowsNestingAndContent()) {
-            if ($this->parent instanceof Tag) {
-                $msg = sprintf('Illegal nesting: content can\'t be both given on the same line as %%%s and nested within it', $this->parent->getTagName());
-            } else {
-                $msg = sprintf('Illegal nesting: nesting within a tag that already has content is illegal');
-            }
-            throw $this->syntaxError($buf, $msg);
-        }
-
-        if ($this->parent instanceof Tag && $this->parent->getFlags() & Tag::FLAG_SELF_CLOSE) {
-            $msg = 'Illegal nesting: nesting within a self-closing tag is illegal';
-            throw $this->syntaxError($buf, $msg);
-        }
-
-        $this->parent->addChild($node);
     }
 
     /**
@@ -154,11 +111,7 @@ class Parser
             $this->parseLine($buf);
         }
 
-        if (count($this->parentStack) > 0) {
-            return $this->parentStack[0];
-        } else {
-            return $this->parent;
-        }
+        return $this->treeBuilder->getRoot();
     }
 
     /**
