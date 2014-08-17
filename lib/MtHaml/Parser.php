@@ -38,12 +38,12 @@ class Parser
     protected $lineno;
 
     /**
-     * @var MtHaml\Indentation\IndentationInterface
+     * @var \MtHaml\Indentation\IndentationInterface
      */
     private $prevIndent;
 
     /**
-     * @var MtHaml\Indentation\IndentationInterface
+     * @var \MtHaml\Indentation\IndentationInterface
      */
     private $indent;
 
