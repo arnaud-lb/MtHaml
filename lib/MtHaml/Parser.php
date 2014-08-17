@@ -542,47 +542,56 @@ class Parser
 
     protected function parseTagAttributesHtml(Buffer $buf)
     {
-        $attrs = array();
-
-        if ($buf->match('/\(\s*/A')) {
-            do {
-                if ($expr = $this->parseInterpolation($buf)) {
-                    $attrs[] = new TagAttributeInterpolation($expr->getPosition(), $expr);
-                } elseif ($buf->match('/[\w+:-]+/A', $match)) {
-                    $name = new Text($match['pos'][0], $match[0]);
-
-                    if (!$buf->match('/\s*=\s*/A')) {
-                        $value = null;
-                    } else {
-                        $value = $this->parseAttrExpression($buf, ' ');
-                    }
-
-                    $attr = new TagAttribute($name->getPosition(), $name, $value);
-                    $attrs[] = $attr;
-
-                } else {
-                    $this->syntaxErrorExpected($buf, 'html attribute name or #{interpolation}');
-                }
-
-                if ($buf->match('/\s*\)/A')) {
-                    break;
-                }
-                if (!$buf->match('/\s+/A')) {
-                    if (!$buf->isEol()) {
-                        $this->syntaxErrorExpected($buf, "' ', ')' or end of line");
-                    }
-                }
-
-                // allow line break
-                if ($buf->isEol()) {
-                    $buf->nextLine();
-                    $buf->skipWs();
-                }
-
-            } while (true);
+        if (!$buf->match('/\(\s*/A')) {
+            return null;
         }
 
+        $attrs = array();
+
+        do {
+
+            $attrs[] = $this->parseTagAttributeHtml($buf);
+
+            if ($buf->match('/\s*\)/A')) {
+                break;
+            }
+
+            if (!$buf->match('/\s+/A')) {
+                if (!$buf->isEol()) {
+                    $this->syntaxErrorExpected($buf, "' ', ')' or end of line");
+                }
+            }
+
+            // allow line break
+            if ($buf->isEol()) {
+                $buf->nextLine();
+                $buf->skipWs();
+            }
+
+        } while (true);
+
         return $attrs;
+    }
+
+    private function parseTagAttributeHtml($buf)
+    {
+        if ($expr = $this->parseInterpolation($buf)) {
+            return new TagAttributeInterpolation($expr->getPosition(), $expr);
+        }
+
+        if ($buf->match('/[\w+:-]+/A', $match)) {
+            $name = new Text($match['pos'][0], $match[0]);
+
+            if (!$buf->match('/\s*=\s*/A')) {
+                $value = null;
+            } else {
+                $value = $this->parseAttrExpression($buf, ' ');
+            }
+
+            return new TagAttribute($name->getPosition(), $name, $value);
+        }
+
+        $this->syntaxErrorExpected($buf, 'html attribute name or #{interpolation}');
     }
 
     protected function parseTagAttributesObject(Buffer $buf)
