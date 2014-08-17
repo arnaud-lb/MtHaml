@@ -93,12 +93,12 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         return array_pop($this->savedIndent);
     }
 
-    public function write($string, $indent = true, $break = true)
+    public function write($string, $indent = true, $break = true, $filter = null)
     {
         if ($indent) {
             $this->writeIndentation();
         }
-        $this->raw($string);
+        $this->raw($string, $filter);
         $this->lineno += substr_count($string, "\n");
         if ($break) {
             $this->output .= "\n";
@@ -108,8 +108,11 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         return $this;
     }
 
-    public function raw($string)
+    public function raw($string, $filter = null)
     {
+        if (null !== $filter) {
+            $string = call_user_func($filter, $string, $this->output);
+        }
         $this->output .= $string;
         $this->lineno += substr_count($string, "\n");
 
@@ -133,7 +136,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     abstract protected function writeDebugInfos($lineno);
 
-    abstract protected function escapeLanguage($string);
+    abstract protected function escapeLanguage($string, $context);
 
     abstract protected function stringLiteral($string);
 
@@ -261,8 +264,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
                 $string = $this->escapeHtml($string, !$once);
             }
 
-            $string = $this->escapeLanguage($string);
-            $this->raw($string);
+            $this->raw($string, array($this, 'escapeLanguage'));
         } else {
             $string = $this->stringLiteral($string);
             $this->raw($string);
@@ -287,7 +289,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
     public function enterDoctype(Doctype $node)
     {
         $doctype = $node->getDoctype($this->env->getOption('format'));
-        $this->write($this->escapeLanguage($doctype));
+        $this->write($doctype, true, true, array($this, 'escapeLanguage'));
     }
 
     public function enterComment(Comment $comment)

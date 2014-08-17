@@ -1,0 +1,13 @@
+--FILE--
+<?php
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+- trans with {'%x%': elem.courses.count}
+    \%x% courses are sharing the same %element%.
+--EXPECT--
+{% trans with {'%x%': elem.courses.count} %}
+  %x% courses are sharing the same %element%.
+{% endtrans %}
+

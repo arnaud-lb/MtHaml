@@ -102,7 +102,7 @@ echo $env->compileString($parts['HAML'], "$file.haml");
     <div class="footer">
       <strong class="shout"><?php echo "footer"; ?></strong>
       <?php echo '<?'; ?>php here should not be executed <
-      <?php echo '?'; ?> neither here
+      ? neither here
     </div>
   </body>
 </html>

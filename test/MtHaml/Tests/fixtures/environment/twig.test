@@ -104,8 +104,8 @@ echo $env->compileString($parts['HAML'], "$file.haml");
     <div class="footer">
       <strong class="shout">{% line 47 %}{{ "footer" }}</strong>
       {{ '{%' }} twig here should not be executed {
-      {{ '{' }} neither here {{ '{{' }} or here {{ '{%' }} or here {
-      {{ '%' }}
+      { neither here {{ '{{' }} or here {{ '{%' }} or here {
+      %
     </div>
   </body>
 </html>

@@ -15,9 +15,24 @@ use MtHaml\Node\Filter;
 
 class PhpRenderer extends RendererAbstract
 {
-    protected function escapeLanguage($string)
+    protected function escapeLanguage($string, $context)
     {
-        return preg_replace('~(^\?|<\?)~', "<?php echo '\\1'; ?>", $string);
+        // If there is a '?' at the begining of the string, it could become
+        // a '<?' when concatenated with previous output. So we need to escape
+        // '?' when appearing at the begining of the string, unless we know
+        // that previous output doesn't end with '<'.
+        $re = '~(^\?|<\?)~';
+
+        // when context is empty, consider that we don't know what's before
+        if (0 < strlen($context)) {
+            $len = strlen($context);
+            $char = $context[$len-1];
+            if ('<' !== $char) {
+                $re = '~(<\?)~';
+            }
+        }
+
+        return preg_replace($re, "<?php echo '\\1'; ?>", $string);
     }
 
     protected function stringLiteral($string)

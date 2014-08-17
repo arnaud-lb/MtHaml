@@ -4,6 +4,8 @@ namespace MtHaml\Tests\NodeVisitor;
 
 use MtHaml\NodeVisitor\PhpRenderer;
 use MtHaml\Environment;
+use MtHaml\Node\InterpolatedString;
+use MtHaml\Node\Text;
 
 class PhpRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,6 +51,62 @@ class PhpRendererTest extends \PHPUnit_Framework_TestCase
             ),
             '# in comment' => array(
                 '"foo"', '"foo" # b # a # r'
+            ),
+        );
+    }
+
+    /** @dataProvider getPhpOpenTagsAreEscapedData */
+    public function testPhpOpenTagsAreEscaped($expect, $node)
+    {
+        $env = $this->getMockBuilder('MtHaml\Environment')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $r = new PhpRenderer($env);
+
+        $node = $node();
+        $node->accept($r);
+
+        $output = $r->getOutput();
+        $this->assertSame($expect, $output);
+    }
+
+    public function getPhpOpenTagsAreEscapedData()
+    {
+        $pos = array(0, 0);
+
+        return array(
+            'middle' => array(
+                'expect' => "foo <?php echo '<?'; ?> bar",
+                'node' => function () use ($pos) {
+                    return new Text($pos, "foo <? bar");
+                },
+            ),
+            '? leading in node, not preceeded by <' => array(
+                'expect' => "foo ? bar",
+                'nodes' => function () use ($pos) {
+                    return new InterpolatedString($pos, array(
+                        new Text($pos, 'foo '),
+                        new Text($pos, '? bar'),
+                    ));
+                },
+            ),
+            '? leading in node, preceeded by <' => array(
+                'expect' => "foo <<?php echo '?'; ?> bar",
+                'nodes' => function () use ($pos) {
+                    return new InterpolatedString($pos, array(
+                        new Text($pos, 'foo <'),
+                        new Text($pos, '? bar'),
+                    ));
+                },
+            ),
+            '? leading in node, globally leading' => array(
+                'expect' => "<?php echo '?'; ?> bar",
+                'nodes' => function () use ($pos) {
+                    return new InterpolatedString($pos, array(
+                        new Text($pos, '? bar'),
+                    ));
+                },
             ),
         );
     }
