@@ -21,6 +21,7 @@ use MtHaml\Node\ObjectRefClass;
 use MtHaml\Node\ObjectRefId;
 use MtHaml\Node\TagAttributeInterpolation;
 use MtHaml\Node\TagAttributeList;
+use MtHaml\Indentation\IndentationException;
 
 /**
  * MtHaml Parser
@@ -32,103 +33,46 @@ class Parser
 
     protected $prev;
 
-    protected $indentChar;
-    protected $indentWidth;
-    protected $prevIndentLevel = 0;
-    protected $indentLevel = 0;
-
     protected $filename;
     protected $column;
     protected $lineno;
 
+    /**
+     * @var MtHaml\Indentation\IndentationInterface
+     */
+    private $prevIndent;
+
+    /**
+     * @var MtHaml\Indentation\IndentationInterface
+     */
+    private $indent;
+
     public function __construct()
     {
         $this->parent = new Root;
+        $this->indent = new Indentation\Undefined();
+        $this->prevIndent = $this->indent;
     }
 
     /**
-     * Verifies and maintains indentation state
+     * Updates the indentation state
      *
      * @param Buffer $buf
      * @param string $indent The indentation characters of the current line
      */
-    public function checkIndent(Buffer $buf, $indent)
+    private function updateIndent(Buffer $buf, $indent)
     {
-        $this->prevIndentLevel = $this->indentLevel;
+        $this->prevIndent = $this->indent;
 
-        if (0 === strlen($indent)) {
-            $this->indentLevel = 0;
-
-            return;
+        try {
+            $this->indent = $this->indent->newLevel($indent);
+        } catch (IndentationException $e) {
+            $this->syntaxError($buf, $e->getMessage());
         }
 
-        if (null === $this->prev) {
+        if (null === $this->prev && 0 < $this->indent->getLevel()) {
             $this->syntaxError($buf, 'Indenting at the beginning of the document is illegal');
         }
-
-        $char = count_chars($indent, 3 /* 3 = return all unique chars */);
-
-        if (1 !== strlen($char)) {
-            $this->syntaxError($buf, "Indentation can't use both tabs and spaces");
-        }
-
-        if (null === $this->indentChar) {
-
-            $this->indentChar = $char;
-            $this->indentWidth = strlen($indent);
-            $this->indentLevel = 1;
-
-        } else {
-
-            if ($char !== $this->indentChar) {
-                $expected = $this->indentChar === ' ' ? 'spaces' : 'tabs';
-                $actual = $char === ' ' ? 'spaces' : 'tabs';
-                $msg = sprintf('Inconsistent indentation: %s were used for indentation, but the rest of the document was indented using %s', $actual, $expected);
-                $this->syntaxError($buf, $msg);
-            }
-
-            if (0 !== (strlen($indent) % $this->indentWidth)) {
-                $msg = sprintf('Inconsistent indentation: %d is not a multiple of %d', strlen($indent), $this->indentWidth);
-                $this->syntaxError($buf, $msg);
-            }
-
-            $indentLevel = strlen($indent) / $this->indentWidth;
-
-            if ($indentLevel > $this->indentLevel + 1) {
-                $this->syntaxError($buf, 'The line was indented more than one level deeper than the previous line');
-            }
-
-            $this->indentLevel = $indentLevel;
-        }
-    }
-
-    /**
-     * Returns the indentation string for the current line
-     *
-     * Returns the string that should be used for indentation in regard to the
-     * current indentation state.
-     *
-     * @param  int    $levelOffset Identation level offset
-     * @param  string $fallback    Fallback indent string. If there is
-     *                             currently no indentation level and
-     *                             fallback is not null, the first char of
-     *                             $fallback is returned instead
-     * @return string A string of zero or more spaces or tabs
-     */
-    public function getIndentString($levelOffset = 0, $fallback = null)
-    {
-        if (null !== $this->indentChar) {
-            $width = $this->indentWidth * ($this->indentLevel + $levelOffset);
-
-            return str_repeat($this->indentChar, $width);
-        }
-
-        $char = substr($fallback, 0, 1);
-        if (' ' === $char || "\t" === $char) {
-            return $char;
-        }
-
-        return '';
     }
 
     /**
@@ -142,22 +86,22 @@ class Parser
      */
     public function processStatement(Buffer $buf, NodeAbstract $node)
     {
+        $diff = $this->indent->getLevel() - $this->prevIndent->getLevel();
+
         // open tag or block
 
-        if ($this->indentLevel > $this->prevIndentLevel) {
+        if ($diff > 0) {
 
             $this->parentStack[] = $this->parent;
             $this->parent = $this->prev;
 
         // close tag or block
 
-        } elseif ($this->indentLevel < $this->prevIndentLevel) {
+        } elseif ($diff < 0) {
 
-            $diff = $this->prevIndentLevel - $this->indentLevel;
-            for ($i = 0; $i < $diff; ++$i) {
+            for ($i = $diff; $i < 0; ++$i) {
                 $this->parent = array_pop($this->parentStack);
             }
-
         }
 
         // handle nesting
@@ -262,7 +206,7 @@ class Parser
 
         $buf->match('/[ \t]*/A', $match);
         $indent = $match[0];
-        $this->checkIndent($buf, $indent);
+        $this->updateIndent($buf, $indent);
 
         if (null === $node = $this->parseStatement($buf)) {
             $this->syntaxErrorExpected($buf, 'statement');
@@ -345,7 +289,7 @@ class Parser
                     $indent = '';
 
                     if ('' !== trim($next)) {
-                        $indent = $this->getIndentString(1, $next);
+                        $indent = $this->indent->getString(1, $next);
                         if ('' === $indent) {
                             break;
                         }
@@ -894,7 +838,7 @@ class Parser
             $indent = '';
 
             if ('' !== trim($next)) {
-                $indent = $this->getIndentString(1, $next);
+                $indent = $this->indent->getString(1, $next);
                 if ('' === $indent) {
                     break;
                 }
