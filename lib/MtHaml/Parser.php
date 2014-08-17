@@ -67,11 +67,11 @@ class Parser
         try {
             $this->indent = $this->indent->newLevel($indent);
         } catch (IndentationException $e) {
-            $this->syntaxError($buf, $e->getMessage());
+            throw $this->syntaxError($buf, $e->getMessage());
         }
 
         if (null === $this->prev && 0 < $this->indent->getLevel()) {
-            $this->syntaxError($buf, 'Indenting at the beginning of the document is illegal');
+            throw $this->syntaxError($buf, 'Indenting at the beginning of the document is illegal');
         }
     }
 
@@ -112,7 +112,7 @@ class Parser
                 $parent = $parent->getContent();
             }
             $msg = sprintf('Illegal nesting: nesting within %s is illegal', $parent->getNodeName());
-            $this->syntaxError($buf, $msg);
+            throw $this->syntaxError($buf, $msg);
         }
 
         if ($this->parent->hasContent() && !$this->parent->allowsNestingAndContent()) {
@@ -121,12 +121,12 @@ class Parser
             } else {
                 $msg = sprintf('Illegal nesting: nesting within a tag that already has content is illegal');
             }
-            $this->syntaxError($buf, $msg);
+            throw $this->syntaxError($buf, $msg);
         }
 
         if ($this->parent instanceof Tag && $this->parent->getFlags() & Tag::FLAG_SELF_CLOSE) {
             $msg = 'Illegal nesting: nesting within a self-closing tag is illegal';
-            $this->syntaxError($buf, $msg);
+            throw $this->syntaxError($buf, $msg);
         }
 
         $this->parent->addChild($node);
@@ -209,7 +209,7 @@ class Parser
         $this->updateIndent($buf, $indent);
 
         if (null === $node = $this->parseStatement($buf)) {
-            $this->syntaxErrorExpected($buf, 'statement');
+            throw $this->syntaxErrorExpected($buf, 'statement');
         }
         $this->processStatement($buf, $node);
     }
@@ -357,7 +357,7 @@ class Parser
 
                 if ($flags & Tag::FLAG_SELF_CLOSE) {
                     $msg = 'Illegal nesting: nesting within a self-closing tag is illegal';
-                    $this->syntaxError($buf, $msg);
+                    throw $this->syntaxError($buf, $msg);
                 }
 
                 $node->setContent($nested);
@@ -467,7 +467,7 @@ class Parser
 
                 $buf->skipWs();
                 if (!$buf->match('/,\s*/A')) {
-                    $this->syntaxErrorExpected($buf, "',' or '}'");
+                    throw $this->syntaxErrorExpected($buf, "',' or '}'");
                 }
                 // allow line break after comma
                 if ($buf->isEol()) {
@@ -558,7 +558,7 @@ class Parser
 
             if (!$buf->match('/\s+/A')) {
                 if (!$buf->isEol()) {
-                    $this->syntaxErrorExpected($buf, "' ', ')' or end of line");
+                    throw $this->syntaxErrorExpected($buf, "' ', ')' or end of line");
                 }
             }
 
@@ -591,7 +591,7 @@ class Parser
             return new TagAttribute($name->getPosition(), $name, $value);
         }
 
-        $this->syntaxErrorExpected($buf, 'html attribute name or #{interpolation}');
+        throw $this->syntaxErrorExpected($buf, 'html attribute name or #{interpolation}');
     }
 
     protected function parseTagAttributesObject(Buffer $buf)
@@ -616,7 +616,7 @@ class Parser
             if ($buf->match('/\s*\]\s*/A')) {
                 break;
             } elseif (!$buf->match('/\s*,\s*/A')) {
-                $this->syntaxErrorExpected($buf, "',' or ']'");
+                throw $this->syntaxErrorExpected($buf, "',' or ']'");
             }
 
         } while (true);
@@ -705,13 +705,13 @@ class Parser
             return array($match[0], $match['pos'][0]);
         }
 
-        $this->syntaxErrorExpected($buf, 'target language expression');
+        throw $this->syntaxErrorExpected($buf, 'target language expression');
     }
 
     protected function parseSymbol(Buffer $buf)
     {
         if (!$buf->match('/:(\w+)/A', $match)) {
-            $this->syntaxErrorExpected($buf, 'symbol');
+            throw $this->syntaxErrorExpected($buf, 'symbol');
         }
 
         return new Text($match['pos'][0], $match[1]);
@@ -720,7 +720,7 @@ class Parser
     protected function parseInterpolatedString(Buffer $buf, $quoted = true)
     {
         if ($quoted && !$buf->match('/"/A', $match)) {
-            $this->syntaxErrorExpected($buf, 'double quoted string');
+            throw $this->syntaxErrorExpected($buf, 'double quoted string');
         }
 
         $node = new InterpolatedString($buf->getPosition());
@@ -757,7 +757,7 @@ class Parser
             } elseif (!$quoted && $buf->match('/$/A')) {
                 break;
             } else {
-                $this->syntaxErrorExpected($buf, 'string or #{...}');
+                throw $this->syntaxErrorExpected($buf, 'string or #{...}');
             }
         } while (true);
 
@@ -874,7 +874,7 @@ class Parser
             $unexpected = 'end of line';
         }
         $msg = sprintf("Unexpected %s, expected %s", $unexpected, $expected);
-        $this->syntaxError($buf, $msg);
+        return $this->syntaxError($buf, $msg);
     }
 
     protected function syntaxError(Buffer $buf, $msg)
@@ -885,7 +885,7 @@ class Parser
         $msg = sprintf('%s in %s on line %d, column %d',
             $msg, $this->filename, $this->lineno, $this->column);
 
-        throw new SyntaxErrorException($msg);
+        return new SyntaxErrorException($msg);
     }
 
     public function getColumn()
