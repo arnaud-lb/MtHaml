@@ -104,8 +104,12 @@ class Parser
             }
         }
 
-        // handle nesting
+        $this->addChild($buf, $node);
+        $this->prev = $node;
+    }
 
+    private function addChild(Buffer $buf, NodeAbstract $node)
+    {
         if (!$this->parent instanceof NestInterface) {
             $parent = $this->parent;
             if ($parent instanceof Statement) {
@@ -130,7 +134,6 @@ class Parser
         }
 
         $this->parent->addChild($node);
-        $this->prev = $node;
     }
 
     /**
