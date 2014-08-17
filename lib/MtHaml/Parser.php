@@ -573,7 +573,7 @@ class Parser
         return $attrs;
     }
 
-    private function parseTagAttributeHtml($buf)
+    private function parseTagAttributeHtml(Buffer $buf)
     {
         if ($expr = $this->parseInterpolation($buf)) {
             return new TagAttributeInterpolation($expr->getPosition(), $expr);
