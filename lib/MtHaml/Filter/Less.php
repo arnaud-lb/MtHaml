@@ -2,6 +2,7 @@
 
 namespace MtHaml\Filter;
 
+use MtHaml\Filter\Less\AdapterInterface;
 use MtHaml\NodeVisitor\RendererAbstract as Renderer;
 use MtHaml\Node\Filter;
 
@@ -21,10 +22,17 @@ class Less extends AbstractFilter
 
     public function filter($content, array $context, $options)
     {
+        $css = $this->getCss($content, $context, $options);
+
         if (isset($options['cdata']) && $options['cdata'] === true) {
-            return "<style type=\"text/css\">\n/*<![CDATA[*/\n".$this->less->compile($content)."\n/*]]>*/\n</style>";
+            return "<style type=\"text/css\">\n/*<![CDATA[*/\n".$css."\n/*]]>*/\n</style>";
         }
 
-        return "<style type=\"text/css\">\n".$this->less->compile($content)."\n</style>";
+        return "<style type=\"text/css\">\n".$css."\n</style>";
+    }
+
+    protected function getCss($content, array $context, $options)
+    {
+        return $this->less->compile($content);
     }
 }

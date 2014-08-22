@@ -16,6 +16,7 @@
     },
     "require-dev": {
         "twig/twig": "~1.11",
+        "oyejorge/less.php": "*",
         "leafo/lessphp": "*",
         "leafo/scssphp": "*",
         "coffeescript/coffeescript": "~1",
@@ -23,6 +24,7 @@
     },
     "suggest": {
         "twig/twig": "If you want to use Twig templating engine",
+        "oyejorge/less.php": "If you want to use :less filter",
         "leafo/lessphp": "If you want to use :less filter",
         "leafo/scssphp": "If you want to use :scss filter",
         "coffeescript/coffeescript": "If you want to use :coffee or :coffeescript filter",
