@@ -56,7 +56,7 @@ class ExecutorTest extends \PHPUnit_Framework_TestCase
 
         for ($i = 0; $i < 100; $i++) {
             $name = bin2hex(pack('d', rand()));
-            if (mkdir($name)) {
+            if (mkdir($root . '/' . $name)) {
                 return $root . '/' . $name;
             }
         }
