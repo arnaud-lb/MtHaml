@@ -2,7 +2,6 @@
 
 namespace MtHaml\Filter;
 
-use Michelf\Markdown as MarkdownTransformer;
 use MtHaml\Node\InterpolatedString;
 use MtHaml\NodeVisitor\RendererAbstract as Renderer;
 use MtHaml\Node\Filter;
@@ -10,10 +9,10 @@ use MtHaml\Node\Text;
 
 class Markdown extends AbstractFilter
 {
-    private $markdown;
-    private $forceOptimization;
+    protected $markdown;
+    protected $forceOptimization;
 
-    public function __construct(MarkdownTransformer $markdown, $forceOptimization = false)
+    public function __construct($markdown, $forceOptimization = false)
     {
         $this->markdown = $markdown;
         $this->forceOptimization = $forceOptimization;
@@ -46,7 +45,7 @@ class Markdown extends AbstractFilter
         }
 
         $string = new InterpolatedString(array());
-        $result = $this->markdown->transform($content);
+        $result = $this->filter($content, array(), array());
         foreach ($inserts as $hash => $insert) {
             $parts = explode($hash, $result, 2);
             $string->addChild(new Text(array(), $parts[0]));

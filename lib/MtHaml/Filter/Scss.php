@@ -9,8 +9,15 @@ class Scss extends AbstractFilter
 {
     private $scss;
 
-    public function __construct(\scssc $scss)
+    public function __construct($scss)
     {
+        if (!is_object($scss) || (!is_a($scss, 'Leafo\ScssPhp\Compiler') && !is_a($scss, 'scssc'))) {
+            throw new \InvalidArgumentException(sprintf(
+                'Argument 1 passed to %s::__construct() must be an instance of %s or %s, %s given',
+                __CLASS__, 'Leafo\ScssPhp\Compiler', 'scssc', is_object($scss) ? 'instance of '.get_class($scss) : gettype($scss)
+            ));
+        }
+
         $this->scss = $scss;
     }
 
@@ -25,6 +32,6 @@ class Scss extends AbstractFilter
             return "<style type=\"text/css\">\n/*<![CDATA[*/\n".$this->scss->compile($content)."\n/*]]>*/\n</style>";
         }
 
-        return "<style type=\"text/css\">\n".$this->less->compile($content)."\n</style>";
+        return "<style type=\"text/css\">\n".$this->scss->compile($content)."\n</style>";
     }
 }

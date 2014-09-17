@@ -1,0 +1,49 @@
+--FILE--
+<?php
+$filter = new MtHaml\Filter\Less\OyejorgeLess(new Less_Parser);
+$env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('less' => $filter));
+echo $env->compileString($parts['HAML'], "$file.haml");
+
+--HAML--
+:less
+ .mixin (@color) {
+   color: @color;
+ }
+
+ p {
+   .mixin(#0000ff);
+ }
+
+:less
+ p {
+   span {
+     border: 1px solid;
+   }
+ }
+
+:less
+ p.#{class} {
+   text-align: left;
+ }
+--EXPECT--
+<style type="text/css">
+/*<![CDATA[*/
+p {
+  color: #0000ff;
+}
+
+/*]]>*/
+</style>
+<style type="text/css">
+/*<![CDATA[*/
+p span {
+  border: 1px solid;
+}
+
+/*]]>*/
+</style>
+{% filter mthaml_less %}p.{% line 18 %}{{ class }} {
+  text-align: left;
+}
+{% endfilter %}
+
