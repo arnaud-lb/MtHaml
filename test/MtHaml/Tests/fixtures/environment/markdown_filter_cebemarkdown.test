@@ -1,5 +1,8 @@
 --FILE--
 <?php
+if (!class_exists('cebe\markdown\Markdown')) {
+    throw new PHPUnit_Framework_SkippedTestError('Class cebe\markdown\Markdown does not exist');
+}
 $filter = new MtHaml\Filter\Markdown\CebeMarkdown(new cebe\markdown\Markdown);
 $env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('markdown' => $filter));
 echo $env->compileString($parts['HAML'], "$file.haml");
