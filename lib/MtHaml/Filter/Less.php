@@ -2,7 +2,6 @@
 
 namespace MtHaml\Filter;
 
-use MtHaml\Filter\Less\AdapterInterface;
 use MtHaml\NodeVisitor\RendererAbstract as Renderer;
 use MtHaml\Node\Filter;
 
