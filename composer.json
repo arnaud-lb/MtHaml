@@ -21,9 +21,7 @@
         "leafo/scssphp": "*",
         "coffeescript/coffeescript": "~1",
         "michelf/php-markdown": "~1.3",
-        "erusev/parsedown": "*",
-        "kzykhys/ciconia": "*",
-        "cebe/markdown": "*"
+        "erusev/parsedown": "*"
     },
     "suggest": {
         "twig/twig": "If you want to use Twig templating engine",
