@@ -6,9 +6,12 @@ use MtHaml\Filter\Markdown;
 
 class Parsedown extends Markdown
 {
+    private $markdown;
+
     public function __construct(\Parsedown $markdown, $forceOptimization = false)
     {
-        parent::__construct($markdown, $forceOptimization);
+        parent::__construct($forceOptimization);
+        $this->markdown = $markdown;
     }
 
     public function filter($content, array $context, $options)

@@ -7,14 +7,12 @@ use MtHaml\NodeVisitor\RendererAbstract as Renderer;
 use MtHaml\Node\Filter;
 use MtHaml\Node\Text;
 
-class Markdown extends AbstractFilter
+abstract class Markdown extends AbstractFilter
 {
-    protected $markdown;
-    protected $forceOptimization;
+    private $forceOptimization;
 
-    public function __construct($markdown, $forceOptimization = false)
+    public function __construct($forceOptimization = false)
     {
-        $this->markdown = $markdown;
         $this->forceOptimization = $forceOptimization;
     }
 
@@ -56,8 +54,5 @@ class Markdown extends AbstractFilter
         $string->accept($renderer);
     }
 
-    public function filter($content, array $context, $options)
-    {
-        return $this->markdown->transform($content);
-    }
+    abstract public function filter($content, array $context, $options);
 }
