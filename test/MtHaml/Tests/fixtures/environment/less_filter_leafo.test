@@ -1,6 +1,6 @@
 --FILE--
 <?php
-$filter = new MtHaml\Filter\Less(new lessc);
+$filter = new MtHaml\Filter\Less\LeafoLess(new \lessc);
 $env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('less' => $filter));
 echo $env->compileString($parts['HAML'], "$file.haml");
 

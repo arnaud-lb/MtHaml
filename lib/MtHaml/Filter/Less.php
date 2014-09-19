@@ -6,15 +6,8 @@ use MtHaml\Filter\Less\AdapterInterface;
 use MtHaml\NodeVisitor\RendererAbstract as Renderer;
 use MtHaml\Node\Filter;
 
-class Less extends AbstractFilter
+abstract class Less extends AbstractFilter
 {
-    private $less;
-
-    public function __construct(\lessc $less)
-    {
-        $this->less = $less;
-    }
-
     public function optimize(Renderer $renderer, Filter $node, $options)
     {
         $renderer->write($this->filter($this->getContent($node), array(), $options));
@@ -31,8 +24,5 @@ class Less extends AbstractFilter
         return "<style type=\"text/css\">\n".$css."\n</style>";
     }
 
-    protected function getCss($content, array $context, $options)
-    {
-        return $this->less->compile($content);
-    }
+    abstract protected function getCss($content, array $context, $options);
 }
