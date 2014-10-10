@@ -172,7 +172,7 @@ abstract class RendererAbstract extends NodeVisitorAbstract
             }
         }
 
-        if (!$hasDynAttr) {
+        if (!$hasDynAttr || !$this->env->getOption('enable_dynamic_attrs')) {
             return;
         }
 
