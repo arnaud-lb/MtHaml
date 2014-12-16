@@ -22,7 +22,9 @@
         "coffeescript/coffeescript": "~1",
         "michelf/php-markdown": "~1.3",
         "erusev/parsedown": "*",
-        "league/commonmark": ">=0.4"
+        "league/commonmark": ">=0.4",
+        "cebe/markdown": "~1",
+        "kzykhys/ciconia": "~1"
     },
     "suggest": {
         "twig/twig": "If you want to use Twig templating engine",
