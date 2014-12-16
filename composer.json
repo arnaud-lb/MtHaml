@@ -24,7 +24,8 @@
         "erusev/parsedown": "*",
         "league/commonmark": ">=0.4",
         "cebe/markdown": "~1",
-        "kzykhys/ciconia": "~1"
+        "kzykhys/ciconia": "~1",
+        "gregwar/rst": "~1"
     },
     "suggest": {
         "twig/twig": "If you want to use Twig templating engine",
@@ -36,7 +37,8 @@
         "erusev/parsedown": "If you want to use :markdown filter",
         "cebe/markdown": "If you want to use :markdown filter",
         "kzykhys/ciconia": "If you want to use :markdown filter",
-        "league/commonmark": "If you want to use :markdown filter"
+        "league/commonmark": "If you want to use :markdown filter",
+        "gregwar/rst": "If you want to use :rest filter"
     },
     "conflict": {
         "mthaml/mthaml-bundle": "<1.1.0"
