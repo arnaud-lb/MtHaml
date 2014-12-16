@@ -25,6 +25,7 @@
         "league/commonmark": ">=0.4",
         "cebe/markdown": "~1",
         "kzykhys/ciconia": "~1",
+        "fluxbb/markdown": "*",
         "gregwar/rst": "~1"
     },
     "suggest": {
@@ -38,6 +39,7 @@
         "cebe/markdown": "If you want to use :markdown filter",
         "kzykhys/ciconia": "If you want to use :markdown filter",
         "league/commonmark": "If you want to use :markdown filter",
+        "fluxbb/markdown": "If you want to use :markdown filter",
         "gregwar/rst": "If you want to use :rest filter"
     },
     "conflict": {
