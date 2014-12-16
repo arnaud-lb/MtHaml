@@ -21,7 +21,8 @@
         "leafo/scssphp": "*",
         "coffeescript/coffeescript": "~1",
         "michelf/php-markdown": "~1.3",
-        "erusev/parsedown": "*"
+        "erusev/parsedown": "*",
+        "league/commonmark": ">=0.4"
     },
     "suggest": {
         "twig/twig": "If you want to use Twig templating engine",
@@ -32,7 +33,8 @@
         "michelf/php-markdown": "If you want to use :markdown filter",
         "erusev/parsedown": "If you want to use :markdown filter",
         "cebe/markdown": "If you want to use :markdown filter",
-        "kzykhys/ciconia": "If you want to use :markdown filter"
+        "kzykhys/ciconia": "If you want to use :markdown filter",
+        "league/commonmark": "If you want to use :markdown filter"
     },
     "conflict": {
         "mthaml/mthaml-bundle": "<1.1.0"
