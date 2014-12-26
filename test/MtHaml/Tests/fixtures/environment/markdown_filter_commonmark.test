@@ -1,6 +1,7 @@
 --FILE--
 <?php
-$filter = new MtHaml\Filter\Markdown\CommonMark(new League\CommonMark\DocParser(), new League\CommonMark\HtmlRenderer());
+$cmEnv = League\CommonMark\Environment::createCommonMarkEnvironment();
+$filter = new MtHaml\Filter\Markdown\CommonMark(new League\CommonMark\DocParser($cmEnv), new League\CommonMark\HtmlRenderer($cmEnv));
 $env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('markdown' => $filter));
 echo $env->compileString($parts['HAML'], "$file.haml");
 

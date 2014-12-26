@@ -20,6 +20,6 @@ class CommonMark extends Markdown
 
     public function filter($content, array $context, $options)
     {
-        return $this->renderer->render($this->parser->parse($content));
+        return $this->renderer->renderBlock($this->parser->parse($content));
     }
 }
