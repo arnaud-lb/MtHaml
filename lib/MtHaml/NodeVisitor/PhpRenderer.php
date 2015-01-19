@@ -61,6 +61,17 @@ class PhpRenderer extends RendererAbstract
         }
     }
 
+    protected function isSafeFunction($content) {
+      $safe_functions = $this->env->getOption('safe_functions');
+
+      foreach ($safe_functions as $s) {
+        if (preg_match("#^" . $s . "\\s*\\(#", trim($content))) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     public function enterInsert(Insert $node)
     {
         $content = $node->getContent();
@@ -70,7 +81,9 @@ class PhpRenderer extends RendererAbstract
             $fmt = '<?php echo %s; ?>';
 
             if ($node->getEscaping()->isEnabled()) {
-                if ($node->getEscaping()->isOnce()) {
+                if ($this->isSafeFunction($content)) {
+                    $fmt = "<?php echo %s; ?>";
+                } else if ($node->getEscaping()->isOnce()) {
                     $fmt = "<?php echo htmlspecialchars(%s,ENT_QUOTES,'%s',false); ?>";
                 } else {
                     $fmt = "<?php echo htmlspecialchars(%s,ENT_QUOTES,'%s'); ?>";

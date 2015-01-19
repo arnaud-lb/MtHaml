@@ -15,6 +15,7 @@ class Environment
     protected $options = array(
         'format' => 'html5',
         'enable_escaper' => true,
+        'safe_functions' => array(),
         'escape_html' => true,
         'escape_attrs' => true,
         'cdata' => true,
