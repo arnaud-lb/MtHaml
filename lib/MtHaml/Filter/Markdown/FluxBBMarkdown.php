@@ -2,21 +2,24 @@
 
 namespace MtHaml\Filter\Markdown;
 
-use FluxBB\Markdown\Parser;
+use FluxBB\CommonMark\DocumentParser;
+use FluxBB\CommonMark\Renderer;
 use MtHaml\Filter\Markdown;
 
 class FluxBBMarkdown extends Markdown
 {
-    private $markdown;
+    private $parser;
+    private $renderer;
 
-    public function __construct(Parser $markdown, $forceOptimization = false)
+    public function __construct(DocumentParser $parser, Renderer $renderer, $forceOptimization = false)
     {
         parent::__construct($forceOptimization);
-        $this->markdown = $markdown;
+        $this->parser = $parser;
+        $this->renderer = $renderer;
     }
 
     public function filter($content, array $context, $options)
     {
-        return $this->markdown->render($content);
+        return $this->renderer->render($this->parser->convert($content));
     }
 }
