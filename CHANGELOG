@@ -1,3 +1,9 @@
+* 1.7.0 (2015-01-23)
+
+ * Dropped PHP 5.3 support
+ * Added Ruby 1.9 style attributes support
+ * Added new filters (hason)
+
 * 1.6.0 (2014-08-16)
 
  * Code statements continue on the next line when the current one is terminated by
