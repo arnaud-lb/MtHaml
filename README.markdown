@@ -245,6 +245,7 @@ $env = new MtHaml\Environment('twig', array(
  - Silex: https://github.com/arnaud-lb/Silex-MtHaml
  - Sprockets-PHP: https://github.com/Nami-Doc/Sprockets-PHP
  - Symfony2: https://github.com/arnaud-lb/MtHamlBundle
+ - Yii2 Framework: https://github.com/mervick/yii2-mthaml
  - Zend Framework 1: https://github.com/bonndan/mthaml-zf1
 
 Add yours: https://github.com/arnaud-lb/MtHaml/edit/master/README.markdown
