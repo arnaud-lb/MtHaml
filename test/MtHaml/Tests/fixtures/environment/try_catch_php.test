@@ -10,8 +10,8 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 
 --EXPECT--
 <?php try { ?>
-  <?php echo foo(); ?>
+<?php echo foo(); ?>
 <?php } catch(\Exception $e) { ?>
-  bar
+bar
 <?php } ?>
 

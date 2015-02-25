@@ -15,8 +15,8 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 <?php echo 1 + 2; ?>
 <?php echo 1 + 2; ?>
 <?php if ($foo) { ?>
-  .
+.
 <?php } else { ?>
-  .
+.
 <?php } ?>
 
