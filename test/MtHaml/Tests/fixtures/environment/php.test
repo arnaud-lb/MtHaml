@@ -72,9 +72,9 @@ echo $env->compileString($parts['HAML'], "$file.haml");
       <p>everything can be nested in comments</p>
     -->
     <div id="body"><?php echo " Hey I print something!"; ?></div>
-    <?php foreach(range(0, 4) as $number) { ?>
-      <?php echo $number; ?>
-    <?php } ?>
+<?php foreach(range(0, 4) as $number) { ?>
+    <?php echo $number; ?>
+<?php } ?>
     Wow.|
     <p>
       <?php echo "Holy cow        " . "multiline       " . "tags!           " . "A pipe (|) even!"   ; ?>
@@ -82,16 +82,16 @@ echo $env->compileString($parts['HAML'], "$file.haml");
       <?php echo "Holy cow        " . "multiline       " . "tags!           "   ; ?>
     </p>
     <div class="silent">
-      <?php $foo = "this"; ?>
-      <?php $foo .= " shouldn't"; ?>
-      <?php $foo .= " be displayed"; ?>
+<?php $foo = "this"; ?>
+<?php $foo .= " shouldn't"; ?>
+<?php $foo .= " be displayed"; ?>
       <?php echo $foo . " but now it should!"; ?>
     </div>
     = Escape
     <ul class="really cool">
-      <?php foreach(range("a", "f") as $a) { ?>
-        <li><?php echo $a; ?></li>
-      <?php } ?>
+<?php foreach(range("a", "f") as $a) { ?>
+      <li><?php echo $a; ?></li>
+<?php } ?>
     </ul>
     <div id="combo" class="of_divs_with_underscore"><?php echo "with this text"; ?></div>
     <div id="escaping-test">
