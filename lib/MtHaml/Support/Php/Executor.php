@@ -104,7 +104,7 @@ class Executor
     private function wrapCompiledCode($code, $funName)
     {
         // Parses all used namespaces and puts them into header of the file.
-        $namespaces = [];
+        $namespaces = array();
         if (preg_match_all('/<\?php\s+(use\s+[^;\?]+);?(?:\s+)?\?>\n?/S', $code, $matches, PREG_OFFSET_CAPTURE)) {
             for ($i = count($matches[0])-1; $i >= 0; $i--) {
                 $code = substr($code, 0, $matches[0][$i][1]) .
