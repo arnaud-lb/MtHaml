@@ -103,12 +103,23 @@ class Executor
 
     private function wrapCompiledCode($code, $funName)
     {
+        // Parses all used namespaces and puts them into header of the file.
+        $namespaces = [];
+        if (preg_match_all('/<\?php\s+(use\s+[^;\?]+);?(?:\s+)?\?>\n?/S', $code, $matches, PREG_OFFSET_CAPTURE)) {
+            for ($i = count($matches[0])-1; $i >= 0; $i--) {
+                $code = substr($code, 0, $matches[0][$i][1]) .
+                    substr($code, $matches[0][$i][1] + strlen($matches[0][$i][0]));
+                array_unshift($namespaces, $matches[1][$i][0].';');
+            }
+        }
+        $namespaces = implode(PHP_EOL, $namespaces);
+
         // The code is wrapped in a function so that it can be parsed
         // once, and executed multiple times. This is faster than repeatedly
         // including the same PHP file.
         return <<<PHP
 <?php
-
+$namespaces
 function $funName(\$__variables)
 {
     extract(\$__variables);
