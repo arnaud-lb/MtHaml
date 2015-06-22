@@ -17,7 +17,7 @@ class Filter extends NodeAbstract
 
     public function getFilter()
     {
-        return $this->filter;
+        return trim($this->filter);
     }
 
     public function addChild(NodeAbstract $node)
