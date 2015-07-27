@@ -79,7 +79,9 @@ class Executor
             . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/'
             . substr($hash, 4) . '_' . basename($file) . '.php';
 
-        if ($this->options['debug'] || !file_exists($cacheFile) || filemtime($cacheFile) !== filemtime($file)) {
+        $fileMtime = filemtime($file);
+
+        if ($this->options['debug'] || !file_exists($cacheFile) || filemtime($cacheFile) !== $fileMtime) {
 
             $hamlCode = file_get_contents($file);
 
@@ -93,7 +95,7 @@ class Executor
             $compiledCode = $this->environment->compileString($hamlCode, $file);
             $compiledCode = $this->wrapCompiledCode($compiledCode, $funName);
 
-            $this->writeCacheFile($cacheFile, $compiledCode);
+            $this->writeCacheFile($cacheFile, $compiledCode, $fileMtime);
         }
 
         require_once $cacheFile;
@@ -117,8 +119,9 @@ function $funName(\$__variables)
 PHP;
     }
 
-    private function writeCacheFile($cacheFile, $contents)
+    private function writeCacheFile($cacheFile, $contents, $timestamp)
     {
+
         $dir = dirname($cacheFile);
 
         if (!is_dir($dir)) {
@@ -153,5 +156,13 @@ PHP;
                 , $cacheFile
             ));
         }
+
+        if (!touch($cacheFile, $timestamp)) {
+            throw new Exception(sprintf(
+                "Failed writing cache file: `%s`"
+                , $cacheFile
+            ));
+        }
+
     }
 }
