@@ -10,5 +10,6 @@ matrix:
   allow_failures:
     - php: hhvm
     - php: nightly
+    - php: 7
 before_script:
   - composer install --no-interaction
