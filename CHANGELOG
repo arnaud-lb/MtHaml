@@ -1,3 +1,8 @@
+* 1.7.1 (2015-07-28)
+
+ * Fixed PHP cache invalidation (mendelk)
+ * Fixed filters with trailing white space (thelucre)
+
 * 1.7.0 (2015-01-23)
 
  * Dropped PHP 5.3 support
