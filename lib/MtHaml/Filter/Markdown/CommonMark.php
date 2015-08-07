@@ -2,24 +2,21 @@
 
 namespace MtHaml\Filter\Markdown;
 
-use League\CommonMark\DocParser;
-use League\CommonMark\HtmlRenderer;
+use League\CommonMark\Converter;
 use MtHaml\Filter\Markdown;
 
 class CommonMark extends Markdown
 {
-    private $parser;
-    private $renderer;
+    private $converter;
 
-    public function __construct(DocParser $parser, HtmlRenderer $renderer, $forceOptimization = false)
+    public function __construct(Converter $converter, $forceOptimization = false)
     {
         parent::__construct($forceOptimization);
-        $this->parser = $parser;
-        $this->renderer = $renderer;
+        $this->converter = $converter;
     }
 
     public function filter($content, array $context, $options)
     {
-        return $this->renderer->renderBlock($this->parser->parse($content));
+        return $this->converter->convertToHtml($content);
     }
 }
