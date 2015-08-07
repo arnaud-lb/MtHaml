@@ -1,5 +1,7 @@
 --FILE--
 <?php
+// enforce class \lessc from "leafo/lessphp" package and fix conflict with the same class from "oyejorge/less.php" package
+new \lessc_formatter_classic;
 $filter = new MtHaml\Filter\Less\LeafoLess(new \lessc);
 $env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('less' => $filter));
 echo $env->compileString($parts['HAML'], "$file.haml");
