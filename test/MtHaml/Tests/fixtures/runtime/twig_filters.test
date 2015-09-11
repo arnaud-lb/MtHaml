@@ -2,7 +2,7 @@
 <?php
 $mthaml = new MtHaml\Environment('twig', array('enable_escaper' => false));
 
-$twig = new Twig_Environment(new MtHaml\Support\Twig\Loader($mthaml, new Twig_Loader_String()));
+$twig = new Twig_Environment(new MtHaml\Support\Twig\Loader($mthaml, new Twig_Loader_Array(array())));
 $twig->addExtension(new MtHaml\Support\Twig\Extension($mthaml));
 
 $mthaml->addFilter('twig', new MtHaml\Filter\Twig($twig));
