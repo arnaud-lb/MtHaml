@@ -59,6 +59,11 @@ class Executor
         return ob_get_clean();
     }
 
+    public function warmup($file)
+    {
+        $this->compileFile($file);
+    }
+
     private function compileFile($file)
     {
         if (!file_exists($file)) {
