@@ -34,7 +34,7 @@ class Executor
      */
     public function display($file, array $variables)
     {
-        $fun = $this->compileFile($file);
+        $fun = $this->compile($file);
         $fun($variables);
     }
 
@@ -59,7 +59,7 @@ class Executor
         return ob_get_clean();
     }
 
-    private function compileFile($file)
+    public function compile($file)
     {
         if (!file_exists($file)) {
             throw new Exception(sprintf(
