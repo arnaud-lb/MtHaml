@@ -16,11 +16,11 @@ class Extension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'mthaml_attributes' => new \Twig_Function_Function('MtHaml\Runtime::renderAttributes'),
-            'mthaml_attribute_interpolation' => new \Twig_Function_Function('MtHaml\Runtime\AttributeInterpolation::create'),
-            'mthaml_attribute_list' => new \Twig_Function_Function('MtHaml\Runtime\AttributeList::create'),
-            'mthaml_object_ref_class' => new \Twig_Function_Function('MtHaml\Runtime::renderObjectRefClass'),
-            'mthaml_object_ref_id' => new \Twig_Function_Function('MtHaml\Runtime::renderObjectRefId'),
+            new \Twig_SimpleFunction('mthaml_attributes', 'MtHaml\Runtime::renderAttributes'),
+            new \Twig_SimpleFunction('mthaml_attribute_interpolation', 'MtHaml\Runtime\AttributeInterpolation::create'),
+            new \Twig_SimpleFunction('mthaml_attribute_list', 'MtHaml\Runtime\AttributeList::create'),
+            new \Twig_SimpleFunction('mthaml_object_ref_class', 'MtHaml\Runtime::renderObjectRefClass'),
+            new \Twig_SimpleFunction('mthaml_object_ref_id', 'MtHaml\Runtime::renderObjectRefId'),
         );
     }
 
