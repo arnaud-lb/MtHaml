@@ -247,6 +247,7 @@ $env = new MtHaml\Environment('twig', array(
  - Symfony2: https://github.com/arnaud-lb/MtHamlBundle
  - Yii2 Framework: https://github.com/mervick/yii2-mthaml
  - Zend Framework 1: https://github.com/bonndan/mthaml-zf1
+ - PhileCMS: https://bitbucket.org/jacmoe/templatemthaml
 
 Add yours: https://github.com/arnaud-lb/MtHaml/edit/master/README.markdown
 
