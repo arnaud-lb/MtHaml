@@ -1,5 +1,8 @@
 --FILE--
 <?php
+if (!class_exists('scssc')) {
+    throw new PHPUnit_Framework_SkippedTestError('Class scssc does not exist');
+}
 $filter = new MtHaml\Filter\Scss(new scssc);
 $env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('scss' => $filter));
 echo $env->compileString($parts['HAML'], "$file.haml");
