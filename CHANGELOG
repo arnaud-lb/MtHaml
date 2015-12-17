@@ -1,3 +1,8 @@
+* 1.8.0 (2015-12-17)
+
+ * Twig 2.x compatibility (hason)
+ * Make Executor::compile public (pwhelan)
+
 * 1.7.1 (2015-07-28)
 
  * Fixed PHP cache invalidation (mendelk)
