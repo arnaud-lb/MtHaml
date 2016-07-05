@@ -210,6 +210,7 @@ The following filters are available:
  - **less***: compiles as Lesscss
  - **markdown***: converts markdown to html
  - **php**: executes the input as php code
+ - **plain**: does not parse the filtered text
  - **preseve**: preserves preformatted text
  - **scss***: converts scss to css
  - **twig**: executes the input as twig code
