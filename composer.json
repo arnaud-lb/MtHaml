@@ -15,7 +15,7 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "twig/twig": "~1.12|~2.0",
+        "twig/twig": ">=1.24",
         "oyejorge/less.php": "*",
         "leafo/lessphp": "*",
         "leafo/scssphp": "*",
