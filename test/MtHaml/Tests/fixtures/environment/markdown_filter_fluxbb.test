@@ -4,6 +4,10 @@ $filter = new MtHaml\Filter\Markdown\FluxBBMarkdown(new FluxBB\CommonMark\Docume
 $env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('markdown' => $filter));
 echo $env->compileString($parts['HAML'], "$file.haml");
 
+--SKIPIF--
+<?php
+PHP_MAJOR_VERSION >= 7 && print("skip");
+
 --HAML--
 :markdown
  ## Header

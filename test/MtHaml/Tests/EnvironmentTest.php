@@ -15,6 +15,19 @@ class EnvironmentTest extends TestCase
         file_put_contents($file . '.php', $parts['FILE']);
         file_put_contents($file . '.exp', $parts['EXPECT']);
 
+        if (isset($parts['SKIPIF'])) {
+            file_put_contents($file . '.skip.php', $parts['SKIPIF']);
+        }
+
+        if (isset($parts['SKIPIF'])) {
+            ob_start();
+            require $file . '.skip.php';
+            $out = ob_get_clean();
+            if (false !== strpos($out, 'skip')) {
+                return $this->markTestSkipped();
+            }
+        }
+
         try {
             ob_start();
             require $file . '.php';
