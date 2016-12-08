@@ -54,6 +54,6 @@ class EnvironmentTest extends TestCase
 
         return array_map(function ($file) {
             return array($file);
-        }, $files);
+        }, array_combine($files, $files));
     }
 }
