@@ -17,7 +17,7 @@ use MtHaml\Environment;
  * $twig->setLoader($mthaml, new \MtHaml\Support\Twig\Loader($origLoader));
  * </code>
  */
-class Loader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
+class Loader implements \Twig_LoaderInterface
 {
     protected $env;
     protected $loader;
@@ -66,7 +66,7 @@ class Loader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
      */
     public function exists($name)
     {
-        if ($this->loader instanceof \Twig_ExistsLoaderInterface) {
+        if ($this->loader instanceof \Twig_LoaderInterface) {
             return $this->loader->exists($name);
         } else {
             try {
