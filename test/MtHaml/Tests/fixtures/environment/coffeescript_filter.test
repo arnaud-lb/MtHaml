@@ -4,6 +4,10 @@ $filter = new MtHaml\Filter\CoffeeScript(new CoffeeScript\Compiler);
 $env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('coffee' => $filter));
 echo $env->compileString($parts['HAML'], "$file.haml");
 
+--SKIPIF--
+<?php
+PHP_MAJOR_VERSION >= 7 && print("skip");
+
 --HAML--
 :coffee
  square = (x) -> x * x
