@@ -116,6 +116,17 @@ Email <?php echo htmlspecialchars($user->getEmail(), ENT_QUOTES, 'UTF-8'); ?>
 <a href="<?php echo htmlspecialchars($user->getUrl(), ENT_QUOTES, 'UTF-8'); ?>">Home page</a>
 ```
 
+For PHP environments, you can also define _safe functions_ for functions that
+already escape things by default:
+
+``` php
+new MtHaml\Environment('php', array('safe_functions' => array('htmlspecialchars')));
+```
+
+``` haml
+%li =htmlspecialchars("<b>")
+```
+
 ## Twig
 
 Using [Twig][4] in HAML gives more control over what can be executed, what variables and functions are exposed to the templates, etc. This also allows to use all of Twig's awesome features like template inheritance, macros, blocks, filters, functions, tests, ...
