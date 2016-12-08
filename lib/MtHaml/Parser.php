@@ -535,7 +535,7 @@ class Parser
             return new TagAttributeInterpolation($expr->getPosition(), $expr);
         }
 
-        if ($buf->match('/[\w+:-]+/A', $match)) {
+        if ($buf->match('/[@\.\w+:-]+/A', $match)) {
             $name = new Text($match['pos'][0], $match[0]);
 
             if (!$buf->match('/\s*=\s*/A')) {
