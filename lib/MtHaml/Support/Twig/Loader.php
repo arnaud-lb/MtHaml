@@ -78,4 +78,12 @@ class Loader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
             }
         }
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getSourceContext($name)
+    {
+        return $this->loader->getSourceContext($name);
+    }
 }
