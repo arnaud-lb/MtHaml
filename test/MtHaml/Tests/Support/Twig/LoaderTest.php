@@ -14,13 +14,18 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $env->expects($this->never())
             ->method('compileString');
 
-        $loader = $this->getMock('Twig_LoaderInterface');
+        $source = new \Twig_Source('<h1>{{ title }}</h1>', 'template.haml', '/somewhere/template.haml');
+
+        $loader = $this->getMockBuilder('Twig_LoaderInterface')
+            ->setMethods(['getSourceContext'])
+            ->getMock();
         $loader->expects($this->once())
-            ->method('getSource')
-            ->will($this->returnValue('<h1>{{ title }}</h1>'));
+            ->method('getSourceContext')
+            ->with('template.haml')
+            ->will($this->returnValue($source));
 
         $hamlLoader = new Loader($env, $loader);
-        $hamlLoader->getSource('template.twig');
+        $hamlLoader->getSourceContext('template.twig');
     }
 
     public function testLoadHamlTemplate()
@@ -34,13 +39,19 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ->with('%h1= title')
             ->will($this->returnValue('<h1>{{ title }}</h1>'));
 
-        $loader = $this->getMock('Twig_LoaderInterface');
+        $source = new \Twig_Source('%h1= title', 'template.haml', '/somewhere/template.haml');
+
+        $loader = $this->getMockBuilder('Twig_LoaderInterface')
+            ->setMethods(['getSourceContext'])
+            ->getMock();
         $loader->expects($this->once())
-            ->method('getSource')
-            ->will($this->returnValue('%h1= title'));
+            ->method('getSourceContext')
+            ->with('template.haml')
+            ->will($this->returnValue($source));
+
 
         $hamlLoader = new Loader($env, $loader);
-        $hamlLoader->getSource('template.haml');
+        $hamlLoader->getSourceContext('template.haml');
     }
 
     public function testLoadTwigWithHamlTemplate()
@@ -54,12 +65,17 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ->with('           %h1= title')
             ->will($this->returnValue('<h1>{{ title }}</h1>'));
 
-        $loader = $this->getMock('Twig_LoaderInterface');
+        $source = new \Twig_Source('{% haml %} %h1= title', 'template.haml', '/somewhere/template.haml');
+
+        $loader = $this->getMockBuilder('Twig_LoaderInterface')
+            ->setMethods(['getSourceContext'])
+            ->getMock();
         $loader->expects($this->once())
-            ->method('getSource')
-            ->will($this->returnValue('{% haml %} %h1= title'));
+            ->method('getSourceContext')
+            ->with('template.haml')
+            ->will($this->returnValue($source));
 
         $hamlLoader = new Loader($env, $loader);
-        $hamlLoader->getSource('template.twig');
+        $hamlLoader->getSourceContext('template.twig');
     }
 }
