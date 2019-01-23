@@ -256,10 +256,10 @@ Add yours: https://github.com/arnaud-lb/MtHaml/edit/master/README.markdown
 
 MtHaml is released under the MIT license (same as HAML/Ruby).
 
-[1]: http://haml-lang.com/
-[2]: http://haml-lang.com/tutorial.html
-[3]: http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html
+[1]: http://haml.info
+[2]: http://haml.info/tutorial.html
+[3]: http://haml.info/docs/yardoc/file.HAML_REFERENCE.html
 [4]: http://www.twig-project.org/
-[5]: http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#attribute_methods
+[5]: http://haml.info/docs/yardoc/file.HAML_REFERENCE.html#attribute_methods
 [6]: http://sass-lang.com/
 [7]: https://github.com/arnaud-lb/MtHaml/blob/master/examples/README.md
