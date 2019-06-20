@@ -3,8 +3,9 @@
 namespace MtHaml\Tests\Node;
 
 use MtHaml\Node\Tag;
+use PHPUnit\Framework\TestCase;
 
-class NodeTest extends \PHPUnit_Framework_TestCase
+class NodeTest extends TestCase
 {
     protected function createNodes()
     {

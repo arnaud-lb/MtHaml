@@ -3,8 +3,9 @@
 namespace MtHaml\Tests;
 
 use MtHaml\Indentation\Undefined;
+use MtHaml\Tests\TestCase;
 
-class IndentationTest extends \PHPUnit_Framework_TestCase
+class IndentationTest extends TestCase
 {
     /** @dataProvider getTransitionData */
     public function testTransition($expectChar, $expectWidth, $expectLevel, $expectString, array $transitions)

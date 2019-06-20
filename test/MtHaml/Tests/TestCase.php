@@ -2,7 +2,9 @@
 
 namespace MtHaml\Tests;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase as BaseTestCase;
+
+class TestCase extends BaseTestCase
 {
     public function assertException($parts, \Exception $e = null)
     {
@@ -20,7 +22,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             if (null === $e) {
                 $this->assertThat(
                     NULL,
-                    new \PHPUnit_Framework_Constraint_Exception($class)
+                    new \PHPUnit\Framework\Constraint\Exception($class)
                 );
             }
             if (get_class($e) !== $class) {

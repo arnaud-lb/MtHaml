@@ -4,8 +4,9 @@ namespace MtHaml\Tests;
 
 use MtHaml\Environment;
 use MtHaml\Support\Twig\Extension;
+use PHPUnit\Framework\TestCase;
 
-class HamlSpecTest extends \PHPUnit_Framework_TestCase
+class HamlSpecTest extends TestCase
 {
     /**
      * @dataProvider getTestData

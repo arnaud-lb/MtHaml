@@ -3,8 +3,9 @@
 namespace MtHaml\Tests\Support\Php;
 
 use MtHaml\Support\Php\Executor;
+use PHPUnit\Framework\TestCase;
 
-class ExecutorTest extends \PHPUnit_Framework_TestCase
+class ExecutorTest extends TestCase
 {
     private $cacheDir;
 

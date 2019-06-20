@@ -3,8 +3,9 @@
 namespace MtHaml\Tests\Node;
 
 use MtHaml\Node\Doctype;
+use PHPUnit\Framework\TestCase;
 
-class DoctypeTest extends \PHPUnit_Framework_TestCase
+class DoctypeTest extends TestCase
 {
     /** @dataProvider getGetDoctypeReturnsDefaultOneWhenInvalidData */
     public function testGetDoctypeReturnsDefaultOneWhenInvalid($format, $doctype)
@@ -36,7 +37,7 @@ class DoctypeTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertNotNull($e);
-        $this->assertInstanceOf('PHPUnit_Framework_Error_Warning', $e);
+        $this->assertInstanceOf('PHPUnit\Framework\Error\Warning', $e);
         $this->assertSame($msg, $e->getMessage());
 
     }

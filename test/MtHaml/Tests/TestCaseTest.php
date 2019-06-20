@@ -8,6 +8,7 @@ class TestCaseTest extends TestCase
 {
     public function testAssertExceptionReturnsIfNothingExceptedAndThrown()
     {
+        $this->expectNotToPerformAssertions();
         $this->assertException(array(), null);
     }
 
@@ -21,7 +22,7 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_ExpectationFailedException
+     * @expectedException PHPUnit\Framework\ExpectationFailedException
      * @expectedExceptionMessage Failed asserting that exception of type "Foo"
      */
     public function testAssertExceptionFailsIfExpectedButNothingThrown()
@@ -39,7 +40,7 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_ExpectationFailedException
+     * @expectedException PHPUnit\Framework\ExpectationFailedException
      * @expectedExceptionMessage Failed asserting that 'foo' matches PCRE pattern "~^(bar)$~".
      */
     public function testAssertExceptionFailsIfMessageDoesNotMatch()

@@ -2,8 +2,9 @@
 namespace MtHaml\Tests\Support\Twig;
 
 use MtHaml\Support\Twig\Loader;
+use PHPUnit\Framework\TestCase;
 
-class LoaderTest extends \PHPUnit_Framework_TestCase
+class LoaderTest extends TestCase
 {
     protected $getSourceMethod;
 

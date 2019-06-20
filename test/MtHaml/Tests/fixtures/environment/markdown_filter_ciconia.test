@@ -1,7 +1,7 @@
 --FILE--
 <?php
 if (!class_exists('Ciconia\Ciconia')) {
-    throw new PHPUnit_Framework_SkippedTestError('Ciconia\Ciconia');
+    throw new PHPUnit\Framework\SkippedTestError('Ciconia\Ciconia');
 }
 $filter = new MtHaml\Filter\Markdown\Ciconia(new Ciconia\Ciconia);
 $env = new MtHaml\Environment('twig', array('enable_escaper' => false), array('markdown' => $filter));

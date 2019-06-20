@@ -2,12 +2,13 @@
 
 namespace MtHaml\Tests\NodeVisitor;
 
-use MtHaml\NodeVisitor\PhpRenderer;
 use MtHaml\Environment;
 use MtHaml\Node\InterpolatedString;
 use MtHaml\Node\Text;
+use MtHaml\NodeVisitor\PhpRenderer;
+use PHPUnit\Framework\TestCase;
 
-class PhpRendererTest extends \PHPUnit_Framework_TestCase
+class PhpRendererTest extends TestCase
 {
     /**
      * @dataProvider getTestTrimInlineCommentsData

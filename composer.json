@@ -26,7 +26,8 @@
         "cebe/markdown": "~1",
         "kzykhys/ciconia": "~1",
         "fluxbb/commonmark": "~1@dev",
-        "gregwar/rst": "1.0.0"
+        "gregwar/rst": "1.0.0",
+        "phpunit/phpunit": "^7.5"
     },
     "suggest": {
         "twig/twig": "If you want to use Twig templating engine",

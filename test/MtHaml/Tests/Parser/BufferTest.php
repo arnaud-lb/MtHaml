@@ -3,8 +3,9 @@
 namespace MtHaml\Tests\Parser;
 
 use MtHaml\Parser\Buffer;
+use PHPUnit\Framework\TestCase;
 
-class BufferTest extends \PHPUnit_Framework_TestCase
+class BufferTest extends TestCase
 {
     public function testSimple()
     {

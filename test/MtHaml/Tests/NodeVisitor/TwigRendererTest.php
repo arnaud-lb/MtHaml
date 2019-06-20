@@ -2,11 +2,12 @@
 
 namespace MtHaml\Tests\NodeVisitor;
 
+use MtHaml\Node\InterpolatedString;
 use MtHaml\Node\Text;
 use MtHaml\NodeVisitor\TwigRenderer;
-use MtHaml\Node\InterpolatedString;
+use MtHaml\Tests\TestCase;
 
-class TwigRendererTest extends \PHPUnit_Framework_TestCase
+class TwigRendererTest extends TestCase
 {
     /** @dataProvider getCurlyPercentAndCurlyCurclyAreEscapedData */
     public function testCurlyPercentAndCurlyCurclyAreEscaped($expect, $node)
