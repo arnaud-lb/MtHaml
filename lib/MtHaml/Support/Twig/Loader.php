@@ -17,7 +17,7 @@ use MtHaml\Environment;
  * $twig->setLoader($mthaml, new \MtHaml\Support\Twig\Loader($origLoader));
  * </code>
  */
-class Loader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
+class Loader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface, \Twig_SourceContextLoaderInterface
 {
     protected $env;
     protected $loader;
@@ -29,6 +29,8 @@ class Loader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
     }
 
     /**
+     * Deprecated in Twig 1.27
+     * Removed in Twig 2.x
      * {@inheritdoc}
      */
     public function getSource($name)
@@ -43,6 +45,26 @@ class Loader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
         }
 
         return $source;
+    }
+
+    /**
+     * Support Twig 2.x
+     * {@inheritdoc}
+     */
+    public function getSourceContext($name)
+    {
+        $context = $this->loader->getSourceContext($name);
+        $source = $context->getCode();
+
+        if ('haml' === pathinfo($name, PATHINFO_EXTENSION)) {
+            $source = $this->env->compileString($source, $name);
+        } elseif (preg_match('#^\s*{%\s*haml\s*%}#', $source, $match)) {
+            $padding = str_repeat(' ', strlen($match[0]));
+            $source = $padding . substr($source, strlen($match[0]));
+            $source = $this->env->compileString($source, $name);
+        }
+
+        return new \Twig\Source($source, $context->getName(), $context->getPath());
     }
 
     /**
