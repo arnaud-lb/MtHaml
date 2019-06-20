@@ -27,7 +27,7 @@ class Runtime
      * @param string $format  Output format (e.g. html5)
      * @param string $charset Output charset
      */
-    public static function renderAttributes($list, $format, $charset, $escape = true)
+    public static function renderAttributes($list, $format, $charset)
     {
         $attributes = array();
 
@@ -42,14 +42,11 @@ class Runtime
             if ($value instanceof AttributeInterpolation) {
                 $result .= $value->value;
             } elseif (true === $value) {
-                $result .= $escape ?
-                    htmlspecialchars($name, ENT_QUOTES, $charset) : $name;
+                $result .= htmlspecialchars($name, ENT_QUOTES, $charset);
             } else {
-                $result .= ($escape ?
-                        htmlspecialchars($name, ENT_QUOTES, $charset) : $name)
+                $result .= htmlspecialchars($name, ENT_QUOTES, $charset)
                     .'="'
-                    . ($escape ?
-                        htmlspecialchars($value, ENT_QUOTES, $charset) : $value)
+                    . htmlspecialchars($value, ENT_QUOTES, $charset)
                     .'"';
             }
         }
