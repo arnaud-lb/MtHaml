@@ -16,6 +16,8 @@ use MtHaml\Node\NestInterface;
 use MtHaml\Node\Run;
 use MtHaml\Node\TagAttributeInterpolation;
 use MtHaml\Node\TagAttributeList;
+use MtHaml\Node\Insert;
+use MtHaml\Node\Root;
 
 abstract class RendererAbstract extends NodeVisitorAbstract
 {
@@ -424,6 +426,16 @@ abstract class RendererAbstract extends NodeVisitorAbstract
         }
     }
 
+    protected function getAncestorTag(NodeAbstract $node, $returnChild = false)
+    {
+        while (null !== $parent = $node->getParent()) {
+            if ($parent instanceof Tag) {
+                return $returnChild ? $node : $parent;
+            }
+            $node = $parent;
+        }
+    }
+
     protected function getFirstChildIfTag(NodeAbstract $node)
     {
         if (!($node instanceof NestInterface)) {
@@ -480,13 +492,20 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     protected function shouldIndentBeforeOpen(NodeAbstract $node)
     {
-        if (null !== $parent = $this->getParentIfFirstChild($node)) {
-            if ($parent->getFlags() & Tag::FLAG_REMOVE_INNER_WHITESPACES) {
-                return false;
-            }
-        }
+        if ($node instanceof Run || $node instanceof Statement) {
+            return false;
+        }        
         if ($node instanceof Tag) {
             if ($node->getFlags() & Tag::FLAG_REMOVE_OUTER_WHITESPACES) {
+                return false;
+            }
+        } else {
+		    if (null === $node = $this->getAncestorTag($node, true)) {
+		        return false;
+		    }
+		}
+        if (null !== $parent = $this->getParentIfFirstChild($node)) {
+            if ($parent->getFlags() & Tag::FLAG_REMOVE_INNER_WHITESPACES) {
                 return false;
             }
         }
@@ -501,6 +520,9 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     protected function shouldBreakAfterOpen(NodeAbstract $node)
     {
+        if ($node instanceof Run || $node instanceof Statement) {
+            return false;
+        }
         if ($node instanceof Tag) {
             if ($node->getFlags() & Tag::FLAG_REMOVE_INNER_WHITESPACES) {
                 return false;
@@ -520,6 +542,9 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     protected function shouldIndentBeforeClose(NodeAbstract $node)
     {
+        if ($node instanceof Run || $node instanceof Statement) {
+            return false;
+        }        
         if ($node instanceof Tag) {
             if ($node->getFlags() & Tag::FLAG_REMOVE_INNER_WHITESPACES) {
                 return false;
@@ -539,6 +564,22 @@ abstract class RendererAbstract extends NodeVisitorAbstract
 
     protected function shouldBreakAfterClose(NodeAbstract $node)
     {
+        if ($node instanceof Run || $node instanceof Statement) {
+            if ($node->getParent() instanceof Root) {
+                return true;
+            }
+                        
+            return false;
+        }
+        if ($node instanceof Tag) {
+            if ($node->getFlags() & Tag::FLAG_REMOVE_OUTER_WHITESPACES) {
+                return false;
+            }
+        } else {
+            if (null === $node = $this->getAncestorTag($node, true)) {
+                return false;
+            }
+        }
         if (null !== $parent = $this->getParentIfLastChild($node)) {
             if ($parent->getFlags() & Tag::FLAG_REMOVE_INNER_WHITESPACES) {
                 return false;
@@ -549,12 +590,6 @@ abstract class RendererAbstract extends NodeVisitorAbstract
                 return false;
             }
         }
-        if ($node instanceof Tag) {
-            if ($node->getFlags() & Tag::FLAG_REMOVE_OUTER_WHITESPACES) {
-                return false;
-            }
-        }
-
         return true;
     }
 

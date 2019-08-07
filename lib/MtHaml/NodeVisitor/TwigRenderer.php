@@ -98,7 +98,7 @@ class TwigRenderer extends RendererAbstract
     {
         if ($node->isBlock()) {
             if (preg_match('~^(?:-\s*)?(\w+)~', $node->getContent(), $match)) {
-                $this->write($this->renderTag('end'.$match[1]));
+                $this->write($this->renderTag('end'.$match[1]), false, false);
             }
         }
     }
@@ -106,7 +106,7 @@ class TwigRenderer extends RendererAbstract
     protected function renderBlockTop(Run $node)
     {
         $this->addDebugInfos($node);
-        $this->write($this->renderTag($node->getContent()));
+        $this->write($this->renderTag($node->getContent()), false, false);
     }
 
     public function enterObjectRefClass(ObjectRefClass $node)
