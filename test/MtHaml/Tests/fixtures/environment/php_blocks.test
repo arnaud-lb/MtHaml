@@ -15,15 +15,15 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 
 --EXPECT--
 <?php if ($a) { ?>
-  <ul>
-    <?php foreach($items as $item) { ?>
-      <li>
-        <?php echo $item; ?>
-      </li>
-    <?php } ?>
-  </ul>
-  <?php echo $foo; ?>
+<ul>
+<?php foreach($items as $item) { ?>
+  <li>
+    <?php echo $item; ?>
+  </li>
+<?php } ?>
+</ul>
+<?php echo $foo; ?>
 <?php } else { ?>
-  no item
+no item
 <?php } ?>
 

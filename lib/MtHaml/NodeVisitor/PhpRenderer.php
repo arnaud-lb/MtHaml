@@ -96,12 +96,13 @@ class PhpRenderer extends RendererAbstract
 
         if (!$node->isBlock()) {
             if (preg_match('~[:;]\s*$~', $content)) {
-                $this->write(sprintf('<?php %s ?>' , $content));
+                $this->write(sprintf('<?php %s ?>' , $content), false);
             } else {
-                $this->write(sprintf('<?php %s; ?>' , $content));
+                $this->write(sprintf('<?php %s; ?>' , $content), false);
             }
         } else {
-            $this->write(sprintf('<?php %s { ?>' , $content));
+            $this->write(sprintf('<?php %s { ?>' , $content), false);
+            $this->undent();
         }
     }
 
@@ -111,13 +112,14 @@ class PhpRenderer extends RendererAbstract
 
         $content = $this->trimInlineComments($node->getContent());
 
-        $this->write(sprintf('<?php } %s { ?>' , $content));
+        $this->write(sprintf('<?php } %s { ?>' , $content), false);
     }
 
     public function leaveTopBlock(Run $node)
     {
         if ($node->isBlock()) {
-            $this->write('<?php } ?>');
+            $this->write('<?php } ?>', false);
+            $this->indent();
         }
     }
 

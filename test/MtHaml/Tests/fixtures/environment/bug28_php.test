@@ -10,6 +10,6 @@ echo $env->compileString($parts['HAML'], "$file.haml");
 --EXPECT--
 <?php if ($a) { ?>
 <?php } else { ?>
-  1
+1
 <?php } ?>
 
